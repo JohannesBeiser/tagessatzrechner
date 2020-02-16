@@ -1,1 +1,37 @@
-<p>add works!</p>
+<div class="add-component-container">
+    <div class="example-container">
+        <mat-form-field appearance="standard">
+            <mat-label>Input</mat-label>
+            <input pattern="[0-9]*" type="text" matInput required>
+        </mat-form-field>
+
+        <mat-form-field appearance="standard">
+            <mat-label>Angular forms</mat-label>
+            <input matInput [matDatepicker]="picker1" [formControl]="date">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="standard">
+            <mat-label>Angular forms2</mat-label>
+            <input type="date" matInput value="{{datee}}">
+        </mat-form-field>
+
+        <input type="date" name="datevalue">
+
+        <mat-form-field appearance="standard">
+            <mat-label>Cars</mat-label>
+            <select matNativeControl required>
+                <option value="volvo">Volvo</option>
+                <option value="saab">Saab</option>
+                <option value="mercedes">Mercedes</option>
+                <option value="audi">Audi</option>
+            </select>
+        </mat-form-field>
+        <mat-form-field appearance="standard">
+            <mat-label>Textarea</mat-label>
+            <textarea matInput></textarea>
+        </mat-form-field>
+    </div>
+</div>

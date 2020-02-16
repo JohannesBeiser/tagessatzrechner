@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-add',
@@ -8,8 +9,11 @@ import { Component, OnInit } from '@angular/core';
 export class AddComponent implements OnInit {
 
   constructor() { }
-
+  public date: FormControl;
+  public datee: Date;
   ngOnInit(): void {
+    this.datee= new Date();
+    this.date = new FormControl(new Date());
   }
 
 }
