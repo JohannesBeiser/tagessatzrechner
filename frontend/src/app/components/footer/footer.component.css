@@ -1,0 +1,37 @@
+.footer-component-container {
+  height: 40px;
+  width: 100%;
+  border-top: 1px solid #c5c5c5;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.footer-component-container i {
+  flex: 1;
+}
+.footer-component-container i.active {
+  font-family: 'Material Icons';
+}
+.footer-component-container .image-icon {
+  height: 20px;
+  width: 20px;
+  background-size: contain;
+  justify-content: center;
+}
+.footer-component-container .image-icon.home {
+  background-image: url('../../../assets/images/home_outlined.png');
+}
+.footer-component-container .image-icon.home.active {
+  background-image: url('../../../assets/images/home_filled.png');
+}
+.footer-component-container .image-icon.add {
+  background-image: url('../../../assets/images/add.png');
+}
+.footer-component-container .image-icon.settings {
+  background-image: url('../../../assets/images/settings_outlined.png');
+}
+.footer-component-container .image-icon.settings.active {
+  background-image: url('../../../assets/images/settings_filled.png');
+}

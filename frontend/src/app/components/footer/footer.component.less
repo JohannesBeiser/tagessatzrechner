@@ -14,4 +14,28 @@
             font-family: 'Material Icons';
         }
     }
+
+    .image-icon{
+        height: 20px;
+        width: 20px;
+        background-size: contain;
+        justify-content: center;
+
+        &.home{
+            background-image: url('../../../assets/images/home_outlined.png');
+            &.active{
+                background-image: url('../../../assets/images/home_filled.png');
+            }
+        }
+        &.add{
+            background-image: url('../../../assets/images/add.png');
+        }
+        &.settings{
+            background-image: url('../../../assets/images/settings_outlined.png');
+            &.active{
+                background-image: url('../../../assets/images/settings_filled.png');
+            }
+        }
+    }
+    
 }
