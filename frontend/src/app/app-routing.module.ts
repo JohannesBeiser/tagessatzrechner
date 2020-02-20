@@ -9,9 +9,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'add', component: AddComponent },
   { path: 'home', component: HomeComponent, data: {animation: 'Home'} },
-  { path: 'settings', component: SettingsComponent, data: {animation: 'Settings'}  }
+  { path: 'settings', component: SettingsComponent, data: {animation: 'Settings'}  },
+  { path: '**', redirectTo: 'home', pathMatch: 'full' },
 ];
 
 @NgModule({

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { slideInAnimation } from './animations';
+import { SliderService } from './services/slider/slider.service';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,9 @@ import { slideInAnimation } from './animations';
 export class AppComponent {
   title = 'frontend';
 
+  constructor(
+    public sliderService: SliderService
+  ){}
 
   prepareRoute(outlet: RouterOutlet) {
     return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];

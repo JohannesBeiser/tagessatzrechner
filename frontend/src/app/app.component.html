@@ -1,5 +1,13 @@
-<app-header></app-header>
+<app-header>
+  <div class="flexbox justify align h-100">
+    <span>Expensemanager 2.0</span>
+  </div>
+</app-header>
+
 <div class="router-body" [@routeAnimations]="prepareRoute(outlet)">
   <router-outlet #outlet="outlet"></router-outlet>
 </div>
+
 <app-footer></app-footer>
+
+<app-add class="add-slider" [class.sliderActive]="sliderService.getIsActive() | async"></app-add>

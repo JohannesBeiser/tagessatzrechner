@@ -1,5 +1,24 @@
 <div class="add-component-container">
-    <div class="example-container">
+    <app-header>
+        <div class="flexbox align h-100 space-between p-0-8 slider-header">
+            <i class="slider-header-icon" (click)="sliderService.deactivate()" class="material-icons-outlined slider-header-icon">close</i>
+            <i class="material-icons-outlined slider-header-icon">check</i>
+        </div>
+    </app-header>
+
+    <div class="content-container">
+        <mat-form-field appearance="standard">
+            <mat-label>Input</mat-label>
+            <input pattern="[0-9]*" type="text" matInput required>
+        </mat-form-field>
+        <mat-form-field appearance="standard">
+            <mat-label>Input</mat-label>
+            <input pattern="[0-9]*" type="text" matInput required>
+        </mat-form-field>
+        <mat-form-field appearance="standard">
+            <mat-label>Input</mat-label>
+            <input pattern="[0-9]*" type="text" matInput required>
+        </mat-form-field>
         <mat-form-field appearance="standard">
             <mat-label>Input</mat-label>
             <input pattern="[0-9]*" type="text" matInput required>
@@ -33,5 +52,9 @@
             <mat-label>Textarea</mat-label>
             <textarea matInput></textarea>
         </mat-form-field>
+        <mat-form-field appearance="standard">
+                <mat-label>Input</mat-label>
+                <input pattern="[0-9]*" type="text" matInput required>
+            </mat-form-field>
     </div>
 </div>

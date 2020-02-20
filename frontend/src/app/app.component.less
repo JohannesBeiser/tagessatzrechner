@@ -1,4 +1,13 @@
-.router-body{
-    flex:1;
+.router-body {
+    flex    : 1;
     overflow: auto;
+}
+
+.add-slider {
+    transform : translateY(100%);
+    transition: transform 150ms ease-in-out;
+
+    &.sliderActive {
+        transform: translateY(0%)
+    }
 }
