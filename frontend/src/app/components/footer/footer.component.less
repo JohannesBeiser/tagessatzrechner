@@ -1,41 +1,48 @@
-.footer-component-container{
-    height: 40px;
-    width: 100%;
-    border-top: 1px solid #e6e6e6;
-    background: white;
-    display: flex;
-    align-items: center;
+.footer-component-container {
+    height         : 40px;
+    width          : 100%;
+    border-top     : 1px solid #e6e6e6;
+    background     : white;
+    display        : flex;
+    align-items    : center;
     justify-content: center;
-    text-align: center;
+    text-align     : center;
 
-    i{
-        flex:1;
-        &.active{
+    i {
+        flex: 1;
+
+        &.active {
             font-family: 'Material Icons';
         }
     }
 
-    .image-icon{
-        height: 20px;
-        width: 20px;
-        background-size: contain;
-        justify-content: center;
-
-        &.home{
+    span {
+        .home {
             background-image: url('../../../assets/images/home_outlined.png');
-            &.active{
-                background-image: url('../../../assets/images/home_filled.png');
-            }
         }
-        &.add{
+
+        .add {
             background-image: url('../../../assets/images/add.png');
         }
-        &.settings{
+
+        .settings {
             background-image: url('../../../assets/images/settings_outlined.png');
-            &.active{
+        }
+
+        &.active {
+            .home {
+                background-image: url('../../../assets/images/home_filled.png');
+            }
+
+            .settings {
                 background-image: url('../../../assets/images/settings_filled.png');
             }
         }
     }
-    
+    .image-icon {
+        height         : 20px;
+        width          : 20px;
+        background-size: contain;
+        justify-content: center;
+    }
 }

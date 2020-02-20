@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SliderService } from 'src/app/services/slider/slider.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
@@ -13,15 +13,40 @@ export class AddComponent implements OnInit, OnDestroy {
     public sliderService: SliderService
   ) { }
 
-  public date: FormControl;
-  public datee: Date;
-  toggle:boolean= false;
+
+  public expenseForm: FormGroup;
+
+
+  public date: Date;
 
   ngOnInit(): void {
-    this.datee= new Date();
-    this.date = new FormControl(new Date());
+    this.expenseForm = new FormGroup({
+      amount: new FormControl('', [Validators.required ]),
+      date: new FormControl(this.currentDate()),
+      category: new FormControl('transport', [Validators.required]),
+      description: new FormControl('', [Validators.required, Validators.maxLength(100)])
+    });
+
+
+
+    this.date= new Date();
     console.log("added")
   }
+
+  hasError(controlName: string, errorName: string){
+    return this.expenseForm.controls[controlName].hasError(errorName);
+  }
+
+  currentDate() {
+    const currentDate = new Date();
+    return currentDate.toISOString().substring(0,10);
+  }
+
+  createExpense(expense: any){
+    debugger;
+    console.log("added")
+  }
+  
 
   ngOnDestroy(){
     console.log("removed")

@@ -1,60 +1,51 @@
 <div class="add-component-container">
-    <app-header>
-        <div class="flexbox align h-100 space-between p-0-8 slider-header">
-            <i class="slider-header-icon" (click)="sliderService.deactivate()" class="material-icons-outlined slider-header-icon">close</i>
-            <i class="material-icons-outlined slider-header-icon">check</i>
-        </div>
-    </app-header>
+  <app-header>
+    <div class="flexbox align h-100 space-between p-0-8 slider-header">
+      <i class="slider-header-icon" (click)="sliderService.deactivate()"
+        class="material-icons-outlined slider-header-icon">close</i>
+      <i class="material-icons-outlined slider-header-icon">check</i>
+    </div>
+  </app-header>
 
-    <div class="content-container">
-        <mat-form-field appearance="standard">
-            <mat-label>Input</mat-label>
-            <input pattern="[0-9]*" type="text" matInput required>
-        </mat-form-field>
-        <mat-form-field appearance="standard">
-            <mat-label>Input</mat-label>
-            <input pattern="[0-9]*" type="text" matInput required>
-        </mat-form-field>
-        <mat-form-field appearance="standard">
-            <mat-label>Input</mat-label>
-            <input pattern="[0-9]*" type="text" matInput required>
-        </mat-form-field>
-        <mat-form-field appearance="standard">
-            <mat-label>Input</mat-label>
-            <input pattern="[0-9]*" type="text" matInput required>
-        </mat-form-field>
+  <div class="content-container">
 
-        <mat-form-field appearance="standard">
-            <mat-label>Angular forms</mat-label>
-            <input matInput [matDatepicker]="picker1" [formControl]="date">
-            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-            <mat-datepicker #picker1></mat-datepicker>
+    <form [formGroup]="expenseForm" autocomplete="off" novalidate (ngSubmit)="createExpense(expenseForm.value)">
+
+      <mat-form-field appearance="standard">
+        <mat-label>Amount</mat-label>
+        <input pattern="[0-9]*" type="text" matInput formControlName="amount">
+        <mat-error *ngIf="hasError('amount', 'required')">Amount is required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="standard">
+        <mat-label>Category</mat-label>
+        <select matNativeControl formControlName="category">
+          <option value="food">food</option>
+          <option value="accommodation">accommodation</option>
+          <option value="transport">transport</option>
+          <option value="general">general</option>
+        </select>
+      </mat-form-field>
+
+      <mat-form-field appearance="standard">
+        <mat-label>Date</mat-label>
+        <input type="date" matInput formControlName="date">
+      </mat-form-field>
+
+      <mat-form-field appearance="standard" >
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description"></textarea>
         </mat-form-field>
+    </form>
 
-
+    <!-- 
         <mat-form-field appearance="standard">
-            <mat-label>Angular forms2</mat-label>
-            <input type="date" matInput value="{{datee}}">
-        </mat-form-field>
-
-        <input type="date" name="datevalue">
-
-        <mat-form-field appearance="standard">
-            <mat-label>Cars</mat-label>
-            <select matNativeControl required>
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-                <option value="mercedes">Mercedes</option>
-                <option value="audi">Audi</option>
-            </select>
-        </mat-form-field>
-        <mat-form-field appearance="standard">
-            <mat-label>Textarea</mat-label>
+            <mat-label>Description</mat-label>
             <textarea matInput></textarea>
         </mat-form-field>
         <mat-form-field appearance="standard">
                 <mat-label>Input</mat-label>
                 <input pattern="[0-9]*" type="text" matInput required>
-            </mat-form-field>
-    </div>
+            </mat-form-field> -->
+  </div>
 </div>
