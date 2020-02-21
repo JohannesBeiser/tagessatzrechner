@@ -3,27 +3,31 @@
     <div class="flexbox align h-100 space-between p-0-8 slider-header">
       <i class="slider-header-icon" (click)="sliderService.deactivate()"
         class="material-icons-outlined slider-header-icon">close</i>
-      <i class="material-icons-outlined slider-header-icon">check</i>
+      <i class="material-icons-outlined slider-header-icon" (click)="createExpense(expenseForm.value)">check</i>
     </div>
   </app-header>
 
   <div class="content-container">
+    <form class="expense-form" [formGroup]="expenseForm" autocomplete="off" novalidatew (ngSubmit)="createExpense(expenseForm.value)">
+      <mat-form-field appearance="standard" class="w-100">
+        <mat-label>Name</mat-label>
+        <input type="text" matInput formControlName="name">
+        <mat-error *ngIf="hasError('name', 'required')">Name is required</mat-error>
+      </mat-form-field>
 
-    <form [formGroup]="expenseForm" autocomplete="off" novalidate (ngSubmit)="createExpense(expenseForm.value)">
-
-      <mat-form-field appearance="standard">
+      <mat-form-field appearance="standard" class="amount-input">
         <mat-label>Amount</mat-label>
-        <input pattern="[0-9]*" type="text" matInput formControlName="amount">
+        <input type="number" matInput formControlName="amount">
         <mat-error *ngIf="hasError('amount', 'required')">Amount is required</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="standard">
         <mat-label>Category</mat-label>
         <select matNativeControl formControlName="category">
-          <option value="food">food</option>
+          <option value="food">Food</option>
           <option value="accommodation">accommodation</option>
-          <option value="transport">transport</option>
-          <option value="general">general</option>
+          <option value="transport">Transport</option>
+          <option value="general">General</option>
         </select>
       </mat-form-field>
 
@@ -36,16 +40,7 @@
             <mat-label>Description</mat-label>
             <textarea matInput formControlName="description"></textarea>
         </mat-form-field>
-    </form>
 
-    <!-- 
-        <mat-form-field appearance="standard">
-            <mat-label>Description</mat-label>
-            <textarea matInput></textarea>
-        </mat-form-field>
-        <mat-form-field appearance="standard">
-                <mat-label>Input</mat-label>
-                <input pattern="[0-9]*" type="text" matInput required>
-            </mat-form-field> -->
+      </form>
   </div>
 </div>

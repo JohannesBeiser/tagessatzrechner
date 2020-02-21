@@ -1,27 +1,27 @@
 :host {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    z-index: 1000;
+    position    : fixed;
+    width       : 100%;
+    height      : 100%;
+    z-index     : 1000;
     // transform: translateY(+100%);
-  }
+}
 
 .add-component-container {
-    background:white;
-    height: 100%;
-    display: flex;
+    background    : white;
+    height        : 100%;
+    display       : flex;
     flex-direction: column;
-    
-    .slider-header{
-        .slider-header-icon{
-            flex: 1;
-            height: 40px;
-            display: flex;
+
+    .slider-header {
+        .slider-header-icon {
+            flex       : 1;
+            height     : 40px;
+            display    : flex;
             align-items: center;
 
-            &:last-child{
-                display: flex;
-                justify-content :flex-end;
+            &:last-child {
+                display        : flex;
+                justify-content: flex-end;
             }
         }
     }
@@ -30,6 +30,23 @@
         display       : flex;
         flex-direction: column;
         padding       : 0 16px;
-        overflow: auto;
+        overflow      : auto;
+
+        .expense-form {
+            display  : flex;
+            flex-wrap: wrap;
+
+            mat-form-field {
+                flex: auto;
+
+                &.amount-input {
+                    width       : 70px;
+                    margin-right: 16px;
+                }
+            }
+
+
+        }
+
     }
 }

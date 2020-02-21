@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SliderService } from 'src/app/services/slider/slider.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { Expense, ExpenseService } from 'src/app/services/expenses/expense.service';
 
 @Component({
   selector: 'app-add',
@@ -10,26 +11,22 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 })
 export class AddComponent implements OnInit, OnDestroy {
   constructor(
-    public sliderService: SliderService
+    public sliderService: SliderService,
+    public expenseService: ExpenseService
   ) { }
-
 
   public expenseForm: FormGroup;
 
 
-  public date: Date;
-
   ngOnInit(): void {
     this.expenseForm = new FormGroup({
-      amount: new FormControl('', [Validators.required ]),
-      date: new FormControl(this.currentDate()),
-      category: new FormControl('transport', [Validators.required]),
-      description: new FormControl('', [Validators.required, Validators.maxLength(100)])
+      name: new FormControl('', Validators.required),
+      amount: new FormControl('', Validators.required ),
+      date: new FormControl(this.currentDate(), Validators.required),
+      category: new FormControl('transport', Validators.required),
+      description: new FormControl('', Validators.maxLength(50))
     });
 
-
-
-    this.date= new Date();
     console.log("added")
   }
 
@@ -42,9 +39,8 @@ export class AddComponent implements OnInit, OnDestroy {
     return currentDate.toISOString().substring(0,10);
   }
 
-  createExpense(expense: any){
-    debugger;
-    console.log("added")
+  createExpense(expense: Expense){
+    this.expenseService.addExpense(expense);
   }
   
 

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ExpenseService, Expense } from 'src/app/services/expenses/expense.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -7,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public expenseService: ExpenseService
+  ) { }
+
+  public expenses$: Observable<Expense[]>;
 
   ngOnInit(): void {
+    this.expenses$= this.expenseService.getExpenses();
+  }
+  
+  myhandler(){
+    this.expenses$= this.expenseService.getExpenses();
   }
 
 }
