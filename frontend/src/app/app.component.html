@@ -1,6 +1,6 @@
 <app-header>
   <div class="flexbox justify align h-100">
-    <span>Expensemanager 2.0</span>
+    <span>ExpenseManager 2.0</span>
   </div>
 </app-header>
 
@@ -10,4 +10,7 @@
 
 <app-footer></app-footer>
 
-<app-add class="add-slider" [class.sliderActive]="sliderService.getIsActive() | async"></app-add>
+<div class="app-slider" [class.sliderActive]="sliderService.getActiveComponent()">
+  <app-add *ngIf="sliderService.activeComponent === 'add'"></app-add>
+  <app-search *ngIf="sliderService.activeComponent === 'search'"></app-search>
+</div>

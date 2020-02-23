@@ -1,0 +1,28 @@
+.search-component-container .search-bar-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.search-component-container .search-bar-input-container .search-input-icon-prefix {
+  position: absolute;
+  left: 8px;
+  color: #888;
+  font-size: 18px;
+}
+.search-component-container .search-bar-input-container .search-input-icon-suffix {
+  position: absolute;
+  right: 8px;
+  font-size: 16px;
+}
+.search-component-container .search-bar-input-container .searchbar-input {
+  box-sizing: border-box;
+  padding: 6px;
+  font-size: 16px;
+  background: #6b6b70;
+  border: none;
+  border-radius: 8px;
+  padding-left: 36px;
+}
+.search-component-container ::ng-deep .header-component-container {
+  height: 50px;
+}

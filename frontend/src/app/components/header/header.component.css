@@ -1,0 +1,10 @@
+.header-component-container {
+  height: 40px;
+  width: 100%;
+  background: #76757b;
+  border-bottom: 1px solid #e6e6e6;
+  font-family: 'Roboto-Regular';
+}
+.header-component-container ::ng-deep * {
+  color: #efefef;
+}

@@ -1,10 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
-@import "assets/fonts/fonts/SFMono/SFMono.css";
-@import "assets/fonts/fonts/Roboto/roboto.css";
+@import "assets/fonts/SFMono/SFMono.css";
+@import "assets/fonts/Roboto/roboto.css";
+@import "assets/fonts/mat-icon/material_Icons.css";
 * {
   padding: 0;
   margin: 0;
   outline: none;
+  -webkit-tap-highlight-color: transparent;
+  color: #444;
 }
 html,
 body,
@@ -28,4 +31,25 @@ app-root {
 }
 .justify {
   justify-content: center;
+}
+.align {
+  align-items: center;
+}
+.h-100 {
+  height: 100%;
+}
+.w-100 {
+  width: 100%;
+}
+.space-between {
+  justify-content: space-between;
+}
+.p-0-8 {
+  padding: 0 8px;
+}
+.mr-8 {
+  margin-right: 8px;
+}
+.mr-16 {
+  margin-right: 16px;
 }

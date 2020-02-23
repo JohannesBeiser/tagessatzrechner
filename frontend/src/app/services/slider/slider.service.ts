@@ -1,26 +1,34 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class SliderService {
 
-  private active$: BehaviorSubject<boolean>;
+  private active$: BehaviorSubject<string>;
+  public activeComponent: string;
+
   constructor() {
-    this.active$= new BehaviorSubject<boolean>(false)
+    this.active$= new BehaviorSubject<string>(null)
    }
 
-  public getIsActive():Observable<boolean>{
+  public getActiveComponent():string{
+     return this.activeComponent;
+  }
+
+  public getActiveComponentAsync():Observable<string>{
     return this.active$.asObservable();
+ }
+
+  public show(component: string):void{
+    this.activeComponent= component;
+    this.active$.next(component);
   }
 
-  public activate():void{
-    this.active$.next(true);
+  public hide():void{
+    this.activeComponent=null;
+    this.active$.next(null);
   }
-
-  public deactivate():void{
-    this.active$.next(false);
-  }
-
 }

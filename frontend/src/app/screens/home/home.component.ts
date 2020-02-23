@@ -18,9 +18,4 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.expenses$= this.expenseService.getExpenses();
   }
-  
-  myhandler(){
-    this.expenses$= this.expenseService.getExpenses();
-  }
-
 }

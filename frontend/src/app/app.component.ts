@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { slideInAnimation } from './animations';
 import { SliderService } from './services/slider/slider.service';
@@ -12,7 +12,7 @@ import { SliderService } from './services/slider/slider.service';
     // animation triggers go here
   ]
 })
-export class AppComponent {
+export class AppComponent{
   title = 'frontend';
 
   constructor(

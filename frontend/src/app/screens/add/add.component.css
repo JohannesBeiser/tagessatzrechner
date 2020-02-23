@@ -1,0 +1,34 @@
+.add-component-container {
+  display: flex;
+  flex-direction: column;
+}
+.add-component-container .slider-header .slider-header-icon {
+  flex: 1;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+.add-component-container .slider-header .slider-header-icon.submit-icon.disabled {
+  opacity: 0.3;
+}
+.add-component-container .slider-header .slider-header-icon:last-child {
+  display: flex;
+  justify-content: flex-end;
+}
+.add-component-container .content-container {
+  display: flex;
+  flex-direction: column;
+  padding: 0 16px;
+  overflow: auto;
+}
+.add-component-container .content-container .expense-form {
+  display: flex;
+  flex-wrap: wrap;
+}
+.add-component-container .content-container .expense-form mat-form-field {
+  flex: auto;
+}
+.add-component-container .content-container .expense-form mat-form-field.amount-input {
+  width: 70px;
+  margin-right: 16px;
+}

@@ -15,8 +15,10 @@ import { MatFormFieldModule} from '@angular/material/form-field';
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatDatepickerModule } from "@angular/material/datepicker";
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
+import { GroupsComponent } from './screens/groups/groups.component';
+import { SearchComponent } from './screens/search/search.component';
 
 
 
@@ -27,7 +29,9 @@ import { MatNativeDateModule } from '@angular/material/core';
     HomeComponent,
     HeaderComponent,
     FooterComponent,
-    SettingsComponent
+    SettingsComponent,
+    GroupsComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,
@@ -39,6 +43,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatDatepickerModule,
     ReactiveFormsModule,
     MatNativeDateModule,
+    FormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],

@@ -1,14 +1,4 @@
-:host {
-    position    : fixed;
-    width       : 100%;
-    height      : 100%;
-    z-index     : 1000;
-    // transform: translateY(+100%);
-}
-
 .add-component-container {
-    background    : white;
-    height        : 100%;
     display       : flex;
     flex-direction: column;
 
@@ -18,6 +8,12 @@
             height     : 40px;
             display    : flex;
             align-items: center;
+
+            &.submit-icon{
+                &.disabled{
+                    opacity: 0.3;
+                }
+            }
 
             &:last-child {
                 display        : flex;

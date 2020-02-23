@@ -11,6 +11,8 @@
           "/index.html",
           "/manifest.webmanifest",
           "/*.css",
+          "!/assets/update-pwa.js",
+          "/assets/delayed-reload.js",
           "/*.js"
         ]
       }
@@ -20,8 +22,8 @@
       "updateMode": "prefetch",
       "resources": {
         "files": [
-          "/assets/**",
-          "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"
+          "/assets/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani|css)",
+          "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani|css)"
         ]
       }
     }

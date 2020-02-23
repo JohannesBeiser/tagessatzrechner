@@ -1,13 +1,23 @@
 .router-body {
     flex    : 1;
     overflow: auto;
+    background: white;
 }
 
-.add-slider {
-    transform : translateY(100%);
-    transition: transform 150ms ease-in-out;
+.app-slider {
+    position    : fixed;
+    width       : 100%;
+    height      : 100%;
+    z-index     : 1000;
+    display: none;
+    
+    >*{
+        height: 100%;
+        background: white;
+        display: flex;
+    }
 
     &.sliderActive {
-        transform: translateY(0%)
+        display: block;
     }
 }

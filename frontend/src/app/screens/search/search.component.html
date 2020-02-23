@@ -1,0 +1,14 @@
+<div class="search-component-container w-100">
+    <app-header>
+        <div class="flexbox align p-0-8 h-100">
+            <div class="flex-1 mr-8 search-bar-input-container" >
+                <i matIcon class="material-icons-outlined search-input-icon-prefix">search</i>
+                <input class="searchbar-input w-100" id="searchbar-to-focus" type="search" matInput [(ngModel)]="seachtext" #searchInput> 
+                <i matIcon class="material-icons-outlined search-input-icon-suffix" (click)="clear()">close</i>
+            </div>
+            
+           <span (click)="sliderService.hide()">cancel</span>
+        </div>
+    </app-header>
+    Search works!
+</div>

@@ -1,14 +1,15 @@
 <div class="add-component-container">
   <app-header>
     <div class="flexbox align h-100 space-between p-0-8 slider-header">
-      <i class="slider-header-icon" (click)="sliderService.deactivate()"
+      <i class="slider-header-icon" (click)="sliderService.hide()"
         class="material-icons-outlined slider-header-icon">close</i>
-      <i class="material-icons-outlined slider-header-icon" (click)="createExpense(expenseForm.value)">check</i>
+      <i class="material-icons-outlined slider-header-icon submit-icon" [class.disabled]="!expenseForm.valid" (click)="createExpense(expenseForm.value)">check</i>
     </div>
   </app-header>
 
   <div class="content-container">
-    <form class="expense-form" [formGroup]="expenseForm" autocomplete="off" novalidatew (ngSubmit)="createExpense(expenseForm.value)">
+    <form class="expense-form" [formGroup]="expenseForm" autocomplete="off" (submit)="createExpense(expenseForm.value)"
+      #formDirective="ngForm">
       <mat-form-field appearance="standard" class="w-100">
         <mat-label>Name</mat-label>
         <input type="text" matInput formControlName="name">
@@ -25,8 +26,16 @@
         <mat-label>Category</mat-label>
         <select matNativeControl formControlName="category">
           <option value="food">Food</option>
-          <option value="accommodation">accommodation</option>
+          <option value="accommodation">Accommodation</option>
           <option value="transport">Transport</option>
+          <option value="multimedia">Multimedia</option>
+          <option value="general">General</option>
+        </select>
+      </mat-form-field>
+
+      <mat-form-field appearance="standard">
+        <mat-label>Group</mat-label>
+        <select matNativeControl formControlName="group">
           <option value="general">General</option>
         </select>
       </mat-form-field>
@@ -36,11 +45,15 @@
         <input type="date" matInput formControlName="date">
       </mat-form-field>
 
-      <mat-form-field appearance="standard" >
-            <mat-label>Description</mat-label>
-            <textarea matInput formControlName="description"></textarea>
-        </mat-form-field>
+      <mat-form-field appearance="standard">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+          cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+      </mat-form-field>
 
-      </form>
+      <input type="submit" style="display: none">
+
+
+    </form>
   </div>
 </div>
