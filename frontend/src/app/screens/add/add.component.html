@@ -12,7 +12,7 @@
       #formDirective="ngForm">
       <mat-form-field appearance="standard" class="w-100">
         <mat-label>Name</mat-label>
-        <input type="text" matInput formControlName="name">
+        <input type="text" matInput formControlName="name" #focusInput>
         <mat-error *ngIf="hasError('name', 'required')">Name is required</mat-error>
       </mat-form-field>
 
@@ -37,6 +37,7 @@
         <mat-label>Group</mat-label>
         <select matNativeControl formControlName="group">
           <option value="general">General</option>
+          <option *ngFor="let group of groups$ | async" value="{{group.groupName}}">{{group.groupName}}</option>
         </select>
       </mat-form-field>
 
@@ -49,11 +50,9 @@
         <mat-label>Description</mat-label>
         <textarea matInput formControlName="description" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
           cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+          <!-- <mat-error *ngIf="hasError('description', 'maxlength')">Too many words</mat-error> -->
       </mat-form-field>
-
       <input type="submit" style="display: none">
-
-
     </form>
   </div>
 </div>

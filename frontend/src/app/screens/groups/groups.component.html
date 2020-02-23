@@ -1,4 +1,6 @@
 <div class="groupscomponent-container w-100">
-       
-        Groups works!
- </div>
+
+  <div *ngFor="let group of groups$ | async">
+    {{group.groupName}}
+  </div>
+</div>

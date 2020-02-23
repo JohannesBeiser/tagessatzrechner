@@ -1,0 +1,63 @@
+.settings-component-container{
+    
+    section{
+        border-bottom: 1px solid #ddd;
+        padding: 16px 0;
+
+        .section-container{
+            padding: 0 8px;
+            .groups-header{
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+        }
+
+        &.group-settings-section{
+            .groups-header{
+                display: flex;
+                align-items: center;
+    
+                input{
+                    padding: 6px;
+                    font-size: 16px;
+                    background: #eee;
+                    border: none;
+                    border-radius: 8px;
+                    flex: 1;
+                    margin: 0px 8px;
+                    box-sizing: border-box;
+                    display: inline;
+                    min-width: 10px;
+                }
+    
+                i{        
+                    margin-right: 8px;
+                }
+            }
+    
+            .group-list{
+                display: flex;
+                flex-direction: column;
+    
+                .group-item{
+                    padding: 4px 8px;
+                    display: flex;
+                    align-items: center;
+                    background: #eee;
+                    border-radius: 16px;
+                    margin: 4px 0;
+                    align-items: center;
+                    min-width: 100px;
+                    
+                    span{
+                        flex: 1;
+                    }
+                }
+    
+            }
+    
+        }
+
+    }
+    
+}

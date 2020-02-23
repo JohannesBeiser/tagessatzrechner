@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable, BehaviorSubject, ReplaySubject } from 'rxjs';
+import { IndexedDBConnectionService } from '../indexed-dbconnection.service';
 
 export interface Expense {
   name: string;
@@ -18,7 +19,9 @@ export class ExpenseService {
   private expenses$: Subject<Expense[]>;
   private connection$: ReplaySubject<boolean>;
 
-  constructor() {
+  constructor(
+    private indexedDBService: IndexedDBConnectionService
+  ) {
     this.connection$ = new ReplaySubject(1);
     this.createExpenseDatabase();
     this.expenses$ = new Subject<Expense[]>();
@@ -83,11 +86,11 @@ export class ExpenseService {
   }
 
   private createExpenseDatabase() {
-    let dbReq = indexedDB.open('ExpenseManagerDB', 1);
+    let dbReq = this.indexedDBService.getConnection()
 
     dbReq.onupgradeneeded = (event) => {
-      this.db = (event.target as any).result;
-      this.db.createObjectStore('expenses', { autoIncrement: true });
+      let db = (event.target as any).result;
+      this.indexedDBService.upgradeDatabase(db);
     }
 
     dbReq.onsuccess = (event) => {

@@ -1,7 +1,44 @@
 <div class="settings-component-container">
-    <div>Categories</div>
-    <div>Groups</div>
-    <div>Monthly</div>
-    <div>Application -refresh</div>
+    <!-- <div>Categories</div> -->
+    <section class="group-settings-section">
+        <div class="section-container">
+            <div class="groups-header">
+                <span>Groups</span>
+                <input type="text" [(ngModel)]="newGroupInputValue">
+                <i class="material-icons-outlined" (click)="addGroup()">add</i>
+            </div>
+    
+            <div class="group-list">
+                <div class="group-item">
+                    <span>General</span>
+                    <i class="material-icons-outlined ">close</i>
+                </div>
+                <div class="group-item" *ngFor="let group of groups$ | async">
+                    <span>{{group.groupName}}</span>
+                    <i class="material-icons-outlined" (click)="deleteGroup(group.key, group.groupName)">close</i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="general-settings-section">
+        <div class="section-container">
+            <div class="groups-header">
+                <span>General</span>
+            </div>
+            <div class="flexbox align p-8" (click)="reloadApp()">            
+                <i class="material-icons-outlined mr-8">refresh</i>
+                <span>Reload Application</span>
+            </div>
+            <div class="flexbox align p-8" (click)="hardReloadApp()">            
+                <i class="material-icons-outlined mr-8">sync_problem</i>
+                <span>Hard-reload Application</span>
+            </div>
+    
+        </div>
+       
+    </section>
+  
+    <!-- <div>Monthly</div> -->
 
 </div>

@@ -1,22 +1,26 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgZone, AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormGroupDirective } from '@angular/forms';
 import { SliderService } from 'src/app/services/slider/slider.service';
 import { Expense, ExpenseService } from 'src/app/services/expenses/expense.service';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs/operators';
+import { GroupsService } from 'src/app/services/groups/groups.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-add',
   templateUrl: './add.component.html',
   styleUrls: ['./add.component.less']
 })
-export class AddComponent implements OnInit {
+export class AddComponent implements OnInit, AfterViewInit {
   constructor(
     public sliderService: SliderService,
     public expenseService: ExpenseService,
+    public groupsService: GroupsService,
     private _ngZone: NgZone
   ) { }
 
+  @ViewChild("focusInput") public focusInput: ElementRef;
   @ViewChild('autosize') autosize: CdkTextareaAutosize;
   triggerResize() {
     // Wait for changes to be applied, then trigger textarea resize.
@@ -24,6 +28,7 @@ export class AddComponent implements OnInit {
   }
 
   public expenseForm: FormGroup;
+  public groups$ : Observable<string[]>
 
   ngOnInit(): void {
     this.expenseForm = new FormGroup({
@@ -34,6 +39,10 @@ export class AddComponent implements OnInit {
       group: new FormControl('general', Validators.required),
       description: new FormControl('', Validators.maxLength(50))
     });
+    this.groups$= this.groupsService.getGroups();
+  }
+  ngAfterViewInit(){
+    this.focusInput.nativeElement.focus();
   }
 
   hasError(controlName: string, errorName: string){

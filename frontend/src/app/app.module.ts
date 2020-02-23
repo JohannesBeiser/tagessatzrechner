@@ -19,6 +19,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { GroupsComponent } from './screens/groups/groups.component';
 import { SearchComponent } from './screens/search/search.component';
+import {MatChipsModule} from '@angular/material/chips';
 
 
 
@@ -40,6 +41,7 @@ import { SearchComponent } from './screens/search/search.component';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatChipsModule,
     MatDatepickerModule,
     ReactiveFormsModule,
     MatNativeDateModule,
