@@ -1,6 +1,9 @@
 .filter-component-container {
   padding: 16px 8px;
 }
+.filter-component-container .filter-section {
+  padding: 8px 0;
+}
 .filter-component-container .groups-filter .group-picker {
   text-transform: capitalize;
 }

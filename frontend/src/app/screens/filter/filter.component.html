@@ -1,29 +1,33 @@
 <div class="filter-component-container">
 
+  <div class="filter-section">
+    Month
+      <mat-slide-toggle color="primary" class="example-margin" [checked]="allDatesSelected"
+        (change)="dateChanged($event)">{{allDatesSelected ? "All" : "Specfic"}}</mat-slide-toggle>
 
-
-  <div>Date filter</div>
-  <div>
-    <mat-slide-toggle class="example-margin" [checked]="allDatesSelected" (change)="dateChanged($event)">{{allDatesSelected ? "All time" : "Specfic month"}}</mat-slide-toggle>
+    <mat-form-field appearance="standard" class="month-filter" *ngIf="!allDatesSelected">
+      <mat-label>Month</mat-label>
+      <input type="month" matInput [(ngModel)]="dateSelected">
+    </mat-form-field>
   </div>
 
-  <mat-form-field appearance="standard" class="month-filter" *ngIf="!allDatesSelected">
-    <mat-label>Date</mat-label>
-    <input type="month" matInput [(ngModel)]="dateSelected">
-  </mat-form-field>
 
 
-  <div>Group filter</div>
-  <div>
-    <mat-slide-toggle class="example-margin" [checked]="allGroupsSelected" (change)="groupChanged($event)">{{allGroupsSelected ? "All Groups" : "Specfic group"}}</mat-slide-toggle>
+  <div class="filter-section">
+    Groups
+    <mat-slide-toggle color="primary" class="example-margin" [checked]="allGroupsSelected"
+      (change)="groupChanged($event)">{{allGroupsSelected ? "All" : "Specfic"}}</mat-slide-toggle>
+
+    <mat-form-field appearance="standard" class="groups-filter" *ngIf="!allGroupsSelected">
+      <mat-label>Group</mat-label>
+      <select matNativeControl class="group-picker" [(ngModel)]="groupSelected">
+        <option value="general">General</option>
+        <option *ngFor="let group of groups$ | async" [value]="group.groupName">{{group.groupName}}</option>
+      </select>
+    </mat-form-field>
+
   </div>
-  <mat-form-field appearance="standard" class="groups-filter" *ngIf="!allGroupsSelected">
-    <mat-label>Group</mat-label>
-    <select matNativeControl class="group-picker" [(ngModel)]="groupSelected">
-      <option value="general">General</option>
-      <option *ngFor="let group of groups$ | async" [value]="group.groupName">{{group.groupName}}</option>
-    </select>
-  </mat-form-field>
+
   <br><br>
   <input type="submit" style="display: none">
   <div (click)="submitFilter()">submit</div>

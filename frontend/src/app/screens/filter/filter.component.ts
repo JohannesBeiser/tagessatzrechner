@@ -3,7 +3,7 @@ import { GroupsService } from 'src/app/services/groups/groups.service';
 import { Observable } from 'rxjs';
 import { FilterService, ExpenseFilter } from 'src/app/services/filter/filter.service';
 import { FormGroup, FormControl } from '@angular/forms';
-import { take } from 'rxjs/operators';
+import { take, skip, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-filter',
@@ -12,7 +12,6 @@ import { take } from 'rxjs/operators';
 })
 export class FilterComponent implements OnInit {
 
-  public filterForm: FormGroup;
   public groups$;
 
   //Filters
@@ -26,8 +25,6 @@ export class FilterComponent implements OnInit {
     private groupService: GroupsService,
     private filterService: FilterService
   ) { }
-
-  
 
   ngOnInit(): void {
     this.groups$ = this.groupService.getGroups();
@@ -54,6 +51,15 @@ export class FilterComponent implements OnInit {
         }
       }, 100);
     });
+
+    this.filterService.filterShown$.pipe(
+      skip(1),
+      filter((val) => !val)
+    ).subscribe((isShown) => {
+      this.submitFilter();
+    })
+
+
   }
   groupChanged(e: any) {
     this.allGroupsSelected = e.checked;
@@ -69,18 +75,20 @@ export class FilterComponent implements OnInit {
     }
   }
 
-
   submitFilter() {
+    let currentFilter = JSON.parse(localStorage.getItem("filter"))
     let newFilter: Partial<ExpenseFilter>= {}
+    if(!this.allGroupsSelected){
+      newFilter.group=this.groupSelected
+    }
     if(!this.allDatesSelected){
       newFilter.date={
         month: this.dateSelected.substring(5),
         year: this.dateSelected.substring(0, 4)
       }
     }
-    if(!this.allGroupsSelected){
-      newFilter.group=this.groupSelected
+    if(JSON.stringify(currentFilter) !== JSON.stringify(newFilter) ){
+      this.filterService.setFilter(newFilter)
     }
-    this.filterService.setFilter(newFilter)
   }
 }

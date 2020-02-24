@@ -25,6 +25,7 @@ export class HomeComponent implements OnInit {
     this.currentFilter$ = this.filterService.getFilter();
 
     combineLatest(this.currentFilter$, this.expenses$).subscribe(([filter, expenses]) => {
+      debugger;
       this.expenses = expenses.filter((expense) => {
         return this.matchesFilter(expense, filter)
       });
