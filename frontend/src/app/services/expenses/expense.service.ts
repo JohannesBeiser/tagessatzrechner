@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable, BehaviorSubject, ReplaySubject } from 'rxjs';
 import { IndexedDBConnectionService } from '../indexed-dbconnection.service';
+import { expenses } from "./Expenses";
 
 export interface Expense {
   name: string;
   amount: number;
   category: string;
-  date: Date;
+  group: string;
+  date: string;
   description?: string;
 }
 
@@ -91,6 +93,9 @@ export class ExpenseService {
     dbReq.onupgradeneeded = (event) => {
       let db = (event.target as any).result;
       this.indexedDBService.upgradeDatabase(db);
+      setTimeout(() => {
+        this.seedExpenses();      
+      }, 1000);
     }
 
     dbReq.onsuccess = (event) => {
@@ -100,6 +105,12 @@ export class ExpenseService {
 
     dbReq.onerror = function (event) {
       alert('error opening database ' + (event.target as any).errorCode);
+    }
+  }
+
+  private seedExpenses(){
+    for (const expense of expenses) {
+      this.addExpense(expense);
     }
   }
 }

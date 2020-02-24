@@ -1,6 +1,11 @@
 <div class="home-component-container">
     <div *ngFor="let expense of (expenses$ | async)">
-        <span>{{expense.name}}</span>
-        <i class="material-icons-outlined" (click)="expenseService.deleteExpense(expense.key)">close</i>
+        <span>{{expense.date | date:'d MMM y'}}</span>-
+        <span>{{expense.name}}</span> - 
+        <span>{{expense.group}}</span>
+        <!-- <i class="material-icons-outlined" (click)="expenseService.deleteExpense(expense.key)">close</i> -->
+    </div>
+    <div class="filter-container" [class.active]="filterService.filterShown$ | async">
+        <app-filter></app-filter>
     </div>
 </div>

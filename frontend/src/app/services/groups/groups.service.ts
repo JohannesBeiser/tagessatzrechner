@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject, ReplaySubject, Observable } from 'rxjs';
+import { Subject, ReplaySubject, Observable, BehaviorSubject } from 'rxjs';
 import { IndexedDBConnectionService } from '../indexed-dbconnection.service';
 
 @Injectable({
@@ -8,7 +8,7 @@ import { IndexedDBConnectionService } from '../indexed-dbconnection.service';
 export class GroupsService {
 
   private db: any;
-  private groups: Subject<string[]>;
+  private groups$: BehaviorSubject<string[]>;
   private connection$: ReplaySubject<boolean>;
 
   constructor(
@@ -16,7 +16,7 @@ export class GroupsService {
   ) {
     this.connection$ = new ReplaySubject(1);
     this.createGroupDatabase();
-    this.groups = new Subject<string[]>();
+    this.groups$ = new BehaviorSubject<string[]>([]);
   }
 
   public addGroup(group: string) {
@@ -33,7 +33,7 @@ export class GroupsService {
 
   public getGroups(): Observable<string[]> {
     this.connection$.subscribe(()=>this.refreshGroups());
-    return this.groups.asObservable();
+    return this.groups$.asObservable();
   }
 
 
@@ -64,7 +64,7 @@ export class GroupsService {
         cursor.continue();
       }
       else {
-        this.groups.next(result)
+        this.groups$.next(result)
       }
     };
   }

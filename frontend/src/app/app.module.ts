@@ -20,6 +20,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { GroupsComponent } from './screens/groups/groups.component';
 import { SearchComponent } from './screens/search/search.component';
 import {MatChipsModule} from '@angular/material/chips';
+import { FilterComponent } from './screens/filter/filter.component';
 
 
 
@@ -32,7 +33,8 @@ import {MatChipsModule} from '@angular/material/chips';
     FooterComponent,
     SettingsComponent,
     GroupsComponent,
-    SearchComponent
+    SearchComponent,
+    FilterComponent
   ],
   imports: [
     BrowserModule,

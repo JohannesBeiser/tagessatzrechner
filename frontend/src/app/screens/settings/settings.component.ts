@@ -17,10 +17,10 @@ export class SettingsComponent implements OnInit {
   public newGroupInputValue: string;
 
   ngOnInit(): void {
-    this.groups$= this.groupsService.getGroups();
+    this.groups$ = this.groupsService.getGroups();
   }
 
-  hardReloadApp(){
+  hardReloadApp() {
     let shallUpdate = confirm("Hard reloading resets the offline cached app. Data will still remain!");
     if (shallUpdate) {
       navigator.serviceWorker.getRegistrations().then(function (registrations) {
@@ -32,16 +32,17 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-  reloadApp(){
+  reloadApp() {
     window.location.reload();
   }
 
-  addGroup(){
+  addGroup() {
     this.groupsService.addGroup(this.newGroupInputValue);
+    this.newGroupInputValue = "";
   }
 
-  deleteGroup(groupKey: number, groupName: string){
-    if(confirm(`Are you sure you want to delete ${groupName}?`)){
+  deleteGroup(groupKey: number, groupName: string) {
+    if (confirm(`Are you sure you want to delete ${groupName}?`)) {
       this.groupsService.deleteGroup(groupKey)
     }
   }

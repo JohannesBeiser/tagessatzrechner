@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgZone, AfterViewInit } from '@angular/core';
-import { FormControl, FormGroup, Validators, FormGroupDirective } from '@angular/forms';
+import { Component, OnInit, ViewChild, ElementRef, NgZone, AfterViewInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SliderService } from 'src/app/services/slider/slider.service';
 import { Expense, ExpenseService } from 'src/app/services/expenses/expense.service';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
@@ -42,7 +42,7 @@ export class AddComponent implements OnInit, AfterViewInit {
     this.groups$= this.groupsService.getGroups();
   }
   ngAfterViewInit(){
-    this.focusInput.nativeElement.focus();
+    // this.focusInput.nativeElement.focus();
   }
 
   hasError(controlName: string, errorName: string){

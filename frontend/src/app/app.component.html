@@ -1,6 +1,14 @@
-<app-header>
+<app-header *ngIf="appHeadline !== 'Overview'">
   <div class="flexbox justify align h-100">
-    <span>ExpenseManager 2.0</span>
+    <span>{{appHeadline}}</span>
+  </div>
+</app-header>
+
+<app-header *ngIf="appHeadline === 'Overview'">
+  <div class="flexbox justify align h-100">
+    <i class="material-icons-outlined back-icon" (click)="filterService.hide()" *ngIf="filterService.filterShown$ | async">arrow_back_ios</i>
+    <span>{{appHeadline}}</span>
+    <i class="material-icons-outlined filter-icon" (click)="filterService.show()" *ngIf="!(filterService.filterShown$ | async)">filter_list</i>
   </div>
 </app-header>
 

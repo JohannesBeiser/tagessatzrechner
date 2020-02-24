@@ -1,4 +1,4 @@
-const version = 7;
+const version = 8;
 
 let localVersion = parseInt(localStorage.getItem('version')) || 0;
 

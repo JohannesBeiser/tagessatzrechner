@@ -1,0 +1,21 @@
+<div class="filter-component-container">
+
+  <form class="expense-form" [formGroup]="filterForm" autocomplete="off" #formDirective2="ngForm">
+
+    <mat-form-field appearance="standard" class="month-filter">
+      <mat-label>Date</mat-label>
+      <input type="month" matInput formControlName="date">
+    </mat-form-field>
+
+    <mat-form-field appearance="standard" class="groups-filter">
+      <mat-label>Group</mat-label>
+      <select matNativeControl formControlName="group" class="group-picker">
+        <option *ngFor="let group of groups" [value]="group.groupName" >{{group.groupName}}</option>
+      </select>
+    </mat-form-field>
+    <input type="submit" style="display: none">
+  </form>
+  <div (click)="submitFilter()">submit</div>
+
+
+</div>
