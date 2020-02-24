@@ -1,5 +1,5 @@
 <div class="home-component-container">
-    <div *ngFor="let expense of (expenses$ | async)">
+    <div *ngFor="let expense of expenses">
         <span>{{expense.date | date:'d MMM y'}}</span>-
         <span>{{expense.name}}</span> - 
         <span>{{expense.group}}</span>

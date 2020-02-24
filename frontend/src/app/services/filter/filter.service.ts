@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface MonthYear{
   /**
@@ -10,8 +10,8 @@ export interface MonthYear{
 }
 
 export interface ExpenseFilter{
-  group: string;
-  date: MonthYear;
+  group?: string;
+  date?: MonthYear;
 }
 
 @Injectable({
@@ -22,20 +22,28 @@ export class FilterService {
   public filterShown$: BehaviorSubject<boolean>;
   public filterState$: BehaviorSubject<ExpenseFilter>;
 
+
+  private defaultFilter: ExpenseFilter= {
+    group: "general", 
+    date: {
+      month: this.getCurrentMonthFilter().substring(5),
+      year:this.getCurrentMonthFilter().substring(0,4)
+    }
+  }
+
   constructor() {
     this.filterShown$= new BehaviorSubject(false);
-    this.filterState$= new BehaviorSubject({
-      group: "USA", //TODO: get from localStoreage where all of the defaults are saved
-      date: {
-        month: "05",
-        year: "2020"
-      }
-    });
+    let initialFilter: ExpenseFilter = JSON.parse(localStorage.getItem("filter")) || this.defaultFilter;
+    this.filterState$= new BehaviorSubject(initialFilter);
    }
 
   setFilter(newFilter: Partial<ExpenseFilter>){
-    let merged = {...this.filterState$.value, ...newFilter};
-    this.filterState$.next(merged);
+    this.filterState$.next(newFilter);
+    localStorage.setItem("filter", JSON.stringify(newFilter))
+  }
+
+  getFilter():Observable<ExpenseFilter>{
+    return this.filterState$.asObservable();
   }
 
   show(){
@@ -45,4 +53,17 @@ export class FilterService {
   hide(){
     this.filterShown$.next(false);
   }
+
+  public getCurrentMonthFilter():string{
+    return '' + new Date().getFullYear() + '-' +  this.parseMonth(new Date().getMonth()+1)
+  }
+
+  public parseMonth(month: number): string{
+    if(month>9){
+      return month.toString();
+    }else{
+      return `0${month}`;
+    }
+  }
+
 }

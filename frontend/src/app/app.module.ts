@@ -21,6 +21,7 @@ import { GroupsComponent } from './screens/groups/groups.component';
 import { SearchComponent } from './screens/search/search.component';
 import {MatChipsModule} from '@angular/material/chips';
 import { FilterComponent } from './screens/filter/filter.component';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 
 
@@ -44,6 +45,7 @@ import { FilterComponent } from './screens/filter/filter.component';
     MatInputModule,
     MatSelectModule,
     MatChipsModule,
+    MatSlideToggleModule,
     MatDatepickerModule,
     ReactiveFormsModule,
     MatNativeDateModule,

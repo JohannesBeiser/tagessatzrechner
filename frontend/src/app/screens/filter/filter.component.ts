@@ -12,49 +12,75 @@ import { take } from 'rxjs/operators';
 })
 export class FilterComponent implements OnInit {
 
-  public groups: any[];
   public filterForm: FormGroup;
+  public groups$;
+
+  //Filters
+  public dateSelected: string;
+  public groupSelected: string;
+  public allDatesSelected: boolean;
+  public allGroupsSelected: boolean;
+
 
   constructor(
     private groupService: GroupsService,
     private filterService: FilterService
   ) { }
 
+  
 
   ngOnInit(): void {
-    this.groupService.getGroups().subscribe((val) => {
-      if (val.length > 0) {
-        this.groups = [{ groupName: "general" }, ...val]
-      }
-    })
-
-    this.filterForm = new FormGroup({
-      group: new FormControl(''),
-      date: new FormControl(''),
-    });
+    this.groups$ = this.groupService.getGroups();
 
     this.filterService.filterState$.pipe(
       take(1)
     ).subscribe((state: ExpenseFilter) => {
-      
-      //FIXME: quick workaround for testing
+      //FIXME : quick workaround for testing
       setTimeout(() => {
-        this.filterForm.reset({
-          date: `${state.date.year}-${state.date.month}`,
-          group: state.group
-        });           
+        if (state.date) {
+          this.dateSelected = `${state.date.year}-${state.date.month}`;
+          this.allDatesSelected = false;
+        } else {
+          this.dateSelected = null;
+          this.allDatesSelected = true;
+        }
+        if (state.group) {
+          this.groupSelected = state.group;
+          this.allGroupsSelected = false;
+
+        } else {
+          this.groupSelected = null;
+          this.allGroupsSelected = true;
+        }
       }, 100);
     });
-
+  }
+  groupChanged(e: any) {
+    this.allGroupsSelected = e.checked;
+    if(!e.checked){
+        this.groupSelected= "general"
+    }
   }
 
+  dateChanged(e: any) {
+    this.allDatesSelected = e.checked;
+    if(!e.checked){
+      this.dateSelected= this.filterService.getCurrentMonthFilter();
+    }
+  }
+
+
   submitFilter() {
-    this.filterService.setFilter({
-      group: this.filterForm.value.group,
-      date: {
-        month: this.filterForm.value.date.substring(5),
-        year: this.filterForm.value.date.substring(0, 4)
-      },
-    })
+    let newFilter: Partial<ExpenseFilter>= {}
+    if(!this.allDatesSelected){
+      newFilter.date={
+        month: this.dateSelected.substring(5),
+        year: this.dateSelected.substring(0, 4)
+      }
+    }
+    if(!this.allGroupsSelected){
+      newFilter.group=this.groupSelected
+    }
+    this.filterService.setFilter(newFilter)
   }
 }
