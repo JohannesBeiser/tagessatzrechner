@@ -1,3 +1,61 @@
+.home-component-container {
+  padding: 16px 8px;
+}
+.home-component-container .expense-list .expense-item {
+  background: #eee;
+  margin: 4px;
+  display: flex;
+}
+.home-component-container .expense-list .expense-item .category-indicator {
+  background: steelblue;
+  width: 6px;
+}
+.home-component-container .expense-list .expense-item .item-content {
+  padding: 8px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.home-component-container .expense-list .expense-item .item-content .minimal-info {
+  display: flex;
+}
+.home-component-container .expense-list .expense-item .item-content .minimal-info .info-item.amount {
+  min-width: 80px;
+}
+.home-component-container .expense-list .expense-item .item-content .minimal-info .info-item.name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.home-component-container .expense-list .expense-item .item-content .more-info {
+  flex: 1;
+}
+.home-component-container .expense-list .expense-item .item-content .more-info > div:first-child {
+  padding-top: 16px;
+}
+.home-component-container .expense-list .expense-item .item-content .more-info .description {
+  padding: 8px 0;
+}
+.home-component-container .expense-list .expense-item .item-content .more-info .group {
+  text-transform: capitalize;
+  padding: 8px 0;
+  display: flex;
+  align-items: center;
+}
+.home-component-container .expense-list .expense-item .item-content .more-info .group .group-title {
+  font-weight: bold;
+}
+.home-component-container .expense-list .expense-item .item-content .more-info .group .group-name {
+  margin-left: 8px;
+  flex: 1;
+}
+.home-component-container .expense-list .expense-item .item-content .more-info .group .action-buttons {
+  margin-right: 8px;
+}
+.home-component-container .expense-list .expense-item .item-content .more-info .group .action-buttons i {
+  margin-left: 8px;
+}
 .home-component-container .filter-container {
   background: white;
   position: absolute;

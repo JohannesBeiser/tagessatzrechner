@@ -54,6 +54,7 @@ export class FilterService {
     this.filterShown$.next(false);
   }
 
+
   public getCurrentMonthFilter():string{
     return '' + new Date().getFullYear() + '-' +  this.parseMonth(new Date().getMonth()+1)
   }

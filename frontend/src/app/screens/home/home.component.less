@@ -1,4 +1,84 @@
 .home-component-container {
+  padding: 16px 8px;
+
+  .expense-list {
+    .expense-item {
+      background: #eee;
+      margin: 4px;
+      display: flex;
+
+      .category-indicator {
+        background: steelblue;
+        width: 6px;
+      }
+
+      .item-content {
+        padding: 8px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        .minimal-info {
+          display: flex;
+
+          .info-item {
+            &.amount {
+              min-width: 80px;
+            }
+
+            &.name {
+              flex: 1;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+          }
+        }
+
+        .more-info {
+          flex: 1;
+
+          >div{
+            &:first-child{
+              padding-top: 16px;
+            }
+          }
+
+          .description {
+            padding: 8px 0;
+          }
+
+          .group {
+            text-transform: capitalize;
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+
+            .group-title {
+              font-weight: bold;
+            }
+
+            .group-name {
+              margin-left: 8px;
+              flex: 1;
+            }
+
+            .action-buttons {
+              margin-right: 8px;
+
+              i {
+                margin-left: 8px;
+              }
+            }
+          }
+
+        }
+
+
+      }
+
+    }
+  }
 
   .filter-container {
     background: white;
@@ -9,7 +89,7 @@
     transform: translateX(100%);
     transition: transform 150ms ease-in-out;
 
-    &.active{
+    &.active {
       transform: translateX(0);
     }
   }

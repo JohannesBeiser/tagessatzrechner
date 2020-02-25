@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -22,8 +21,10 @@ import { SearchComponent } from './screens/search/search.component';
 import {MatChipsModule} from '@angular/material/chips';
 import { FilterComponent } from './screens/filter/filter.component';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-
-
+import { registerLocaleData } from '@angular/common';
+import localeDe from '@angular/common/locales/de';
+import { PrettyCurrencyPipe } from './pipes/pretty-currency.pipe';
+registerLocaleData(localeDe);
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     SettingsComponent,
     GroupsComponent,
     SearchComponent,
-    FilterComponent
+    FilterComponent,
+    PrettyCurrencyPipe
   ],
   imports: [
     BrowserModule,
@@ -52,7 +54,12 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     FormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
-  providers: [],
+  providers: [
+    {
+      provide: LOCALE_ID,
+      useValue: 'de-DE'
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

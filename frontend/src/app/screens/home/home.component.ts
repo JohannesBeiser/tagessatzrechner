@@ -3,6 +3,7 @@ import { ExpenseService, Expense } from 'src/app/services/expenses/expense.servi
 import { Observable, combineLatest } from 'rxjs';
 import { FilterService, ExpenseFilter } from 'src/app/services/filter/filter.service';
 import { filter } from 'rxjs/operators';
+import {Pipe} from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -20,17 +21,43 @@ export class HomeComponent implements OnInit {
   public currentFilter$: Observable<ExpenseFilter>;
   public expenses: Expense[];
 
+  public detailViewShownForIndex: number;
+
   ngOnInit(): void {
     this.expenses$ = this.expenseService.getExpenses();
     this.currentFilter$ = this.filterService.getFilter();
 
     combineLatest(this.currentFilter$, this.expenses$).subscribe(([filter, expenses]) => {
-      debugger;
       this.expenses = expenses.filter((expense) => {
         return this.matchesFilter(expense, filter)
+      }).sort((a,b)=>{
+        return this.createComparatorNumber(a.date) - this.createComparatorNumber(b.date)
       });
-      // debugger;
     })
+  }
+
+  public deleteExpense(e:MouseEvent, key: number){
+    e.stopPropagation();
+    if(confirm("Do you really want to delete this expense?")){
+      this.expenseService.deleteExpense(key);
+    }
+    this.detailViewShownForIndex = null;
+  }
+
+  public toggleDetailView(index:number){
+    if(this.detailViewShownForIndex != null && this.detailViewShownForIndex == index){
+      this.detailViewShownForIndex = null;
+    }else{
+      this.detailViewShownForIndex = index;
+    }
+  }
+
+
+  /**
+   * Transforms "2020-02-15" to 20200215, for quick sorting after date
+   */
+  private createComparatorNumber(date: string){
+    return parseInt(date.split('-').join(''))
   }
 
   private matchesFilter(expense: Expense, filter: ExpenseFilter): boolean {
