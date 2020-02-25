@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ExpenseService, Expense } from 'src/app/services/expenses/expense.service';
 import { Observable, combineLatest } from 'rxjs';
 import { FilterService, ExpenseFilter } from 'src/app/services/filter/filter.service';
-import { filter } from 'rxjs/operators';
-import {Pipe} from '@angular/core';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -14,12 +13,15 @@ export class HomeComponent implements OnInit {
 
   constructor(
     public expenseService: ExpenseService,
-    public filterService: FilterService
+    public filterService: FilterService,
+    private datePipe: DatePipe
   ) { }
 
   private expenses$: Observable<Expense[]>;
   public currentFilter$: Observable<ExpenseFilter>;
   public expenses: Expense[];
+  public totalAmount: number =0;
+  public filterString ={};
 
   public detailViewShownForIndex: number;
 
@@ -27,12 +29,27 @@ export class HomeComponent implements OnInit {
     this.expenses$ = this.expenseService.getExpenses();
     this.currentFilter$ = this.filterService.getFilter();
 
+    this.currentFilter$.subscribe(filter=>{
+      let str= ""
+      if(filter.date){
+        str += this.datePipe.transform(`${filter.date.year}-${filter.date.month}-01`, 'MMM y');
+      }
+      if(filter.group){
+        str += ` - ${filter.group}`;
+      }
+      this.filterString= str;
+    })
+
     combineLatest(this.currentFilter$, this.expenses$).subscribe(([filter, expenses]) => {
       this.expenses = expenses.filter((expense) => {
         return this.matchesFilter(expense, filter)
       }).sort((a,b)=>{
-        return this.createComparatorNumber(a.date) - this.createComparatorNumber(b.date)
+        return this.createComparatorNumber(b.date) - this.createComparatorNumber(a.date);
       });
+
+      this.totalAmount = this.expenses.reduce((acc, cur)=>{
+        return acc+ cur.amount
+      },0)
     })
   }
 

@@ -1,4 +1,11 @@
 <div class="home-component-container">
+
+    <div class="general">
+        <div>{{filterString}}</div>
+        <div>{{totalAmount | prettyCurrency}}</div>
+        
+    </div>
+
     <div class="expense-list">
         <div *ngFor="let expense of expenses; let i = index" class="expense-item" (click)="toggleDetailView(i)">
             <div class="category-indicator"></div>

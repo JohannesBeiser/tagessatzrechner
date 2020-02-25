@@ -3,7 +3,7 @@ import { GroupsService } from 'src/app/services/groups/groups.service';
 import { Observable } from 'rxjs';
 import { FilterService, ExpenseFilter } from 'src/app/services/filter/filter.service';
 import { FormGroup, FormControl } from '@angular/forms';
-import { take, skip, filter } from 'rxjs/operators';
+import { take, skip, filter, delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-filter',
@@ -20,7 +20,6 @@ export class FilterComponent implements OnInit {
   public allDatesSelected: boolean;
   public allGroupsSelected: boolean;
 
-
   constructor(
     private groupService: GroupsService,
     private filterService: FilterService
@@ -30,7 +29,7 @@ export class FilterComponent implements OnInit {
     this.groups$ = this.groupService.getGroups();
 
     this.filterService.filterState$.pipe(
-      take(1)
+      take(1),
     ).subscribe((state: ExpenseFilter) => {
       //FIXME : quick workaround for testing
       setTimeout(() => {
@@ -44,7 +43,6 @@ export class FilterComponent implements OnInit {
         if (state.group) {
           this.groupSelected = state.group;
           this.allGroupsSelected = false;
-
         } else {
           this.groupSelected = null;
           this.allGroupsSelected = true;
@@ -58,9 +56,8 @@ export class FilterComponent implements OnInit {
     ).subscribe((isShown) => {
       this.submitFilter();
     })
-
-
   }
+
   groupChanged(e: any) {
     this.allGroupsSelected = e.checked;
     if(!e.checked){
