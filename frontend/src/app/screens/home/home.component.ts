@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
   public currentFilter$: Observable<ExpenseFilter>;
   public expenses: Expense[];
   public totalAmount: number =0;
-  public filterString ={};
+  public filterTitles:{date: string; group:string};
 
   public detailViewShownForIndex: number;
 
@@ -30,14 +30,20 @@ export class HomeComponent implements OnInit {
     this.currentFilter$ = this.filterService.getFilter();
 
     this.currentFilter$.subscribe(filter=>{
-      let str= ""
+      let tempString={
+        date: "All time",
+        group: null
+      }
+
       if(filter.date){
-        str += this.datePipe.transform(`${filter.date.year}-${filter.date.month}-01`, 'MMM y');
+        tempString.date= this.datePipe.transform(`${filter.date.year}-${filter.date.month}-01`, 'MMM y');
       }
+
       if(filter.group){
-        str += ` - ${filter.group}`;
+        tempString.group= `${filter.group}`;
       }
-      this.filterString= str;
+
+      this.filterTitles= tempString;
     })
 
     combineLatest(this.currentFilter$, this.expenses$).subscribe(([filter, expenses]) => {

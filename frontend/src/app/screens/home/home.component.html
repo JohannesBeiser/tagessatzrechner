@@ -1,7 +1,16 @@
+<div class="home-component-header">
+    <i class="material-icons">chevron_left</i>
+    <div class="filter-title">
+        <span>{{filterTitles.date}}</span>
+        <span *ngIf="filterTitles.group"> - {{filterTitles.group}}</span>
+
+    </div>    
+    <i class="material-icons">chevron_right</i>
+
+</div>
 <div class="home-component-container">
 
     <div class="general">
-        <div>{{filterString}}</div>
         <div>{{totalAmount | prettyCurrency}}</div>
         
     </div>
