@@ -32,7 +32,7 @@ export class FilterComponent implements OnInit {
       take(1),
     ).subscribe((state: ExpenseFilter) => {
       //FIXME : quick workaround for testing
-      setTimeout(() => {
+      // setTimeout(() => {
         if (state.date) {
           this.dateSelected = `${state.date.year}-${state.date.month}`;
           this.allDatesSelected = false;
@@ -47,7 +47,7 @@ export class FilterComponent implements OnInit {
           this.groupSelected = null;
           this.allGroupsSelected = true;
         }
-      }, 100);
+      // }, 100);
     });
 
     this.filterService.filterShown$.pipe(

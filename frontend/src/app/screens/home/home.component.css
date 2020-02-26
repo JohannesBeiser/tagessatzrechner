@@ -1,9 +1,20 @@
+:host {
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
 .home-component-header {
   display: flex;
   background: #76757b;
+  padding: 4px;
+  align-items: center;
 }
 .home-component-header i {
   color: white;
+}
+.home-component-header i.disabled {
+  opacity: 0.2;
 }
 .home-component-header .filter-title {
   flex: 1;
@@ -15,6 +26,29 @@
 }
 .home-component-container {
   padding: 16px 12px;
+  overflow-y: auto;
+}
+.home-component-container .general .total-amount {
+  font-size: 2em;
+  border-bottom: 1px solid #ddd;
+}
+.home-component-container .general .categories-total {
+  padding: 8px;
+}
+.home-component-container .general .categories-total .category-item {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+.home-component-container .general .categories-total .category-item .color-badge {
+  height: 14px;
+  width: 14px;
+  background: lightgray;
+  border-radius: 4px;
+  margin-right: 8px;
+}
+.home-component-container .general .categories-total .category-item .category {
+  flex: 1;
 }
 .home-component-container .expense-list .expense-item {
   background: #eee;
@@ -84,5 +118,5 @@
 }
 .home-component-container .filter-container.active {
   visibility: visible;
-  transform: translateX(-8px);
+  transform: translateX(-12px);
 }
