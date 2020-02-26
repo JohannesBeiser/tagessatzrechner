@@ -16,11 +16,11 @@ export class CategoryService {
   constructor() { }
 
   public readonly categoryColors: CategoryColor = {
-    food: "#545E75",
-    accommodation: "#ECBA82",
-    transport: "#232020",
-    multimedia: "#76B041",
-    general: "#C05746",
+    food: "rgb(110, 150, 72)",
+    accommodation: "rgb(84, 94, 117)",
+    transport: "rgb(192, 87, 70)",
+    multimedia: "rgb(189, 155, 117)",
+    general: "rgb(82, 82, 82)",
   }
 
 }
