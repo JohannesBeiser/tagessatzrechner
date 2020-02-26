@@ -23,6 +23,19 @@
         <option *ngFor="let group of groups$ | async" [value]="group.groupName">{{group.groupName}}</option>
       </select>
     </mat-form-field>
+  </div>
+
+  <div class="filter-section">
+    <label id="example-radio-group-label">Sort by</label>
+    <mat-radio-group
+      aria-labelledby="example-radio-group-label"
+      class="example-radio-group"
+      [(ngModel)]="sortMethod">
+      <mat-radio-button color="primary" class="example-radio-button" *ngFor="let method of sortMethods" [value]="method">
+        {{method}}
+      </mat-radio-button>
+    </mat-radio-group>
 
   </div>
+
 </div>

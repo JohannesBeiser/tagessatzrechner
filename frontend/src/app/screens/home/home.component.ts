@@ -28,6 +28,7 @@ export class HomeComponent implements OnInit {
   private expenses$: Observable<Expense[]>;
   public currentFilter$: BehaviorSubject<ExpenseFilter>;
   public monthSwitched$: BehaviorSubject<MonthYear>;
+  public sortMethod$: BehaviorSubject<string>;
 
   public expenses: Expense[];
   public totalAmount: number = 0;
@@ -39,6 +40,7 @@ export class HomeComponent implements OnInit {
     this.expenses$ = this.expenseService.getExpenses();
     this.currentFilter$ = this.filterService.getFilter();
     this.monthSwitched$ = this.filterService.monthSwitched$;
+    this.sortMethod$ = this.filterService.sortMethod$;
 
     combineLatest(this.currentFilter$, this.monthSwitched$).subscribe(([filter, monthSwitch]) => {
       let tempString = {
@@ -60,19 +62,20 @@ export class HomeComponent implements OnInit {
       this.filterTitles = tempString;
     })
 
-    combineLatest(this.currentFilter$, this.expenses$, this.monthSwitched$).subscribe(([filter, expenses, monthSwitch]) => {
+    combineLatest(this.currentFilter$, this.expenses$, this.monthSwitched$, this.sortMethod$).subscribe(([filter, expenses, monthSwitch, sortMethod]) => {
       let filtered= expenses.filter((expense) => {
         return this.matchesFilter(expense, filter, monthSwitch)
       })
       
-      this.expenses= filtered.sort((a, b) => {
-        return this.createComparatorNumber(b.date) - this.createComparatorNumber(a.date);
-      });
+      if(sortMethod == "amount"){
+        this.expenses= filtered.sort(this.filterService.amountSorter);
+      }else{
+        this.expenses= filtered.sort(this.filterService.dateSorter);
+      }
 
       this.totalAmount = filtered.reduce((acc, cur) => {
         return acc + cur.amount
       }, 0);
-
 
       let temp = filtered.reduce((acc, cur) => {
         acc[cur.category] += cur.amount;
@@ -112,12 +115,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  /**
-   * Transforms "2020-02-15" to 20200215, for quick sorting after date
-   */
-  private createComparatorNumber(date: string) {
-    return parseInt(date.split('-').join(''))
-  }
+ 
 
   private matchesFilter(expense: Expense, filter: ExpenseFilter, monthSwitch: MonthYear): boolean {
     let matches = true;

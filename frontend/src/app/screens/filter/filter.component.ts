@@ -20,6 +20,9 @@ export class FilterComponent implements OnInit {
   public allDatesSelected: boolean;
   public allGroupsSelected: boolean;
 
+  sortMethod: string;
+  sortMethods: string[] = ['date', 'amount'];
+
   constructor(
     private groupService: GroupsService,
     private filterService: FilterService
@@ -56,6 +59,8 @@ export class FilterComponent implements OnInit {
     ).subscribe((isShown) => {
       this.submitFilter();
     })
+
+    this.sortMethod = localStorage.getItem("sortMethod") || "date";
   }
 
   groupChanged(e: any) {
@@ -72,11 +77,12 @@ export class FilterComponent implements OnInit {
     }
   }
 
+
   submitFilter() {
     let currentFilter = JSON.parse(localStorage.getItem("filter"))
     let newFilter: Partial<ExpenseFilter>= {}
     if(!this.allGroupsSelected){
-      newFilter.group=this.groupSelected
+      newFilter.group=this.groupSelected;
     }
     if(!this.allDatesSelected){
       newFilter.date={
@@ -84,6 +90,11 @@ export class FilterComponent implements OnInit {
         year: this.dateSelected.substring(0, 4)
       }
     }
+    let currentSortMethod= localStorage.getItem("sortMethod");
+    if(this.sortMethod !== currentSortMethod){
+      this.filterService.setSortMethod(this.sortMethod);
+    }
+
     if(JSON.stringify(currentFilter) !== JSON.stringify(newFilter) ){
       this.filterService.setFilter(newFilter)
     }

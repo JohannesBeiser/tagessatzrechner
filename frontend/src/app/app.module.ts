@@ -23,6 +23,7 @@ import { FilterComponent } from './screens/filter/filter.component';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { PrettyCurrencyPipe } from './pipes/pretty-currency.pipe';
 import { DatePipe } from '@angular/common';
+import {MatRadioModule} from '@angular/material/radio';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { DatePipe } from '@angular/common';
     MatDatepickerModule,
     ReactiveFormsModule,
     MatNativeDateModule,
+    MatRadioModule,
     FormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
