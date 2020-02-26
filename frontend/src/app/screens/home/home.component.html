@@ -1,23 +1,28 @@
-<div class="home-component-header">
-    <i class="material-icons">chevron_left</i>
+<div class="home-component-header animated faster" [className]="!(filterService.filterShown$ | async) ? 'slideInDown' : ''">
+    <i class="material-icons" [class.disabled]="!currentFilter$.value.date" (click)="filterService.switchMonth('decrement')">chevron_left</i>
     <div class="filter-title">
-        <span>{{filterTitles.date}}</span>
-        <span *ngIf="filterTitles.group"> - {{filterTitles.group}}</span>
-
+        <span *ngIf="filterTitles?.date">{{filterTitles.date}}</span>
+        <span *ngIf="filterTitles?.group"> - {{filterTitles.group}}</span>
     </div>    
-    <i class="material-icons">chevron_right</i>
+    <i class="material-icons"  [class.disabled]="!currentFilter$.value.date" (click)="filterService.switchMonth('increment')">chevron_right</i>
 
 </div>
 <div class="home-component-container">
 
     <div class="general">
-        <div>{{totalAmount | prettyCurrency}}</div>
-        
+        <div class="total-amount">{{totalAmount | prettyCurrency}}</div>
+        <div class="categories-total">
+            <div class="category-item" *ngFor="let total of totalCategories">
+                <div class="color-badge" [style.background-color]="categoryService.categoryColors[total.category]"></div>
+                <span class="category">{{total.category}} </span>
+                <span class="amount"> {{total.amount | prettyCurrency}}</span>
+            </div>
+        </div>
     </div>
 
     <div class="expense-list">
-        <div *ngFor="let expense of expenses; let i = index" class="expense-item" (click)="toggleDetailView(i)">
-            <div class="category-indicator"></div>
+        <div *ngFor="let expense of expenses; let i = index" class="expense-item" (click)="toggleDetailView(i)" >
+            <div class="category-indicator" [style.background-color]="categoryService.categoryColors[expense.category]"></div>
             <div class="item-content">
                 <div class="minimal-info" >
                     <div class="amount info-item">{{expense.amount | prettyCurrency}}</div>

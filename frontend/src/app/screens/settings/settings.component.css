@@ -16,17 +16,17 @@
 .settings-component-container section.group-settings-section .groups-header input {
   padding: 6px;
   font-size: 16px;
-  background: #eee;
+  background: #fff;
   border: none;
   border-radius: 8px;
   flex: 1;
-  margin: 0px 8px;
+  margin-left: 8px;
   box-sizing: border-box;
   display: inline;
   min-width: 10px;
 }
 .settings-component-container section.group-settings-section .groups-header i {
-  margin-right: 8px;
+  padding: 8px;
 }
 .settings-component-container section.group-settings-section .group-list {
   display: flex;
@@ -36,7 +36,7 @@
 .settings-component-container section.group-settings-section .group-list .group-item {
   padding: 6px 12px;
   display: flex;
-  background: #eee;
+  background: #fff;
   border-radius: 16px;
   margin: 4px 0;
   align-items: center;

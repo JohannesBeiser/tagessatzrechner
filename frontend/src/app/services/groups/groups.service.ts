@@ -10,6 +10,7 @@ export class GroupsService {
   private db: any;
   private groups$: BehaviorSubject<string[]>;
   private connection$: ReplaySubject<boolean>;
+  public defaultGroup: string;
 
   constructor(
     private indexedDBService: IndexedDBConnectionService
@@ -17,6 +18,7 @@ export class GroupsService {
     this.connection$ = new ReplaySubject(1);
     this.createGroupDatabase();
     this.groups$ = new BehaviorSubject<string[]>([]);
+    this.defaultGroup = localStorage.getItem("defaultGroup") || "general"
   }
 
   public addGroup(group: string) {
@@ -44,6 +46,12 @@ export class GroupsService {
     req.onsuccess = () => {
       this.refreshGroups();
     }
+  }
+
+
+  public setDefaultGroup(group:string){
+    localStorage.setItem("defaultGroup", group)
+    this.defaultGroup= group;
   }
 
   /**

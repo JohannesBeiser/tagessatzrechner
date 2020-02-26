@@ -1,9 +1,21 @@
 .filter-component-container {
-  padding: 16px 8px;
+  padding: 16px;
 }
 .filter-component-container .filter-section {
   padding: 8px 0;
 }
+.filter-component-container .groups-filter,
+.filter-component-container .month-filter {
+  width: 100%;
+}
 .filter-component-container .groups-filter .group-picker {
   text-transform: capitalize;
+}
+.filter-component-container .example-radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 8px 0;
+}
+.filter-component-container .example-radio-button {
+  margin: 5px;
 }

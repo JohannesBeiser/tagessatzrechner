@@ -21,10 +21,9 @@ import { SearchComponent } from './screens/search/search.component';
 import {MatChipsModule} from '@angular/material/chips';
 import { FilterComponent } from './screens/filter/filter.component';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import { registerLocaleData, DatePipe } from '@angular/common';
-import localeDe from '@angular/common/locales/de';
 import { PrettyCurrencyPipe } from './pipes/pretty-currency.pipe';
-registerLocaleData(localeDe);
+import { DatePipe } from '@angular/common';
+import {MatRadioModule} from '@angular/material/radio';
 
 @NgModule({
   declarations: [
@@ -51,15 +50,12 @@ registerLocaleData(localeDe);
     MatDatepickerModule,
     ReactiveFormsModule,
     MatNativeDateModule,
+    MatRadioModule,
     FormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
-    DatePipe,
-    {
-      provide: LOCALE_ID,
-      useValue: 'de-DE'
-    },
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })

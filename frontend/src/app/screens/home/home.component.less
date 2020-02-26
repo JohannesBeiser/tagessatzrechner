@@ -1,21 +1,35 @@
 @import "../../../variables";
 
+:host {
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
 
-.home-component-header{
+.home-component-header {
   display: flex;
   background: @app-header-color;
+  padding: 4px;
+  align-items: center;
 
-  i{
+  i {
     color: white;
+
+    &.disabled {
+      opacity: 0.2;
+    }
   }
 
-  .filter-title{
+  .filter-title {
     flex: 1;
     text-align: center;
 
+    span {
+      &::first-letter {
+        text-transform: uppercase;
+      }
 
-    span{
-      text-transform: capitalize;
       color: white;
     }
   }
@@ -23,10 +37,43 @@
 
 .home-component-container {
   padding: 16px 12px;
+  overflow-y: auto;
+
+  .general {
+    .total-amount {
+      font-size: 2em;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .categories-total {
+      padding: 8px;
+
+      .category-item {
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+
+        .color-badge {
+          height: 14px;
+          width: 14px;
+          background: lightgray;
+          border-radius: 4px;
+          margin-right: 8px;
+        }
+
+        .category {
+          flex: 1;
+          text-transform: capitalize;
+        }
+      }
+    }
+  }
 
   .expense-list {
+    box-shadow: -3px 2px 20px 0px #d8d8d8;
+    
     .expense-item {
-      background: #eee;
+      background: @app-white;
       margin: 4px 0;
       display: flex;
 
@@ -56,15 +103,14 @@
               overflow: hidden;
               text-overflow: ellipsis;
             }
-            
           }
         }
 
         .more-info {
           flex: 1;
 
-          >div{
-            &:first-child{
+          >div {
+            &:first-child {
               padding-top: 16px;
             }
           }
@@ -96,12 +142,8 @@
               }
             }
           }
-
         }
-
-
       }
-
     }
   }
 
@@ -117,7 +159,7 @@
 
     &.active {
       visibility: visible;
-      transform: translateX(-8px);
+      transform: translateX(-12px);
     }
   }
 }

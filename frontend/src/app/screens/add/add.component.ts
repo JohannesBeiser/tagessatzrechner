@@ -6,6 +6,7 @@ import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs/operators';
 import { GroupsService } from 'src/app/services/groups/groups.service';
 import { Observable } from 'rxjs';
+import { CategoryService } from 'src/app/services/category/category.service';
 
 @Component({
   selector: 'app-add',
@@ -17,6 +18,7 @@ export class AddComponent implements OnInit, AfterViewInit {
     public sliderService: SliderService,
     public expenseService: ExpenseService,
     public groupsService: GroupsService,
+    public categoryService: CategoryService,
     private _ngZone: NgZone
   ) { }
 
@@ -28,24 +30,37 @@ export class AddComponent implements OnInit, AfterViewInit {
   }
 
   public expenseForm: FormGroup;
-  public groups$ : Observable<string[]>
+  public groups$: Observable<string[]>
 
   ngOnInit(): void {
+    // debugger;
     this.expenseForm = new FormGroup({
       name: new FormControl('', Validators.required),
-      amount: new FormControl('', Validators.required ),
+      amount: new FormControl('', Validators.required),
       date: new FormControl(this.currentDate(), Validators.required),
-      category: new FormControl('transport', Validators.required),
-      group: new FormControl('general', Validators.required),
+      category: new FormControl(this.categoryService.defaultCategory, Validators.required),
+      group: new FormControl("general", Validators.required),
       description: new FormControl('', Validators.maxLength(50))
     });
-    this.groups$= this.groupsService.getGroups();
+
+    //TODO : Dirty workaround 
+    setTimeout(() => {
+      this.expenseForm.reset({
+        name: '',
+        amount: '',
+        date: this.currentDate(),
+        category: this.categoryService.defaultCategory,
+        group: this.groupsService.defaultGroup,
+        description: ''
+      })
+    }, 100);
+    this.groups$ = this.groupsService.getGroups();
   }
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     // this.focusInput.nativeElement.focus();
   }
 
-  hasError(controlName: string, errorName: string){
+  hasError(controlName: string, errorName: string) {
     return this.expenseForm.controls[controlName].hasError(errorName);
   }
 
@@ -58,19 +73,19 @@ export class AddComponent implements OnInit, AfterViewInit {
 
   currentDate() {
     const currentDate = new Date();
-    return currentDate.toISOString().substring(0,10);
+    return currentDate.toISOString().substring(0, 10);
   }
-  
-  createExpense(expense: Expense){
+
+  createExpense(expense: Expense) {
     this.setFormGroupTouched();
-    if(this.expenseForm.valid){
+    if (this.expenseForm.valid) {
       this.expenseService.addExpense(expense);
       this.expenseForm.reset({
-        name: '', 
+        name: '',
         amount: '',
         date: this.currentDate(),
         category: 'transport',
-        group: 'general', 
+        group: 'general',
         description: ''
       });
       this.sliderService.hide();
