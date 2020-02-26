@@ -13,7 +13,10 @@ export interface CategoryColor{
 })
 export class CategoryService {
 
-  constructor() { }
+  public defaultCategory: string;
+  constructor() { 
+    this.defaultCategory = localStorage.getItem("defaultCategory") || "food"
+  }
 
   public readonly categoryColors: CategoryColor = {
     food: "rgb(110, 150, 72)",
@@ -22,5 +25,11 @@ export class CategoryService {
     multimedia: "rgb(189, 155, 117)",
     general: "rgb(82, 82, 82)",
   }
+
+  public setDefaultCategory(category:string){
+    localStorage.setItem("defaultCategory", category)
+    this.defaultCategory = category;
+  }
+
 
 }

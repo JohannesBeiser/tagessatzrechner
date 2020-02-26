@@ -34,9 +34,33 @@
                 <i class="material-icons-outlined mr-8">sync_problem</i>
                 <span>Hard-reload Application</span>
             </div>
-    
         </div>
-       
+    </section>
+
+    <section class="defaults-settings-section">
+        <div class="section-container">
+            <div class="groups-header">
+                <span>Defaults</span>
+            </div>
+            <mat-form-field appearance="standard" class="groups-default">
+                <mat-label>Group</mat-label>
+                <select matNativeControl class="group-picker" [(ngModel)]="defaultGroupSelected" (change)="defaultGroupChanged()">
+                  <option value="general">General</option>
+                  <option *ngFor="let group of groups$ | async" [value]="group.groupName">{{group.groupName}}</option>
+                </select>
+            </mat-form-field>
+
+            <mat-form-field appearance="standard" class="groups-default">
+                <mat-label>Category</mat-label>
+                <select matNativeControl class="group-picker" [(ngModel)]="defaultCategorySelected" (change)="defaultCategoryChanged()">
+                    <option value="food">Food</option>
+                    <option value="accommodation">Accommodation</option>
+                    <option value="transport">Transport</option>
+                    <option value="multimedia">Multimedia</option>
+                    <option value="general">General</option>
+                </select>
+            </mat-form-field>
+        </div>
     </section>
   
     <!-- <div>Monthly</div> -->

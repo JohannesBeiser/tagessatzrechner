@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GroupsService } from 'src/app/services/groups/groups.service';
+import { CategoryService } from 'src/app/services/category/category.service';
 
 @Component({
   selector: 'app-settings',
@@ -10,14 +11,23 @@ import { GroupsService } from 'src/app/services/groups/groups.service';
 export class SettingsComponent implements OnInit {
 
   constructor(
-    private groupsService: GroupsService
+    private groupsService: GroupsService,
+    private categoryService: CategoryService
   ) { }
 
   public groups$: Observable<string[]>;
   public newGroupInputValue: string;
+  public defaultGroupSelected: string;
+  public defaultCategorySelected: string;
 
   ngOnInit(): void {
     this.groups$ = this.groupsService.getGroups();
+    
+    //TODO : Dirty workaround 
+    setTimeout(() => {
+      this.defaultGroupSelected = this.groupsService.defaultGroup;
+    }, 100);
+    this.defaultCategorySelected = this.categoryService.defaultCategory;
   }
 
   hardReloadApp() {
@@ -34,6 +44,20 @@ export class SettingsComponent implements OnInit {
 
   reloadApp() {
     window.location.reload();
+  }
+
+  /**
+   * call group/category service and update currently selected in subnject and localstorage
+   */
+  public defaultGroupChanged(){
+    this.groupsService.setDefaultGroup(this.defaultGroupSelected);
+  }
+
+  /**
+   * call group/category service and update currently selected in subnject and localstorage
+   */
+  public defaultCategoryChanged(){
+    this.categoryService.setDefaultCategory(this.defaultCategorySelected);
   }
 
   addGroup() {

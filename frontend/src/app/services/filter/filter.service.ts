@@ -28,7 +28,6 @@ export class FilterService {
 
 
   private defaultFilter: ExpenseFilter = {
-    group: "general",
     date: {
       month: this.getCurrentMonthFilter().substring(5),
       year: this.getCurrentMonthFilter().substring(0, 4)
