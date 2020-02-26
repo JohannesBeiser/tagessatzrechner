@@ -1,19 +1,19 @@
 .router-body {
   flex: 1;
-  background: white;
+  background: #eee;
   overflow-y: auto;
   overflow-x: hidden;
 }
 .back-icon {
   position: absolute;
   left: 0;
-  margin-left: 12px;
+  padding: 12px;
   font-size: 18px;
 }
 .filter-icon {
   position: absolute;
   right: 0;
-  margin-right: 12px;
+  padding: 8px 12px 8px 8px;
 }
 .app-slider {
   position: fixed;

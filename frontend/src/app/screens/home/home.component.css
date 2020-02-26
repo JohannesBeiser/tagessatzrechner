@@ -21,8 +21,10 @@
   text-align: center;
 }
 .home-component-header .filter-title span {
-  text-transform: capitalize;
   color: white;
+}
+.home-component-header .filter-title span::first-letter {
+  text-transform: uppercase;
 }
 .home-component-container {
   padding: 16px 12px;
@@ -52,7 +54,7 @@
   text-transform: capitalize;
 }
 .home-component-container .expense-list .expense-item {
-  background: #eee;
+  background: #fff;
   margin: 4px 0;
   display: flex;
 }

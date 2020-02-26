@@ -25,9 +25,11 @@
     flex: 1;
     text-align: center;
 
-
     span {
-      text-transform: capitalize;
+      &::first-letter {
+        text-transform: uppercase;
+      }
+
       color: white;
     }
   }
@@ -69,7 +71,7 @@
 
   .expense-list {
     .expense-item {
-      background: #eee;
+      background: @app-white;
       margin: 4px 0;
       display: flex;
 
@@ -99,7 +101,6 @@
               overflow: hidden;
               text-overflow: ellipsis;
             }
-
           }
         }
 
@@ -139,12 +140,8 @@
               }
             }
           }
-
         }
-
-
       }
-
     }
   }
 
