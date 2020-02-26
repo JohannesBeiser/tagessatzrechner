@@ -4,7 +4,7 @@ import { SliderService } from 'src/app/services/slider/slider.service';
 import { Expense, ExpenseService } from 'src/app/services/expenses/expense.service';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs/operators';
-import { GroupsService } from 'src/app/services/groups/groups.service';
+import { GroupsService, GroupItem } from 'src/app/services/groups/groups.service';
 import { Observable } from 'rxjs';
 import { CategoryService } from 'src/app/services/category/category.service';
 
@@ -30,7 +30,7 @@ export class AddComponent implements OnInit, AfterViewInit {
   }
 
   public expenseForm: FormGroup;
-  public groups$: Observable<string[]>
+  public groups$: Observable<GroupItem[]>
 
   ngOnInit(): void {
     // debugger;

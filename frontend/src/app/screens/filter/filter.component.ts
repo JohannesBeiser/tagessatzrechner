@@ -1,9 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { GroupsService } from 'src/app/services/groups/groups.service';
-import { Observable } from 'rxjs';
 import { FilterService, ExpenseFilter } from 'src/app/services/filter/filter.service';
-import { FormGroup, FormControl } from '@angular/forms';
-import { take, skip, filter, delay } from 'rxjs/operators';
+import { take, skip, filter, } from 'rxjs/operators';
 
 @Component({
   selector: 'app-filter',
@@ -31,38 +29,37 @@ export class FilterComponent implements OnInit {
   ngOnInit(): void {
     this.groups$ = this.groupService.getGroups();
 
-    this.filterService.filterState$.pipe(
-      take(1),
-    ).subscribe((state: ExpenseFilter) => {
+    this.filterService.filterState$.subscribe((state: ExpenseFilter) => {
       //FIXME : quick workaround for testing
       setTimeout(() => {
-        if (state.date) {
-          this.dateSelected = `${state.date.year}-${state.date.month}`;
-          this.allDatesSelected = false;
-        } else {
-          this.dateSelected = null;
-          this.allDatesSelected = true;
-        }
-        if (state.group) {
-          this.groupSelected = state.group;
-          this.allGroupsSelected = false;
-        } else {
-          this.groupSelected = null;
-          this.allGroupsSelected = true;
-        }
+          if (state.date) {
+            this.dateSelected = `${state.date.year}-${state.date.month}`;
+            this.allDatesSelected = false;
+          } else {
+            this.dateSelected = null;
+            this.allDatesSelected = true;
+          }
+          if (state.group) {
+            this.groupSelected = state.group;
+            this.allGroupsSelected = false;
+          } else {
+            this.groupSelected = null;
+            this.allGroupsSelected = true;
+          }            
       }, 100);
     });
 
-    this.filterService.filterShown$.pipe(
-      skip(1),
-      filter((val) => !val)
+  
+  this.filterService.filterShown$.pipe(
+    skip(1),
+    filter((val) => !val)
     ).subscribe((isShown) => {
       this.submitFilter();
     })
-
+    
     this.sortMethod = localStorage.getItem("sortMethod") || "date";
   }
-
+  
   groupChanged(e: any) {
     this.allGroupsSelected = e.checked;
     if(!e.checked){

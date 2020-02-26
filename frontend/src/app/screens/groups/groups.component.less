@@ -1,0 +1,40 @@
+@import "../../../variables";
+:host{
+    display: flex;
+}
+
+.groups-component-container{
+    padding: 16px;
+    .group-list{
+        .group-list-item{
+            margin-bottom: 16px;
+            background: @app-white;
+            padding: 12px;
+            display: flex;
+        
+
+            .info-section{
+                flex: 1;
+
+                .group-name{
+                    text-transform: capitalize;
+                }
+                .group-dates{
+                    margin-top: 12px;
+                    opacity: 0.8;
+                    font-size: 0.8em;
+                }
+
+            }
+            .amount{
+                // display: flex;
+                // align-items: center;
+                // font-weight: bold;
+            }
+            .no-expenses{
+                opacity: 0.7;
+            }
+
+        }
+    }
+}

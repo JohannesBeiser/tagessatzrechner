@@ -68,6 +68,7 @@
 .home-component-container .expense-list .expense-item .item-content {
   padding: 14px 8px;
   flex: 1;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -80,9 +81,15 @@
 }
 .home-component-container .expense-list .expense-item .item-content .minimal-info .info-item.name {
   flex: 1;
+}
+.home-component-container .expense-list .expense-item .item-content .minimal-info .info-item.name,
+.home-component-container .expense-list .expense-item .item-content .minimal-info .info-item.name > * {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.home-component-container .expense-list .expense-item .item-content .minimal-info .info-item.date {
+  margin-left: 12px;
 }
 .home-component-container .expense-list .expense-item .item-content .more-info {
   flex: 1;
@@ -119,10 +126,12 @@
   width: 100%;
   top: 40px;
   visibility: hidden;
+  display: none;
   transform: translateX(100%);
-  transition: transform 150ms ease-in-out;
+  transition: transform 150ms ease-in-out, visibility 150ms ease-in-out;
 }
 .home-component-container .filter-container.active {
+  display: block;
   visibility: visible;
   transform: translateX(-12px);
 }

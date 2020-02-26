@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { GroupsService } from 'src/app/services/groups/groups.service';
+import { GroupsService, GroupItem } from 'src/app/services/groups/groups.service';
 import { CategoryService } from 'src/app/services/category/category.service';
 
 @Component({
@@ -15,7 +15,7 @@ export class SettingsComponent implements OnInit {
     private categoryService: CategoryService
   ) { }
 
-  public groups$: Observable<string[]>;
+  public groups$: Observable<GroupItem[]>;
   public newGroupInputValue: string;
   public defaultGroupSelected: string;
   public defaultCategorySelected: string;

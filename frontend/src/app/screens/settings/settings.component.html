@@ -1,68 +1,69 @@
 <div class="settings-component-container">
-    <!-- <div>Categories</div> -->
-    <section class="group-settings-section">
-        <div class="section-container">
-            <div class="groups-header">
-                <span>Groups</span>
-                <input type="text" [(ngModel)]="newGroupInputValue">
-                <i class="material-icons-outlined" (click)="addGroup()">add</i>
-            </div>
-    
-            <div class="group-list">
-                <div class="group-item" *ngFor="let group of groups$ | async">
-                    <span>{{group.groupName}}</span>
-                    <i class="material-icons-outlined" (click)="deleteGroup(group.key, group.groupName)">close</i>
-                </div>
-                <span *ngIf="(groups$ | async).length === 0" class="no-items-yet">
-                   There are no groups yet
-                </span>
+  <!-- <div>Categories</div> -->
+  <section class="group-settings-section">
+    <div class="section-container">
+      <div class="groups-header">
+        <span>Groups</span>
+        <input type="text" [(ngModel)]="newGroupInputValue">
+        <i class="material-icons-outlined" (click)="addGroup()">add</i>
+      </div>
 
-            </div>
+      <div class="group-list">
+        <div class="group-item" *ngFor="let group of groups$ | async">
+          <span>{{group.groupName}}</span>
+          <i class="material-icons-outlined" (click)="deleteGroup(group.key, group.groupName)">close</i>
         </div>
-    </section>
+        <span *ngIf="(groups$ | async).length === 0" class="no-items-yet">
+          There are no groups yet
+        </span>
+      </div>
+    </div>
+  </section>
 
-    <section class="general-settings-section">
-        <div class="section-container">
-            <div class="groups-header">
-                <span>General</span>
-            </div>
-            <div class="flexbox align p-8" (click)="reloadApp()">            
-                <i class="material-icons-outlined mr-8">refresh</i>
-                <span>Reload Application</span>
-            </div>
-            <div class="flexbox align p-8" (click)="hardReloadApp()">            
-                <i class="material-icons-outlined mr-8">sync_problem</i>
-                <span>Hard-reload Application</span>
-            </div>
-        </div>
-    </section>
+  <section class="defaults-settings-section">
+    <div class="section-container">
+      <div class="groups-header">
+        <span>Defaults</span>
+      </div>
+      <mat-form-field appearance="standard" class="groups-default">
+        <mat-label>Group</mat-label>
+        <select matNativeControl class="group-picker" [(ngModel)]="defaultGroupSelected"
+          (change)="defaultGroupChanged()">
+          <option value="general">General</option>
+          <option *ngFor="let group of groups$ | async" [value]="group.groupName">{{group.groupName}}</option>
+        </select>
+      </mat-form-field>
 
-    <section class="defaults-settings-section">
-        <div class="section-container">
-            <div class="groups-header">
-                <span>Defaults</span>
-            </div>
-            <mat-form-field appearance="standard" class="groups-default">
-                <mat-label>Group</mat-label>
-                <select matNativeControl class="group-picker" [(ngModel)]="defaultGroupSelected" (change)="defaultGroupChanged()">
-                  <option value="general">General</option>
-                  <option *ngFor="let group of groups$ | async" [value]="group.groupName">{{group.groupName}}</option>
-                </select>
-            </mat-form-field>
+      <mat-form-field appearance="standard" class="groups-default">
+        <mat-label>Category</mat-label>
+        <select matNativeControl class="group-picker" [(ngModel)]="defaultCategorySelected"
+          (change)="defaultCategoryChanged()">
+          <option value="food">Food</option>
+          <option value="accommodation">Accommodation</option>
+          <option value="transport">Transport</option>
+          <option value="multimedia">Multimedia</option>
+          <option value="general">General</option>
+        </select>
+      </mat-form-field>
+    </div>
+  </section>
 
-            <mat-form-field appearance="standard" class="groups-default">
-                <mat-label>Category</mat-label>
-                <select matNativeControl class="group-picker" [(ngModel)]="defaultCategorySelected" (change)="defaultCategoryChanged()">
-                    <option value="food">Food</option>
-                    <option value="accommodation">Accommodation</option>
-                    <option value="transport">Transport</option>
-                    <option value="multimedia">Multimedia</option>
-                    <option value="general">General</option>
-                </select>
-            </mat-form-field>
-        </div>
-    </section>
-  
-    <!-- <div>Monthly</div> -->
+  <section class="general-settings-section">
+    <div class="section-container">
+      <div class="groups-header">
+        <span>General</span>
+      </div>
+      <div class="flexbox align p-8" (click)="reloadApp()">
+        <i class="material-icons-outlined mr-8">refresh</i>
+        <span>Reload Application</span>
+      </div>
+      <div class="flexbox align p-8" (click)="hardReloadApp()">
+        <i class="material-icons-outlined mr-8">sync_problem</i>
+        <span>Hard-reload Application</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- <div>Monthly</div> -->
 
 </div>

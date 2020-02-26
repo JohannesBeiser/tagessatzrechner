@@ -1,6 +1,17 @@
-<div class="groupscomponent-container w-100">
+<div class="groups-component-container w-100">
+  <div class="group-list">
 
-  <div *ngFor="let group of groups$ | async">
-    {{group.groupName}}
+    <div *ngFor="let group of groupsTotals" class="group-list-item">
+      <div class="info-section">
+        <div class="group-name">{{group.groupName}}</div>
+        <div class="group-dates" *ngIf="group.amount > 0">
+          <span>{{ {firstExpenseDate:group.firstExpenseDate, lastExpenseDate: group.lastExpenseDate} | dateDuration }}</span>
+        </div>
+      </div>
+      <div class="amount">
+        <span *ngIf="group.amount>0">{{group.amount | prettyCurrency}}</span>
+        <span class="no-expenses" *ngIf="!(group.amount>0)">No expenses yet</span>
+      </div>
+    </div>
   </div>
 </div>

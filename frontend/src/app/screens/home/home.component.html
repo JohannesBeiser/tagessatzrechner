@@ -26,8 +26,8 @@
             <div class="item-content">
                 <div class="minimal-info" >
                     <div class="amount info-item">{{expense.amount | prettyCurrency}}</div>
-                    <div class="name info-item"><span>{{expense.name}}</span></div>
-                    <div class="date info-item">{{expense.date | date:'d MMM'}}</div> 
+                    <div class="name info-item">{{expense.name}}</div>
+                    <div class="date info-item">{{expense.date | dateLongShort}}</div> 
                 </div>
                 <div class="more-info" *ngIf="i == detailViewShownForIndex">
                     <div class="description" *ngIf="expense.description">{{expense.description}}</div>
@@ -44,6 +44,7 @@
             <!-- <i class="material-icons-outlined" (click)="expenseService.deleteExpense(expense.key)">close</i> -->
         </div>
     </div>
+    <!-- TODO remove ngIf -->
     <div class="filter-container" [class.active]="filterService.filterShown$ | async">
         <app-filter></app-filter>
     </div>

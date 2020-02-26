@@ -24,6 +24,8 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { PrettyCurrencyPipe } from './pipes/pretty-currency.pipe';
 import { DatePipe } from '@angular/common';
 import {MatRadioModule} from '@angular/material/radio';
+import { DateDurationPipe } from './pipes/date-duration.pipe';
+import { DateLongShortPipe } from './pipes/date-long-short.pipe';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,9 @@ import {MatRadioModule} from '@angular/material/radio';
     GroupsComponent,
     SearchComponent,
     FilterComponent,
-    PrettyCurrencyPipe
+    PrettyCurrencyPipe,
+    DateDurationPipe,
+    DateLongShortPipe
   ],
   imports: [
     BrowserModule,

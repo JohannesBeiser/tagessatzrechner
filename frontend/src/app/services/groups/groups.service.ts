@@ -2,13 +2,24 @@ import { Injectable } from '@angular/core';
 import { Subject, ReplaySubject, Observable, BehaviorSubject } from 'rxjs';
 import { IndexedDBConnectionService } from '../indexed-dbconnection.service';
 
+export interface GroupItem{
+  key: number;
+  groupName: string;
+}
+
+export interface GroupTotal extends GroupItem {
+  amount: number;
+  firstExpenseDate?: string;
+  lastExpenseDate?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class GroupsService {
 
   private db: any;
-  private groups$: BehaviorSubject<string[]>;
+  private groups$: BehaviorSubject<GroupItem[]>;
   private connection$: ReplaySubject<boolean>;
   public defaultGroup: string;
 
@@ -17,7 +28,7 @@ export class GroupsService {
   ) {
     this.connection$ = new ReplaySubject(1);
     this.createGroupDatabase();
-    this.groups$ = new BehaviorSubject<string[]>([]);
+    this.groups$ = new BehaviorSubject<GroupItem[]>([]);
     this.defaultGroup = localStorage.getItem("defaultGroup") || "general"
   }
 
@@ -33,7 +44,7 @@ export class GroupsService {
     }
   };
 
-  public getGroups(): Observable<string[]> {
+  public getGroups(): Observable<GroupItem[]> {
     this.connection$.subscribe(()=>this.refreshGroups());
     return this.groups$.asObservable();
   }
@@ -61,7 +72,7 @@ export class GroupsService {
     let transaction = this.db.transaction(["groups"]);
     let object_store = transaction.objectStore("groups");
     let request = object_store.openCursor();
-    let result: string[] = []
+    let result: GroupItem[] = []
 
     request.onsuccess = (event) => {
       let cursor = event.target.result;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ɵSWITCH_COMPILE_NGMODULE__POST_R3__ } from '@angular/core';
 import { ExpenseService, Expense } from 'src/app/services/expenses/expense.service';
 import { Observable, combineLatest, Subject, BehaviorSubject } from 'rxjs';
 import { FilterService, ExpenseFilter, MonthYear } from 'src/app/services/filter/filter.service';
@@ -89,9 +89,13 @@ export class HomeComponent implements OnInit {
       });
       this.totalCategories = this.objectToArray(temp).filter((item)=>{
         return item.amount >0;
+      }).sort((a,b)=>{
+        return b.amount-a.amount;
       });
     })
   }
+
+
 
   private objectToArray(obj: any): CategoryTotal[]{
     return Object.keys(obj).map(key=> {
