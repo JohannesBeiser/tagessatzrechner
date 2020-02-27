@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GroupsService, GroupItem } from 'src/app/services/groups/groups.service';
 import { CategoryService } from 'src/app/services/category/category.service';
-import { ExpenseService } from 'src/app/services/expenses/expense.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { SettingsBottomSheetComponent } from './settings-bottom-sheet/settings-bottom-sheet.component';
 
@@ -16,9 +15,7 @@ export class SettingsComponent implements OnInit {
   constructor(
     private groupsService: GroupsService,
     private categoryService: CategoryService,
-    private expenseService: ExpenseService,
     private bottomSheet: MatBottomSheet
-
   ) { }
 
   public groups$: Observable<GroupItem[]>;

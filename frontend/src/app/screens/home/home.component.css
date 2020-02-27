@@ -10,6 +10,9 @@
   padding: 4px;
   align-items: center;
   min-height: 22px;
+  position: fixed;
+  width: 100%;
+  box-sizing: border-box;
 }
 .home-component-header i {
   color: white;
@@ -29,6 +32,7 @@
 }
 .home-component-container {
   padding: 16px 12px;
+  padding-top: 40px;
   overflow-y: auto;
 }
 .home-component-container .general .total-amount {

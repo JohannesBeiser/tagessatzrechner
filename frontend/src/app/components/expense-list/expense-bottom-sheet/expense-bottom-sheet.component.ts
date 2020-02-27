@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { SliderService } from 'src/app/services/slider/slider.service';
-import { ExpenseService, Expense } from 'src/app/services/expenses/expense.service';
+import { ExpenseService } from 'src/app/services/expenses/expense.service';
 
 @Component({
   selector: 'app-expense-bottom-sheet',
