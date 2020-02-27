@@ -1,5 +1,10 @@
+.search-component-container {
+  display: flex;
+  flex-direction: column;
+}
 .search-component-container .search-results {
   padding: 16px 12px;
+  overflow-y: auto;
 }
 .search-component-container .search-bar-input-container {
   position: relative;

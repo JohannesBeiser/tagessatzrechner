@@ -12,6 +12,6 @@
     </app-header>
 
     <div class="search-results">
-        <app-expense-list [expenses]="results$ | async"></app-expense-list>
+        <app-expense-list [expenses]="results$ | async | slice:0:9"></app-expense-list>
     </div>
 </div>

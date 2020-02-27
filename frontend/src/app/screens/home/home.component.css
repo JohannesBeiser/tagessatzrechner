@@ -9,6 +9,7 @@
   background: #76757b;
   padding: 4px;
   align-items: center;
+  min-height: 22px;
 }
 .home-component-header i {
   color: white;

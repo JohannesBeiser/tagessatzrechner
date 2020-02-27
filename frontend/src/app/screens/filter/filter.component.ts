@@ -61,15 +61,15 @@ export class FilterComponent implements OnInit {
   }
   
   groupChanged(e: any) {
-    this.allGroupsSelected = e.checked;
-    if(!e.checked){
+    this.allGroupsSelected = !e.checked;
+    if(e.checked){
         this.groupSelected= "general"
     }
   }
 
   dateChanged(e: any) {
-    this.allDatesSelected = e.checked;
-    if(!e.checked){
+    this.allDatesSelected = !e.checked;
+    if(e.checked){
       this.dateSelected= this.filterService.getCurrentMonthFilter();
     }
   }

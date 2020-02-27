@@ -35,10 +35,19 @@ export class SearchComponent implements OnInit, AfterViewInit {
   }
 
   getSearchResult(term: string): Observable<Expense[]>{
+    let singleTerms = term.toLowerCase().split(",");
     return this.expenseService.getExpenses().pipe(
      map(expenses=>{
       return expenses.filter(expense=>{
-        return expense.name.toLowerCase().includes(term.toLowerCase()) || expense.description.toLowerCase().includes(term.toLowerCase())
+        let matches = true;
+        singleTerms.forEach(singleTerm=>{
+          if(matches){
+            matches= expense.name.toLowerCase().includes(singleTerm) || expense.description.toLowerCase().includes(singleTerm)
+          }else{
+            return matches;
+          }          
+        });
+        return matches;
       }).reverse().sort(this.filterService.dateSorter)
      })
     )

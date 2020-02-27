@@ -2,7 +2,7 @@
 
   <div class="filter-section">
     Month
-      <mat-slide-toggle color="primary" class="example-margin" [checked]="allDatesSelected"
+      <mat-slide-toggle color="primary" class="example-margin" [checked]="!allDatesSelected"
         (change)="dateChanged($event)">{{allDatesSelected ? "All" : "Specfic"}}</mat-slide-toggle>
 
     <mat-form-field appearance="standard" class="month-filter" *ngIf="!allDatesSelected">
@@ -13,7 +13,7 @@
 
   <div class="filter-section">
     Groups
-    <mat-slide-toggle color="primary" class="example-margin" [checked]="allGroupsSelected"
+    <mat-slide-toggle color="primary" class="example-margin" [checked]="!allGroupsSelected"
       (change)="groupChanged($event)">{{allGroupsSelected ? "All" : "Specfic"}}</mat-slide-toggle>
 
     <mat-form-field appearance="standard" class="groups-filter" *ngIf="!allGroupsSelected">
