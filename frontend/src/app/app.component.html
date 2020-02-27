@@ -5,12 +5,22 @@
 </app-header>
 
 <app-header *ngIf="appHeadline === 'Overview'">
-  <div class="flexbox justify align h-100">
+  <div class="home-general-header flexbox justify align h-100">
     <i class="material-icons-outlined back-icon" (click)="filterService.hide()" *ngIf="filterService.filterShown$ | async">arrow_back_ios</i>
     <span *ngIf="!(filterService.filterShown$ | async)">{{appHeadline}}</span>
     <span *ngIf="filterService.filterShown$ | async">Filter</span>
     <i class="material-icons-outlined filter-icon" (click)="filterService.show()" *ngIf="!(filterService.filterShown$ | async)">filter_list</i>
   </div>
+ 
+  <div class="home-component-header animated faster" [className]="(!(filterService.filterShown$ | async) && appHeadline == 'Overview') ? 'slideInDown' : 'slideOutUp'">
+    <i class="material-icons" [class.disabled]="!currentFilter$.value.date" (click)="filterService.switchMonth('decrement')">chevron_left</i>
+    <div class="filter-title" (click)="filterService.show()">
+        <span *ngIf="filterTitles?.date">{{filterTitles.date}}</span>
+        <span *ngIf="filterTitles?.group"> - {{filterTitles.group}}</span>
+    </div>    
+    <i class="material-icons"  [class.disabled]="!currentFilter$.value.date" (click)="filterService.switchMonth('increment')">chevron_right</i>
+  </div>
+
 </app-header>
 
 <div class="router-body" [@routeAnimations]="prepareRoute(outlet)">

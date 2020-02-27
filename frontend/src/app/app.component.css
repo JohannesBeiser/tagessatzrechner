@@ -30,3 +30,38 @@
 .app-slider.sliderActive {
   display: block;
 }
+.home-general-header {
+  position: relative;
+  z-index: 2;
+  background: #76757b;
+}
+.home-component-header {
+  display: flex;
+  background: #76757b;
+  padding: 4px;
+  align-items: center;
+  min-height: 22px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.home-component-header i {
+  color: white;
+}
+.home-component-header i.disabled {
+  opacity: 0.2;
+}
+.home-component-header .filter-title {
+  flex: 1;
+  text-align: center;
+  font-family: "Roboto-Light";
+  font-size: 14px;
+}
+.home-component-header .filter-title span {
+  color: white;
+}
+.home-component-header .filter-title span::first-letter {
+  text-transform: uppercase;
+}
+.hiddenHeader {
+  position: absolute;
+}

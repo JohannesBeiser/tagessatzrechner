@@ -1,12 +1,4 @@
-<div class="home-component-header animated faster" [className]="!(filterService.filterShown$ | async) ? 'slideInDown' : 'slideOutUp'">
-    <i class="material-icons" [class.disabled]="!currentFilter$.value.date" (click)="filterService.switchMonth('decrement')">chevron_left</i>
-    <div class="filter-title">
-        <span *ngIf="filterTitles?.date" (click)="openDateFilter()">{{filterTitles.date}}</span>
-        <span *ngIf="filterTitles?.group" (click)="openGroupFilter()"> - {{filterTitles.group}}</span>
-    </div>    
-    <i class="material-icons"  [class.disabled]="!currentFilter$.value.date" (click)="filterService.switchMonth('increment')">chevron_right</i>
 
-</div>
 <div class="home-component-container">
 
     <div class="general">

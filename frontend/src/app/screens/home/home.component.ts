@@ -21,7 +21,6 @@ export class HomeComponent implements OnInit {
   constructor(
     public expenseService: ExpenseService,
     public filterService: FilterService,
-    private datePipe: DatePipe,
     public categoryService: CategoryService
   ) { }
 
@@ -41,28 +40,6 @@ export class HomeComponent implements OnInit {
     this.currentFilter$ = this.filterService.getFilter();
     this.monthSwitched$ = this.filterService.monthSwitched$;
     this.sortMethod$ = this.filterService.sortMethod$;
-
-    combineLatest(this.currentFilter$, this.monthSwitched$).subscribe(([filter, monthSwitch]) => {
-      let tempString = {
-        date: "All time",
-        group: null
-      }
-      if (monthSwitch) {
-        tempString.date = this.datePipe.transform(`${monthSwitch.year}-${monthSwitch.month}-01`, 'MMM y');
-      } else {
-        if (filter.date) {
-          tempString.date = this.datePipe.transform(`${filter.date.year}-${filter.date.month}-01`, 'MMM y');
-        }else if(localStorage.getItem("last30Active") == 'active'){
-          tempString.date = "Last 30 days" 
-        }
-      }
-
-      if (filter.group) {
-        tempString.group = `${filter.group}`;
-      }
-
-      this.filterTitles = tempString;
-    })
 
     combineLatest(this.currentFilter$, this.expenses$, this.monthSwitched$, this.sortMethod$).subscribe(([filter, expenses, monthSwitch, sortMethod]) => {
       let filtered= expenses.filter((expense) => {
@@ -98,14 +75,6 @@ export class HomeComponent implements OnInit {
   }
 
   public initialFocus: string;
-
-  openDateFilter(){
-    this.filterService.show()
-  }
-
-  openGroupFilter(){
-    this.filterService.show()
-  }
 
   private objectToArray(obj: any): CategoryTotal[]{
     return Object.keys(obj).map(key=> {

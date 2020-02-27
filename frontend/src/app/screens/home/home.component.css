@@ -4,33 +4,6 @@
   display: flex;
   flex-direction: column;
 }
-.home-component-header {
-  z-index: 1;
-  display: flex;
-  background: #76757b;
-  padding: 4px;
-  align-items: center;
-  min-height: 22px;
-  position: fixed;
-  width: 100%;
-  box-sizing: border-box;
-}
-.home-component-header i {
-  color: white;
-}
-.home-component-header i.disabled {
-  opacity: 0.2;
-}
-.home-component-header .filter-title {
-  flex: 1;
-  text-align: center;
-}
-.home-component-header .filter-title span {
-  color: white;
-}
-.home-component-header .filter-title span::first-letter {
-  text-transform: uppercase;
-}
 .home-component-container {
   padding: 16px 12px;
   padding-top: 40px;
