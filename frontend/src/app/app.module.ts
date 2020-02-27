@@ -27,6 +27,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import { DateDurationPipe } from './pipes/date-duration.pipe';
 import { DateLongShortPipe } from './pipes/date-long-short.pipe';
 import { ExpenseListComponent } from './components/expense-list/expense-list.component';
+import { EditComponent } from './screens/edit/edit.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { ExpenseListComponent } from './components/expense-list/expense-list.com
     PrettyCurrencyPipe,
     DateDurationPipe,
     DateLongShortPipe,
-    ExpenseListComponent
+    ExpenseListComponent,
+    EditComponent
   ],
   imports: [
     BrowserModule,

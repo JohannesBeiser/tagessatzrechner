@@ -99,8 +99,6 @@ export const expenses: Expense[] = [
         group: "Studium"
 
     },
-
-
     {
         name: "BlaBlaCar",
         amount: 6,
@@ -164,9 +162,6 @@ export const expenses: Expense[] = [
         group: "Asia"
 
     },
-
-
-
     {
         name: "Döner",
         amount: 12,
@@ -289,9 +284,5 @@ export const expenses: Expense[] = [
         date: "2017-07-20",
         description: "Lorem Ipsum dolor sit amet. Consecteteur amid.",
         group: "Trip Norway"
-
     },
-
-
-    
 ]

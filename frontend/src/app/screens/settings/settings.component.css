@@ -2,8 +2,10 @@
   padding: 0 8px;
 }
 .settings-component-container section {
-  border-bottom: 1px solid #ddd;
   padding: 16px 0;
+}
+.settings-component-container section:not(:last-child) {
+  border-bottom: 1px solid #ddd;
 }
 .settings-component-container section .section-container {
   padding: 0 16px;
