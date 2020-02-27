@@ -3,7 +3,7 @@ import { ExpenseService, Expense } from 'src/app/services/expenses/expense.servi
 import { Observable, combineLatest, Subject, BehaviorSubject } from 'rxjs';
 import { FilterService, ExpenseFilter, MonthYear } from 'src/app/services/filter/filter.service';
 import { DatePipe } from '@angular/common';
-import { addMonths, subMonths } from "date-fns";
+import { addMonths, subMonths, isWithinInterval, subDays } from "date-fns";
 import { CategoryService } from 'src/app/services/category/category.service';
 
 interface CategoryTotal{
@@ -52,6 +52,8 @@ export class HomeComponent implements OnInit {
       } else {
         if (filter.date) {
           tempString.date = this.datePipe.transform(`${filter.date.year}-${filter.date.month}-01`, 'MMM y');
+        }else if(localStorage.getItem("last30Active") == 'active'){
+          tempString.date = "Last 30 days" 
         }
       }
 
@@ -98,15 +100,12 @@ export class HomeComponent implements OnInit {
   public initialFocus: string;
 
   openDateFilter(){
-    this.filterService.show("date")
+    this.filterService.show()
   }
 
   openGroupFilter(){
-    this.filterService.show("group")
+    this.filterService.show()
   }
-
-
-
 
   private objectToArray(obj: any): CategoryTotal[]{
     return Object.keys(obj).map(key=> {
@@ -126,6 +125,12 @@ export class HomeComponent implements OnInit {
       if (filter.date) {
         matches = expenseYear == filter.date.year && expenseMonth == filter.date.month;
         // debugger;
+      }else{
+        //take all data change nothing...BUT if last30Days then 
+        if(localStorage.getItem("last30Active")== 'active'){
+          let expenseDate= new Date(expense.date);
+          matches = isWithinInterval(expenseDate,{ start: subDays(new Date(), 30), end: new Date()})
+        }
       }
     }
 

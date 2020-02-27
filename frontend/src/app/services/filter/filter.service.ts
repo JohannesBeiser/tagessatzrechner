@@ -59,14 +59,11 @@ export class FilterService {
     return this.filterState$;
   }
 
-  public initialFocus: string;
-  show(initialFocus?: string) {
-    this.initialFocus= initialFocus;
+  show() {
     this.filterShown$.next(true);
   }
 
   hide() {
-    this.initialFocus= null;
     this.filterShown$.next(false);
   }
 

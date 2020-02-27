@@ -2,10 +2,16 @@
 
   <div class="filter-section">
     Month
-      <mat-slide-toggle color="primary" class="example-margin" [checked]="!allDatesSelected"
-        (change)="dateChanged($event)">{{allDatesSelected ? "All" : "Specfic"}}</mat-slide-toggle>
+    <!-- <mat-slide-toggle color="primary" class="example-margin" [checked]="!allDatesSelected"
+        (change)="dateChanged($event)">{{allDatesSelected ? "All" : "Specfic"}}</mat-slide-toggle> -->
 
-    <mat-form-field appearance="standard" class="month-filter" *ngIf="!allDatesSelected">
+    <mat-radio-group class="example-radio-group" [(ngModel)]="monthMethod" (change)="dateChanged($event)">
+      <mat-radio-button color="primary" class="example-radio-button" [value]="'all'">All</mat-radio-button>
+      <mat-radio-button color="primary" class="example-radio-button" [value]="'last30'">Last 30 days</mat-radio-button>
+      <mat-radio-button color="primary" class="example-radio-button" [value]="'specific'">specific</mat-radio-button>
+    </mat-radio-group>
+
+    <mat-form-field appearance="standard" class="month-filter" *ngIf="monthMethod == 'specific'">
       <mat-label>Month</mat-label>
       <input type="month" matInput [(ngModel)]="dateSelected" #monthPickerInput>
     </mat-form-field>
@@ -27,11 +33,9 @@
 
   <div class="filter-section">
     <label id="example-radio-group-label">Sort by</label>
-    <mat-radio-group
-      aria-labelledby="example-radio-group-label"
-      class="example-radio-group"
-      [(ngModel)]="sortMethod">
-      <mat-radio-button color="primary" class="example-radio-button" *ngFor="let method of sortMethods" [value]="method">
+    <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" [(ngModel)]="sortMethod">
+      <mat-radio-button color="primary" class="example-radio-button" *ngFor="let method of sortMethods"
+        [value]="method">
         {{method}}
       </mat-radio-button>
     </mat-radio-group>

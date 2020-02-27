@@ -5,6 +5,7 @@
   flex-direction: column;
 }
 .home-component-header {
+  z-index: 1;
   display: flex;
   background: #76757b;
   padding: 4px;
@@ -53,6 +54,7 @@
   background: lightgray;
   border-radius: 4px;
   margin-right: 8px;
+  opacity: 0.9;
 }
 .home-component-container .general .categories-total .category-item .category {
   flex: 1;

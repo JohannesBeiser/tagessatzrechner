@@ -7,8 +7,9 @@
   display: flex;
 }
 .expense-list .expense-item .category-indicator {
-  background: steelblue;
+  background: #444;
   width: 6px;
+  opacity: 0.9;
 }
 .expense-list .expense-item .item-content {
   padding: 14px 8px;

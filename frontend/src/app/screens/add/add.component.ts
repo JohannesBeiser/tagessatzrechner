@@ -42,7 +42,7 @@ export class AddComponent implements OnInit, AfterViewInit {
       date: new FormControl(this.currentDate(), Validators.required),
       category: new FormControl(this.categoryService.defaultCategory, Validators.required),
       group: new FormControl("general", Validators.required),
-      description: new FormControl('', Validators.maxLength(50))
+      description: new FormControl('', Validators.maxLength(200))
     });
     if(this.initialData){
       setTimeout(() => {
