@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Expense, ExpenseService } from 'src/app/services/expenses/expense.service';
 import { CategoryService } from 'src/app/services/category/category.service';
 import { SliderService } from 'src/app/services/slider/slider.service';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { ExpenseBottomSheetComponent } from './expense-bottom-sheet/expense-bottom-sheet.component';
 
 @Component({
   selector: 'app-expense-list',
@@ -13,7 +15,8 @@ export class ExpenseListComponent implements OnInit {
   constructor(
     public expenseService: ExpenseService,
     public categoryService: CategoryService,
-    public sliderService: SliderService
+    public sliderService: SliderService,
+    private bottomSheet: MatBottomSheet
   ) { }
 
   @Input() public expenses: Expense[];
@@ -22,26 +25,17 @@ export class ExpenseListComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public deleteExpense(e: MouseEvent, key: number) {
-    e.stopPropagation();
-    if (confirm("Do you really want to delete this expense?")) {
-      this.expenseService.deleteExpense(key);
-    }
-    this.detailViewShownForIndex = null;
-  }
-
-  public editExpense(e: MouseEvent, expense: Expense, key: number){
-    e.stopPropagation();
-    this.expenseService.updateExpense(key, expense);
-    this.detailViewShownForIndex = null;
-  }
-
   public toggleDetailView(index: number) {
     if (this.detailViewShownForIndex != null && this.detailViewShownForIndex == index) {
       this.detailViewShownForIndex = null;
     } else {
       this.detailViewShownForIndex = index;
     }
+  }
+
+  openBottomSheet(e:MouseEvent, expense: any): void {
+    e.stopPropagation();
+    this.bottomSheet.open(ExpenseBottomSheetComponent,{data: expense});
   }
 
 }

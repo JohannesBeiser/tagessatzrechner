@@ -31,7 +31,7 @@ export class AddComponent implements OnInit, AfterViewInit {
 
   public expenseForm: FormGroup;
   public groups$: Observable<GroupItem[]>
-  private initialData: Expense;
+  public initialData: Expense;
 
   ngOnInit(): void {
     this.initialData= this.sliderService.currentExpenseForEdit;

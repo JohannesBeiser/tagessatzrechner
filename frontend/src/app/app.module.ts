@@ -28,6 +28,9 @@ import { DateDurationPipe } from './pipes/date-duration.pipe';
 import { DateLongShortPipe } from './pipes/date-long-short.pipe';
 import { ExpenseListComponent } from './components/expense-list/expense-list.component';
 import { EditComponent } from './screens/edit/edit.component';
+import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
+import { ExpenseBottomSheetComponent } from './components/expense-list/expense-bottom-sheet/expense-bottom-sheet.component';
+import { SettingsBottomSheetComponent } from './screens/settings/settings-bottom-sheet/settings-bottom-sheet.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +47,9 @@ import { EditComponent } from './screens/edit/edit.component';
     DateDurationPipe,
     DateLongShortPipe,
     ExpenseListComponent,
-    EditComponent
+    EditComponent,
+    ExpenseBottomSheetComponent,
+    SettingsBottomSheetComponent
   ],
   imports: [
     BrowserModule,
@@ -57,6 +62,7 @@ import { EditComponent } from './screens/edit/edit.component';
     MatSlideToggleModule,
     MatDatepickerModule,
     ReactiveFormsModule,
+    MatBottomSheetModule,
     MatNativeDateModule,
     MatRadioModule,
     FormsModule,

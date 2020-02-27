@@ -1,0 +1,25 @@
+.expense-menu {
+  background: none;
+  margin: 12px;
+}
+.expense-menu .option-container {
+  margin-bottom: 12px;
+  background: white;
+  border-radius: 8px;
+}
+.expense-menu .option-container > div:not(:last-child) {
+  border-bottom: 1px solid #d8d8d8;
+}
+.expense-menu .menu-item {
+  height: 60px;
+  color: #0c7def;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6em;
+}
+.expense-menu .cancel {
+  background: white;
+  border-radius: 8px;
+  font-weight: bold;
+}

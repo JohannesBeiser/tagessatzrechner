@@ -34,13 +34,24 @@ export class SearchComponent implements OnInit, AfterViewInit {
     );
   }
 
-  getSearchResult(term: string): Observable<Expense[]>{
-    let singleTerms = term.toLowerCase().split(",");
+  getSearchResult(terms: string): Observable<Expense[]>{
+    let singleTerms = terms.toLowerCase().split(",");
+    //remove leading and ending whitespace after splitting
+    let normalizedTerms= singleTerms.map(el=>{
+      let res= el;
+      if(el[0]===' '){
+        res= res.substring(1);
+      }
+      if(el[el.length-1]===' '){
+        res= res.substring(0, res.length-1);
+      }
+      return res;
+    });
     return this.expenseService.getExpenses().pipe(
      map(expenses=>{
       return expenses.filter(expense=>{
         let matches = true;
-        singleTerms.forEach(singleTerm=>{
+        normalizedTerms.forEach(singleTerm=>{
           if(matches){
             matches= expense.name.toLowerCase().includes(singleTerm) || expense.description.toLowerCase().includes(singleTerm)
           }else{
