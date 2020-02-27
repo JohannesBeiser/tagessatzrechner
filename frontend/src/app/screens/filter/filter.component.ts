@@ -1,7 +1,7 @@
-import { Component, OnInit, NgZone, ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { GroupsService } from 'src/app/services/groups/groups.service';
 import { FilterService, ExpenseFilter } from 'src/app/services/filter/filter.service';
-import { take, skip, filter, } from 'rxjs/operators';
+import {  skip, filter, } from 'rxjs/operators';
 
 @Component({
   selector: 'app-filter',
@@ -9,6 +9,9 @@ import { take, skip, filter, } from 'rxjs/operators';
   styleUrls: ['./filter.component.less']
 })
 export class FilterComponent implements OnInit {
+
+  @ViewChild("monthPickerInput") public monthPickerInputElement: ElementRef;
+  @ViewChild("groupPickerInput") public groupPickerInputElement: ElementRef;
 
   public groups$;
 
@@ -28,6 +31,23 @@ export class FilterComponent implements OnInit {
 
   ngOnInit(): void {
     this.groups$ = this.groupService.getGroups();
+
+    this.filterService.filterShown$.subscribe((val)=>{
+      if(val){
+        if(this.filterService.initialFocus){
+          if(this.filterService.initialFocus == "date"){
+            setTimeout(() => {
+              this.monthPickerInputElement.nativeElement.focus()              
+            }, 200);
+          }else{
+            setTimeout(() => {
+              this.groupPickerInputElement.nativeElement.focus()              
+            }, 200);
+          }
+        }
+  
+      }
+    })
 
     this.filterService.filterState$.subscribe((state: ExpenseFilter) => {
       //FIXME : quick workaround for testing

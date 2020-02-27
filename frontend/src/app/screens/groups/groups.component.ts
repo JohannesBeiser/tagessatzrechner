@@ -47,8 +47,11 @@ export class GroupsComponent implements OnInit, OnDestroy {
     })
 
     expenses.forEach(expense => {
-      sorterHelper[expense.group].amount += expense.amount;
-      sorterHelper[expense.group].expenses.push(expense)
+      //Skip expenses who have a group that has been deleted
+      if(sorterHelper[expense.group]){
+        sorterHelper[expense.group].amount += expense.amount;
+        sorterHelper[expense.group].expenses.push(expense)
+      }
     })
 
     // let sorted = expenses.sort(this.filterService.dateSorter);

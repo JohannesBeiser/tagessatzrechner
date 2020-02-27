@@ -7,7 +7,7 @@
 
     <mat-form-field appearance="standard" class="month-filter" *ngIf="!allDatesSelected">
       <mat-label>Month</mat-label>
-      <input type="month" matInput [(ngModel)]="dateSelected">
+      <input type="month" matInput [(ngModel)]="dateSelected" #monthPickerInput>
     </mat-form-field>
   </div>
 
@@ -18,7 +18,7 @@
 
     <mat-form-field appearance="standard" class="groups-filter" *ngIf="!allGroupsSelected">
       <mat-label>Group</mat-label>
-      <select matNativeControl class="group-picker" [(ngModel)]="groupSelected">
+      <select matNativeControl class="group-picker" [(ngModel)]="groupSelected" #groupPickerInput>
         <option value="general">General</option>
         <option *ngFor="let group of groups$ | async" [value]="group.groupName">{{group.groupName}}</option>
       </select>

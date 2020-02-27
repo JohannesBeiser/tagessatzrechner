@@ -1,8 +1,8 @@
 <div class="home-component-header animated faster" [className]="!(filterService.filterShown$ | async) ? 'slideInDown' : ''">
     <i class="material-icons" [class.disabled]="!currentFilter$.value.date" (click)="filterService.switchMonth('decrement')">chevron_left</i>
     <div class="filter-title">
-        <span *ngIf="filterTitles?.date">{{filterTitles.date}}</span>
-        <span *ngIf="filterTitles?.group"> - {{filterTitles.group}}</span>
+        <span *ngIf="filterTitles?.date" (click)="openDateFilter()">{{filterTitles.date}}</span>
+        <span *ngIf="filterTitles?.group" (click)="openGroupFilter()"> - {{filterTitles.group}}</span>
     </div>    
     <i class="material-icons"  [class.disabled]="!currentFilter$.value.date" (click)="filterService.switchMonth('increment')">chevron_right</i>
 

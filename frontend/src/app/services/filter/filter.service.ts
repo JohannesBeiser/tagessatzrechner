@@ -36,6 +36,7 @@ export class FilterService {
 
   constructor() {
     this.filterShown$ = new BehaviorSubject(false);
+
     let initialFilter: ExpenseFilter = JSON.parse(localStorage.getItem("filter")) || this.defaultFilter;
     this.filterState$ = new BehaviorSubject(initialFilter);
     this.monthSwitched$ = new BehaviorSubject(null);
@@ -58,11 +59,14 @@ export class FilterService {
     return this.filterState$;
   }
 
-  show() {
+  public initialFocus: string;
+  show(initialFocus?: string) {
+    this.initialFocus= initialFocus;
     this.filterShown$.next(true);
   }
 
   hide() {
+    this.initialFocus= null;
     this.filterShown$.next(false);
   }
 

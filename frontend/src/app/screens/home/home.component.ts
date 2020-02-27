@@ -95,6 +95,17 @@ export class HomeComponent implements OnInit {
     })
   }
 
+  public initialFocus: string;
+
+  openDateFilter(){
+    this.filterService.show("date")
+  }
+
+  openGroupFilter(){
+    this.filterService.show("group")
+  }
+
+
 
 
   private objectToArray(obj: any): CategoryTotal[]{
