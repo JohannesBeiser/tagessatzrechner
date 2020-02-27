@@ -24,7 +24,7 @@
 }
 .app-slider > * {
   height: 100%;
-  background: white;
+  background: #eee;
   display: flex;
 }
 .app-slider.sliderActive {

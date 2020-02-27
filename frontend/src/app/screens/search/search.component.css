@@ -1,3 +1,6 @@
+.search-component-container .search-results {
+  padding: 16px 12px;
+}
 .search-component-container .search-bar-input-container {
   position: relative;
   display: flex;

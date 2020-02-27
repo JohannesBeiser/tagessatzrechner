@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
   public totalAmount: number = 0;
   public totalCategories: CategoryTotal[];
   public filterTitles: { date: string; group: string } = null;
-  public detailViewShownForIndex: number;
+
 
   ngOnInit(): void {
     this.expenses$ = this.expenseService.getExpenses();
@@ -103,23 +103,6 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  public deleteExpense(e: MouseEvent, key: number) {
-    e.stopPropagation();
-    if (confirm("Do you really want to delete this expense?")) {
-      this.expenseService.deleteExpense(key);
-    }
-    this.detailViewShownForIndex = null;
-  }
-
-  public toggleDetailView(index: number) {
-    if (this.detailViewShownForIndex != null && this.detailViewShownForIndex == index) {
-      this.detailViewShownForIndex = null;
-    } else {
-      this.detailViewShownForIndex = index;
-    }
-  }
-
- 
 
   private matchesFilter(expense: Expense, filter: ExpenseFilter, monthSwitch: MonthYear): boolean {
     let matches = true;
