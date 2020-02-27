@@ -59,8 +59,6 @@
   flex: 1;
 }
 .expense-list .expense-item .item-content .more-info .group .action-buttons {
+  display: flex;
   margin-right: 8px;
-}
-.expense-list .expense-item .item-content .more-info .group .action-buttons i {
-  margin-left: 8px;
 }

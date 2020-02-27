@@ -13,8 +13,7 @@
                     <div class="group-title">Group:</div>
                     <div class="group-name"> {{expense.group}}</div>   
                     <div class="action-buttons">
-                        <i class="material-icons">edit</i>                    
-                        <i class="material-icons" (click)="deleteExpense($event, expense.key)">delete</i>                    
+                        <i  class="material-icons" (click)="openBottomSheet($event, expense)">more_horiz</i>                    
                     </div>
                 </div>
             </div>

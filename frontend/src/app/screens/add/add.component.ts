@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone, AfterViewInit, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SliderService } from 'src/app/services/slider/slider.service';
 import { Expense, ExpenseService } from 'src/app/services/expenses/expense.service';
@@ -31,8 +31,10 @@ export class AddComponent implements OnInit, AfterViewInit {
 
   public expenseForm: FormGroup;
   public groups$: Observable<GroupItem[]>
+  public initialData: Expense;
 
   ngOnInit(): void {
+    this.initialData= this.sliderService.currentExpenseForEdit;
     // debugger;
     this.expenseForm = new FormGroup({
       name: new FormControl('', Validators.required),
@@ -42,18 +44,32 @@ export class AddComponent implements OnInit, AfterViewInit {
       group: new FormControl("general", Validators.required),
       description: new FormControl('', Validators.maxLength(50))
     });
+    if(this.initialData){
+      setTimeout(() => {
+        this.expenseForm.reset({
+          name: this.initialData.name,
+          amount: this.initialData.amount,
+          date: this.initialData.date,
+          category: this.initialData.category,
+          group: this.initialData.group,
+          description: this.initialData.description
+        })
+      }, 100);
+    }else{
+      setTimeout(() => {
+        this.expenseForm.reset({
+          name: '',
+          amount: '',
+          date: this.currentDate(),
+          category: this.categoryService.defaultCategory,
+          group: this.groupsService.defaultGroup,
+          description: ''
+        })
+      }, 100);
+    }
 
     //TODO : Dirty workaround 
-    setTimeout(() => {
-      this.expenseForm.reset({
-        name: '',
-        amount: '',
-        date: this.currentDate(),
-        category: this.categoryService.defaultCategory,
-        group: this.groupsService.defaultGroup,
-        description: ''
-      })
-    }, 100);
+  
     this.groups$ = this.groupsService.getGroups();
   }
   ngAfterViewInit() {
@@ -79,15 +95,12 @@ export class AddComponent implements OnInit, AfterViewInit {
   createExpense(expense: Expense) {
     this.setFormGroupTouched();
     if (this.expenseForm.valid) {
-      this.expenseService.addExpense(expense);
-      this.expenseForm.reset({
-        name: '',
-        amount: '',
-        date: this.currentDate(),
-        category: 'transport',
-        group: 'general',
-        description: ''
-      });
+      if(!this.initialData){
+        this.expenseService.addExpense(expense);
+      }else{
+        let key = (this.initialData as any).key;
+        this.expenseService.updateExpense(key,expense);
+      }
       this.sliderService.hide();
     }
   }

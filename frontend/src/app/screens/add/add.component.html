@@ -1,8 +1,9 @@
 <div class="add-component-container">
   <app-header>
     <div class="flexbox align h-100 space-between p-0-8 slider-header">
-      <i class="slider-header-icon" (click)="sliderService.hide()"
-        class="material-icons-outlined slider-header-icon">close</i>
+      <i class="slider-header-icon" (click)="sliderService.hide()" class="material-icons-outlined slider-header-icon">close</i>
+      <span *ngIf="initialData">Edit</span>
+      <span *ngIf="!initialData">Add</span>
       <i class="material-icons-outlined slider-header-icon submit-icon" [class.disabled]="!expenseForm.valid" (click)="createExpense(expenseForm.value)">check</i>
     </div>
   </app-header>
