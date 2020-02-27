@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
   public totalAmount: number = 0;
   public totalCategories: CategoryTotal[];
   public filterTitles: { date: string; group: string } = null;
-  public detailViewShownForIndex: number;
+
 
   ngOnInit(): void {
     this.expenses$ = this.expenseService.getExpenses();
@@ -65,12 +65,12 @@ export class HomeComponent implements OnInit {
     combineLatest(this.currentFilter$, this.expenses$, this.monthSwitched$, this.sortMethod$).subscribe(([filter, expenses, monthSwitch, sortMethod]) => {
       let filtered= expenses.filter((expense) => {
         return this.matchesFilter(expense, filter, monthSwitch)
-      })
-      
+      });
+
       if(sortMethod == "amount"){
-        this.expenses= filtered.sort(this.filterService.amountSorter);
+        this.expenses= filtered.reverse().sort(this.filterService.amountSorter);
       }else{
-        this.expenses= filtered.sort(this.filterService.dateSorter);
+        this.expenses= filtered.reverse().sort(this.filterService.dateSorter);
       }
 
       this.totalAmount = filtered.reduce((acc, cur) => {
@@ -103,23 +103,6 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  public deleteExpense(e: MouseEvent, key: number) {
-    e.stopPropagation();
-    if (confirm("Do you really want to delete this expense?")) {
-      this.expenseService.deleteExpense(key);
-    }
-    this.detailViewShownForIndex = null;
-  }
-
-  public toggleDetailView(index: number) {
-    if (this.detailViewShownForIndex != null && this.detailViewShownForIndex == index) {
-      this.detailViewShownForIndex = null;
-    } else {
-      this.detailViewShownForIndex = index;
-    }
-  }
-
- 
 
   private matchesFilter(expense: Expense, filter: ExpenseFilter, monthSwitch: MonthYear): boolean {
     let matches = true;

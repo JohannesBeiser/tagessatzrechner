@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GroupsService, GroupItem } from 'src/app/services/groups/groups.service';
 import { CategoryService } from 'src/app/services/category/category.service';
+import { ExpenseService } from 'src/app/services/expenses/expense.service';
 
 @Component({
   selector: 'app-settings',
@@ -12,7 +13,8 @@ export class SettingsComponent implements OnInit {
 
   constructor(
     private groupsService: GroupsService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private expenseService: ExpenseService
   ) { }
 
   public groups$: Observable<GroupItem[]>;
@@ -22,7 +24,7 @@ export class SettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.groups$ = this.groupsService.getGroups();
-    
+
     //TODO : Dirty workaround 
     setTimeout(() => {
       this.defaultGroupSelected = this.groupsService.defaultGroup;
@@ -49,14 +51,14 @@ export class SettingsComponent implements OnInit {
   /**
    * call group/category service and update currently selected in subnject and localstorage
    */
-  public defaultGroupChanged(){
+  public defaultGroupChanged() {
     this.groupsService.setDefaultGroup(this.defaultGroupSelected);
   }
 
   /**
    * call group/category service and update currently selected in subnject and localstorage
    */
-  public defaultCategoryChanged(){
+  public defaultCategoryChanged() {
     this.categoryService.setDefaultCategory(this.defaultCategorySelected);
   }
 
@@ -67,7 +69,7 @@ export class SettingsComponent implements OnInit {
 
   deleteGroup(groupKey: number, groupName: string) {
     if (confirm(`Are you sure you want to delete ${groupName}?`)) {
-      this.groupsService.deleteGroup(groupKey)
+      this.groupsService.deleteGroup(groupKey, groupName)
     }
   }
 

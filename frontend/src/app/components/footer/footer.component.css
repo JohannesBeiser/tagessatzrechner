@@ -1,7 +1,7 @@
 .footer-component-container {
   height: 40px;
   width: 100%;
-  border-top: 1px solid #c5c5c5;
+  border-top: 1px solid #e6e6e6;
   background: white;
   display: flex;
   align-items: center;
@@ -14,24 +14,37 @@
 .footer-component-container i.active {
   font-family: 'Material Icons';
 }
+.footer-component-container span > * {
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.footer-component-container span .home {
+  background-image: url('../../../assets/images/home_outlined.png');
+}
+.footer-component-container span .groups {
+  background-image: url('../../../assets/images/folder_outlined.png');
+}
+.footer-component-container span .add {
+  background-image: url('../../../assets/images/add.png');
+}
+.footer-component-container span .search {
+  background-image: url('../../../assets/images/search.png');
+}
+.footer-component-container span .settings {
+  background-image: url('../../../assets/images/settings_outlined.png');
+}
+.footer-component-container span.active .home {
+  background-image: url('../../../assets/images/home_filled.png');
+}
+.footer-component-container span.active .groups {
+  background-image: url('../../../assets/images/folder.png');
+}
+.footer-component-container span.active .settings {
+  background-image: url('../../../assets/images/settings_filled.png');
+}
 .footer-component-container .image-icon {
   height: 20px;
   width: 20px;
   background-size: contain;
   justify-content: center;
-}
-.footer-component-container .image-icon.home {
-  background-image: url('../../../assets/images/home_outlined.png');
-}
-.footer-component-container .image-icon.home.active {
-  background-image: url('../../../assets/images/home_filled.png');
-}
-.footer-component-container .image-icon.add {
-  background-image: url('../../../assets/images/add.png');
-}
-.footer-component-container .image-icon.settings {
-  background-image: url('../../../assets/images/settings_outlined.png');
-}
-.footer-component-container .image-icon.settings.active {
-  background-image: url('../../../assets/images/settings_filled.png');
 }

@@ -17,12 +17,24 @@
     }
 
     span {
+        >*{
+            background-repeat: no-repeat;
+            background-position: center;
+        }
         .home {
             background-image: url('../../../assets/images/home_outlined.png');
         }
 
+        .groups{
+            background-image: url('../../../assets/images/folder_outlined.png');
+        }
+
         .add {
             background-image: url('../../../assets/images/add.png');
+        }
+
+        .search {
+            background-image: url('../../../assets/images/search.png');
         }
 
         .settings {
@@ -32,6 +44,10 @@
         &.active {
             .home {
                 background-image: url('../../../assets/images/home_filled.png');
+            }
+
+            .groups{
+                background-image: url('../../../assets/images/folder.png');
             }
 
             .settings {

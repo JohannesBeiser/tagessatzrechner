@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Subject, ReplaySubject, Observable, BehaviorSubject } from 'rxjs';
 import { IndexedDBConnectionService } from '../indexed-dbconnection.service';
+import { groups } from './Groups';
+import { ExpenseService } from '../expenses/expense.service';
 
 export interface GroupItem{
   key: number;
@@ -50,12 +52,15 @@ export class GroupsService {
   }
 
 
-  public deleteGroup(key: number) {
+  public deleteGroup(key: number, groupName: string) {
     let transaction = this.db.transaction("groups", "readwrite");
     let objectStore = transaction.objectStore("groups");
     let req = objectStore.delete(key);
     req.onsuccess = () => {
       this.refreshGroups();
+    }
+    if(this.defaultGroup == groupName){
+      this.setDefaultGroup("general");
     }
   }
 
@@ -104,4 +109,12 @@ export class GroupsService {
     dbReq.onerror = function (event) {
       alert('error opening database ' + (event.target as any).errorCode);
     }
-  }}
+  }
+
+  public seedGroups(){
+    for (const group of groups) {
+      this.addGroup(group);
+    }
+  }
+
+}
