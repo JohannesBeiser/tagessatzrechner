@@ -58,7 +58,7 @@
 }
 .home-component-container .expense-list .expense-item {
   background: #fff;
-  margin: 4px 0;
+  margin: 6px 0;
   display: flex;
 }
 .home-component-container .expense-list .expense-item .category-indicator {

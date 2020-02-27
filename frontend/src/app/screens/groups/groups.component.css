@@ -6,6 +6,7 @@
 }
 .groups-component-container .group-list .group-list-item {
   margin-bottom: 16px;
+  border-radius: 4px;
   background: #fff;
   padding: 12px;
   display: flex;

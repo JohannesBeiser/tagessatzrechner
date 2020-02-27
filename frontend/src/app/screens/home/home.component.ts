@@ -65,12 +65,12 @@ export class HomeComponent implements OnInit {
     combineLatest(this.currentFilter$, this.expenses$, this.monthSwitched$, this.sortMethod$).subscribe(([filter, expenses, monthSwitch, sortMethod]) => {
       let filtered= expenses.filter((expense) => {
         return this.matchesFilter(expense, filter, monthSwitch)
-      })
-      
+      });
+
       if(sortMethod == "amount"){
-        this.expenses= filtered.sort(this.filterService.amountSorter);
+        this.expenses= filtered.reverse().sort(this.filterService.amountSorter);
       }else{
-        this.expenses= filtered.sort(this.filterService.dateSorter);
+        this.expenses= filtered.reverse().sort(this.filterService.dateSorter);
       }
 
       this.totalAmount = filtered.reduce((acc, cur) => {

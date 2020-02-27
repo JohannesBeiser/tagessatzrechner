@@ -1,0 +1,1 @@
+export const groups: string[] = ["Asia", "Trip Norway", "Studium", "Canada"]

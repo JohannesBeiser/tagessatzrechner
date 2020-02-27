@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Subject, Observable, BehaviorSubject, ReplaySubject } from 'rxjs';
 import { IndexedDBConnectionService } from '../indexed-dbconnection.service';
 import { expenses } from "./Expenses";
+import { GroupsService } from '../groups/groups.service';
+import { groups } from '../groups/Groups';
 
 export interface Expense {
   name: string;
@@ -22,7 +24,7 @@ export class ExpenseService {
   private connection$: ReplaySubject<boolean>;
 
   constructor(
-    private indexedDBService: IndexedDBConnectionService
+    private indexedDBService: IndexedDBConnectionService,
   ) {
     this.connection$ = new ReplaySubject(1);
     this.createExpenseDatabase();
@@ -94,7 +96,11 @@ export class ExpenseService {
       let db = (event.target as any).result;
       this.indexedDBService.upgradeDatabase(db);
       setTimeout(() => {
-        this.seedExpenses();      
+        this.seedExpenses();   
+        for (const group of groups) {
+          this.addGroup(group);
+        }
+        // this.groupsService.seedGroups();   
       }, 1000);
     }
 
@@ -107,6 +113,12 @@ export class ExpenseService {
       alert('error opening database ' + (event.target as any).errorCode);
     }
   }
+
+  public addGroup(group: string) {
+    let tx = this.db.transaction(['groups'], 'readwrite');
+    let store = tx.objectStore('groups');
+    store.add({groupName: group});
+  };
 
   private seedExpenses(){
     for (const expense of expenses) {

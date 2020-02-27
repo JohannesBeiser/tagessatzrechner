@@ -1,9 +1,14 @@
+.settings-component-container .defaults-settings-section mat-form-field {
+  padding: 0 8px;
+}
 .settings-component-container section {
   border-bottom: 1px solid #ddd;
   padding: 16px 0;
 }
 .settings-component-container section .section-container {
-  padding: 0 8px;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
 }
 .settings-component-container section .section-container .groups-header {
   font-weight: bold;
@@ -36,8 +41,8 @@
 .settings-component-container section.group-settings-section .group-list .group-item {
   padding: 6px 12px;
   display: flex;
-  background: #fff;
-  border-radius: 16px;
+  background: #d6d6d6;
+  border-radius: 8px;
   margin: 4px 0;
   align-items: center;
   min-width: 100px;

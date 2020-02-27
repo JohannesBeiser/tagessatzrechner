@@ -4,14 +4,19 @@
     <!-- <img routerLink="/home" routerLinkActive="active" class="image-icon" src="../../../assets/images/home_outlined.png"> -->
   </span>
   
-  <i routerLink="/groups" routerLinkActive="active" class="material-icons-outlined">folder</i>
+  <span routerLink="/groups" routerLinkActive="active" class="flex-1 flexbox justify h-100 align">
+    <div class="image-icon groups" ></div>
+  </span>
 
   <span class="flex-1 flexbox justify h-100 align" (click)="sliderService.show('add')">
     <div class="image-icon add" ></div>
   </span>
 
-  <i class="material-icons-outlined" (click)="sliderService.show('search')">search</i>
+  <span  class="flex-1 flexbox justify h-100 align" (click)="sliderService.show('search')">
+    <div class="image-icon search"></div>
+  </span>
   
+
   <span routerLink="/settings" routerLinkActive="active" class="flex-1 flexbox justify h-100 align">
     <div class="image-icon settings"></div>
   </span>
