@@ -34,6 +34,11 @@ export class SearchComponent implements OnInit, AfterViewInit {
       filter(term=>term.length>0),
       switchMap((term)=>this.getSearchResult(term))
     );
+
+    //Collapse first in case of opened when new results come in
+    this.results$.subscribe(()=>{
+      this.collapseNotifier.next();
+    })
   }
 
   getSearchResult(terms: string): Observable<Expense[]>{
@@ -56,6 +61,37 @@ export class SearchComponent implements OnInit, AfterViewInit {
         normalizedTerms.forEach(singleTerm=>{
           if(matches){
             matches= expense.name.toLowerCase().includes(singleTerm) || expense.description.toLowerCase().includes(singleTerm)
+            let expenseDate = new Date(expense.date);
+            let matchesDate= true;
+            let dateSegments = singleTerm.split(".")
+            for (let i=0; i<dateSegments.length;i++) {
+              if(matchesDate){
+                if(!parseInt(dateSegments[i]) && !(dateSegments[i]=="")){
+                  matchesDate= false;
+                  break; // break loop not a date
+                }
+                // first day, month, year
+                if(i==0){
+                  matchesDate= parseInt(dateSegments[i]) == expenseDate.getDate();
+                }else if(i==1){
+                   //this is for the case "22."
+                  if(dateSegments[i] !== ""){
+                    matchesDate= parseInt(dateSegments[i]) == expenseDate.getMonth()+1;
+                  }
+                }else if(i==2){
+                  //this is for the case "22.03." with ending dot leading to third segment
+                  if(dateSegments[i] !== ""){
+                    matchesDate= parseInt(dateSegments[i]) == expenseDate.getFullYear();
+                  }
+                }else{
+                  matchesDate= false;
+                  break; // break loop not a date (can't have more than 3 segments 12.2.2020)
+                }              
+              }else{
+                break;
+              }
+            }
+            matches= matches || matchesDate
           }else{
             return matches;
           }          
