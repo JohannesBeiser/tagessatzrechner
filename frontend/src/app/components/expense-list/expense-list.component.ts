@@ -68,6 +68,7 @@ export class ExpenseListComponent implements OnInit {
 
   openBottomSheet(e:MouseEvent, expense: any): void {
     e.stopPropagation();
+    document.body.style.backgroundColor="#4f5053";
     this.bottomSheet.open(ExpenseBottomSheetComponent,{data: expense});
   }
 

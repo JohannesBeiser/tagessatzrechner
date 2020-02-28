@@ -71,6 +71,7 @@ export class SettingsComponent implements OnInit {
   }
 
   openBottomSheet(e:MouseEvent, group: any): void {
+    document.body.style.backgroundColor="#4f5053";
     e.stopPropagation();
     this.bottomSheet.open(SettingsBottomSheetComponent,{data: group});
   }

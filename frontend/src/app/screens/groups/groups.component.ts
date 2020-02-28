@@ -4,6 +4,7 @@ import { GroupsService, GroupItem, GroupTotal } from 'src/app/services/groups/gr
 import { Observable, combineLatest, Subscription } from 'rxjs';
 import { ExpenseService, Expense } from 'src/app/services/expenses/expense.service';
 import { FilterService } from 'src/app/services/filter/filter.service';
+import { transition, trigger, state, style, animate } from '@angular/animations';
 
 type GroupTotalCollections = {
   type: string;
@@ -12,6 +13,22 @@ type GroupTotalCollections = {
 
 @Component({
   selector: 'app-groups',
+  animations: [
+    trigger('slideInOut', [
+      state('out', style({
+        opacity: '0',
+        overflow: 'hidden',
+        height: '0px',
+      })),
+      state('in', style({
+        opacity: '1',
+        overflow: 'hidden',
+        height: '*',
+      })),
+      transition('out => in', animate('150ms ease-in-out')),
+      transition('in => out', animate('150ms ease-in-out'))
+    ])
+  ],
   templateUrl: './groups.component.html',
   styleUrls: ['./groups.component.less']
 })
@@ -68,9 +85,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
     // debugger;
 
     let result: GroupTotal[] = groups.map<GroupTotal>((group) => {
-      let amountForGroup = sorterHelper[group.groupName].amount;
-      let expenses = sorterHelper[group.groupName].expenses;
-      let deleted = sorterHelper[group.groupName].deleted;
+      let amountForGroup: number = sorterHelper[group.groupName].amount;
+      let expenses: Expense[] = sorterHelper[group.groupName].expenses;
+      let deleted: boolean = sorterHelper[group.groupName].deleted;
 
       let result: GroupTotal ;
 

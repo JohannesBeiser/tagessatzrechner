@@ -16,6 +16,9 @@ export class SettingsBottomSheetComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.bottomSheetRef.backdropClick().subscribe(()=>{
+      document.body.style.backgroundColor="#76757b";
+    });
   }
 
   deleteGroup() {
@@ -26,6 +29,7 @@ export class SettingsBottomSheetComponent implements OnInit {
   }
 
   close(event: MouseEvent): void {
+    document.body.style.backgroundColor="#76757b";
     this.bottomSheetRef.dismiss();
     event.preventDefault();
   }
