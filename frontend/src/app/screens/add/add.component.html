@@ -38,7 +38,7 @@
      <mat-form-field appearance="standard">
         <mat-label>Group</mat-label>
         <select matNativeControl formControlName="group" class="group-input-field">
-          <option value="general">General</option>
+          <option value="General">General</option>
           <option *ngFor="let group of groups$ | async" value="{{group.groupName}}">{{group.groupName}}</option>
         </select>
       </mat-form-field>

@@ -32,7 +32,7 @@ export class GroupsService {
     this.connection$ = new ReplaySubject(1);
     this.createGroupDatabase();
     this.groups$ = new BehaviorSubject<GroupItem[]>([]);
-    this.defaultGroup = localStorage.getItem("defaultGroup") || "general"
+    this.defaultGroup = localStorage.getItem("defaultGroup") || "General"
   }
 
   public addGroup(group: string) {
@@ -61,7 +61,7 @@ export class GroupsService {
       this.refreshGroups();
     }
     if(this.defaultGroup == groupName){
-      this.setDefaultGroup("general");
+      this.setDefaultGroup("General");
     }
   }
 

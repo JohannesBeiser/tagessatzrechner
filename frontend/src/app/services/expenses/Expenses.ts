@@ -105,7 +105,7 @@ export const expenses: Expense[] = [
         category: "food",
         date: "2020-02-17",
         description: "Lorem Ipsum dolor sit amet. Consecteteur amid.",
-        group: "general"
+        group: "General"
 
     },
     {
@@ -114,7 +114,7 @@ export const expenses: Expense[] = [
         category: "food",
         date: "2020-02-22",
         description: "Lorem Ipsum dolor sit amet. Consecteteur amid.",
-        group: "general"
+        group: "General"
 
     },
     {
@@ -123,7 +123,7 @@ export const expenses: Expense[] = [
         category: "multimedia",
         date: "2020-02-01",
         description: "Lorem Ipsum dolor sit amet. Consecteteur amid.",
-        group: "general"
+        group: "General"
 
     },
     {
