@@ -50,7 +50,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     })
 
     expenses.forEach(expense => {
-      let expenseGroup= expense.group.toLowerCase();
+      let expenseGroup= expense.group;
       //Skip expenses who have a group that has been deleted
       if(sorterHelper[expenseGroup]){
         sorterHelper[expenseGroup].amount += expense.amount;

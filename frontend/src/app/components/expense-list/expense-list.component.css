@@ -43,7 +43,6 @@
   padding: 8px 0;
 }
 .expense-list .expense-item .item-content .more-info .group {
-  text-transform: capitalize;
   padding: 8px 0 0 0;
   display: flex;
   align-items: center;

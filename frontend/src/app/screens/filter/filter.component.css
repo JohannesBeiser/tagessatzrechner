@@ -8,12 +8,6 @@
 .filter-component-container .month-filter {
   width: 100%;
 }
-.filter-component-container .groups-filter .group-picker {
-  text-transform: capitalize;
-}
-.filter-component-container .groups-filter .group-picker option {
-  text-transform: capitalize;
-}
 .filter-component-container .example-radio-group {
   display: flex;
   flex-direction: column;

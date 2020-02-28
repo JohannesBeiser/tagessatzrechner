@@ -38,7 +38,7 @@ export class GroupsService {
   public addGroup(group: string) {
     let tx = this.db.transaction(['groups'], 'readwrite');
     let store = tx.objectStore('groups');
-    store.add({groupName: group.toLowerCase()});
+    store.add({groupName: group});
     tx.oncomplete = () => {
       this.refreshGroups();
     }

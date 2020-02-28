@@ -21,9 +21,6 @@
 .groups-component-container .group-list .group-list-item .info-section {
   flex: 1;
 }
-.groups-component-container .group-list .group-list-item .info-section .group-name {
-  text-transform: capitalize;
-}
 .groups-component-container .group-list .group-list-item .info-section .group-dates {
   margin-top: 12px;
   opacity: 0.8;
