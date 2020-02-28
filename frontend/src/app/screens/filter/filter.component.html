@@ -1,14 +1,11 @@
 <div class="filter-component-container">
 
   <div class="filter-section">
-    Month
-    <!-- <mat-slide-toggle color="primary" class="example-margin" [checked]="!allDatesSelected"
-        (change)="dateChanged($event)">{{allDatesSelected ? "All" : "Specfic"}}</mat-slide-toggle> -->
-
-    <mat-radio-group class="example-radio-group" [(ngModel)]="monthMethod" (change)="dateChanged($event)">
-      <mat-radio-button color="primary" class="example-radio-button" [value]="'all'">All</mat-radio-button>
+    Date
+       <mat-radio-group class="example-radio-group" [(ngModel)]="monthMethod" (change)="dateChanged($event)">
+      <mat-radio-button color="primary" class="example-radio-button" [value]="'all'">All time</mat-radio-button>
       <mat-radio-button color="primary" class="example-radio-button" [value]="'last30'">Last 30 days</mat-radio-button>
-      <mat-radio-button color="primary" class="example-radio-button" [value]="'specific'">Specific</mat-radio-button>
+      <mat-radio-button color="primary" class="example-radio-button" [value]="'specific'">Specific month</mat-radio-button>
     </mat-radio-group>
 
     <mat-form-field appearance="standard" class="month-filter" *ngIf="monthMethod == 'specific'">
@@ -17,7 +14,7 @@
     </mat-form-field>
   </div>
 
-  <div class="filter-section">
+  <div class="filter-section groups">
     Groups
     <mat-slide-toggle color="primary" class="example-margin" [checked]="!allGroupsSelected"
       (change)="groupChanged($event)">{{allGroupsSelected ? "All" : "Specfic"}}</mat-slide-toggle>

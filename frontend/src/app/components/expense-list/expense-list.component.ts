@@ -5,6 +5,7 @@ import { SliderService } from 'src/app/services/slider/slider.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ExpenseBottomSheetComponent } from './expense-bottom-sheet/expense-bottom-sheet.component';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-expense-list',
@@ -37,13 +38,19 @@ export class ExpenseListComponent implements OnInit {
   ) { }
 
   @Input() public expenses: Expense[];
+  @Input() public collapseNotifier: Observable<void>;
   public detailViewShownForIndex: number;
 
   ngOnInit(): void {
-
+    this.expenseService.expenseDeletedNotifier.subscribe(()=>{
+      this.helper = {}
+    });
+    this.collapseNotifier.subscribe(()=>{
+      this.helper = {}
+    })
   }
 
-  helper = {}
+  public helper = {}
   helpMenuOpenForIndex(index: number):string{
     return this.helper[index] || 'out';
   }
@@ -58,6 +65,10 @@ export class ExpenseListComponent implements OnInit {
     }
   }
 
+  public stopPropagation(e: MouseEvent){
+    e.stopPropagation();
+  }
+
   // public toggleDetailView(index: number) {
   //   if (this.detailViewShownForIndex != null && this.detailViewShownForIndex == index) {
   //     this.detailViewShownForIndex = null;
@@ -70,6 +81,7 @@ export class ExpenseListComponent implements OnInit {
     e.stopPropagation();
     document.body.style.backgroundColor="#4f5053";
     this.bottomSheet.open(ExpenseBottomSheetComponent,{data: expense});
+    // ExpenseBottomSheetComponent.
   }
 
 }

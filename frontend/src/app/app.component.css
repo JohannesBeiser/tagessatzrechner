@@ -38,14 +38,22 @@
 .home-component-header {
   display: flex;
   background: #76757b;
-  padding: 4px;
   align-items: center;
   min-height: 22px;
   width: 100%;
   box-sizing: border-box;
 }
+.home-component-header > * {
+  padding: 4px;
+}
 .home-component-header i {
   color: white;
+}
+.home-component-header i:first-child {
+  padding-right: 16px;
+}
+.home-component-header i:last-child {
+  padding-left: 16px;
 }
 .home-component-header i.disabled {
   opacity: 0.2;

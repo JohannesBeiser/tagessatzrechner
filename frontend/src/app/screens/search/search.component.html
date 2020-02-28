@@ -11,8 +11,8 @@
         </div>
     </app-header>
 
-    <div class="search-results">
+    <div class="search-results"  (click)="collapseNotifier.next()">
         <div *ngIf="(results$ | async)?.length ==0 " class="no-expenses">No expenses found!</div>
-        <app-expense-list [expenses]="results$ | async | slice:0:9"></app-expense-list>
+        <app-expense-list [expenses]="results$ | async | slice:0:9"  [collapseNotifier]="collapseNotifier" ></app-expense-list>
     </div>
 </div>

@@ -18,6 +18,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
   public searchTerm$: Subject<string>;
   public results$: Observable<Expense[]>
+  public collapseNotifier: Subject<void> = new Subject();
 
   constructor(
     public sliderService: SliderService,

@@ -27,6 +27,10 @@ app-root {
   padding: 0px !important;
   background: none !important;
 }
+.mat-radio-label-content,
+.mat-slide-toggle-content {
+  font-family: "Roboto-Light" !important;
+}
 .capitalize {
   text-transform: capitalize;
 }

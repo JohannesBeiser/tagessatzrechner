@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { GroupsService, GroupItem } from 'src/app/services/groups/groups.service';
 import { CategoryService } from 'src/app/services/category/category.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -34,7 +34,7 @@ export class SettingsComponent implements OnInit {
   }
 
   hardReloadApp() {
-    let shallUpdate = confirm("Hard reloading resets the offline cached app. Data will still remain!");
+    let shallUpdate = confirm("Updating resets the offline cached app. Data will still remain!");
     if (shallUpdate) {
       navigator.serviceWorker.getRegistrations().then(function (registrations) {
         for (let registration of registrations) {

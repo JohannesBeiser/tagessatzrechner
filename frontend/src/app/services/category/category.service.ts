@@ -20,9 +20,9 @@ export class CategoryService {
 
   public readonly categoryColors: CategoryColor = {
     food: "#749056",//"rgb(110, 150, 72)",
-    accommodation: "rgb(84, 94, 117)",
+    accommodation: "#5979a9",//"rgb(84, 94, 117)",
     transport: "rgb(192, 87, 70)",
-    multimedia: "rgb(189, 155, 117)",
+    multimedia: "rgb(150, 123, 92)",//"rgb(189, 155, 117)",
     general: "rgb(82, 82, 82)",
   }
 

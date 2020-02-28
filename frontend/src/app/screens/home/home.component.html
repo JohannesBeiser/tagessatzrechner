@@ -1,5 +1,5 @@
 
-<div class="home-component-container" >
+<div class="home-component-container" (click)="collapseNotifier.next()">
     <div class="general" *ngIf="totalAmount >0">
         <div class="total-amount" >{{totalAmount | prettyCurrency}}</div>
         <div class="categories-total">
@@ -11,9 +11,8 @@
         </div>
     </div>
 
-    <app-expense-list [expenses]="expenses" *ngIf="totalAmount >0"></app-expense-list>
+    <app-expense-list [expenses]="expenses" [collapseNotifier]="collapseNotifier" *ngIf="totalAmount >0"></app-expense-list>
 
-    <!-- TODO remove ngIf -->
     <div class="filter-container" [class.active]="filterService.filterShown$ | async" >
         <app-filter></app-filter>
     </div>

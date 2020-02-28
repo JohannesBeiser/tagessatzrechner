@@ -1,8 +1,20 @@
 .filter-component-container {
-  padding: 16px;
+  height: 100%;
+  overflow-y: auto;
 }
 .filter-component-container .filter-section {
-  padding: 8px 0;
+  padding: 16px;
+}
+.filter-component-container .filter-section:not(:last-child) {
+  border-bottom: 1px solid #ddd;
+}
+.filter-component-container .filter-section.groups {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.filter-component-container .filter-section.groups mat-slide-toggle {
+  padding-left: 12px;
 }
 .filter-component-container .groups-filter,
 .filter-component-container .month-filter {

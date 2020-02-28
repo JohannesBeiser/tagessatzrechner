@@ -33,7 +33,7 @@ export class HomeComponent implements OnInit {
   public totalAmount: number = 0;
   public totalCategories: CategoryTotal[];
   public filterTitles: { date: string; group: string } = null;
-
+  public collapseNotifier: Subject<void> = new Subject();
 
   ngOnInit(): void {
     this.expenses$ = this.expenseService.getExpenses();

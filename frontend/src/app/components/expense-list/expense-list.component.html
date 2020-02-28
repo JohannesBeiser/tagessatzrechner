@@ -1,4 +1,4 @@
-<div class="expense-list">
+<div class="expense-list" (click)="stopPropagation($event)">
     <div *ngFor="let expense of expenses; let i = index" class="expense-item" (click)="toggleHelpMenu(i)" >
         <div class="category-indicator" [style.background-color]="categoryService.categoryColors[expense.category]"></div>
         <div class="item-content">

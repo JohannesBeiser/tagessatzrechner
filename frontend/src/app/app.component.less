@@ -50,14 +50,23 @@
 .home-component-header {
     display: flex;
     background: @app-header-color;
-    padding: 4px;
     align-items: center;
     min-height: 22px;
     width: 100%;
     box-sizing: border-box;
   
+    >*{
+      padding: 4px;
+    }
+
     i {
       color: white;
+      &:first-child{
+        padding-right: 16px;
+      }
+      &:last-child{
+        padding-left: 16px;
+      }
   
       &.disabled {
         opacity: 0.2;

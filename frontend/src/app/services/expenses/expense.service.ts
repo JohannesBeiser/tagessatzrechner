@@ -22,6 +22,7 @@ export class ExpenseService {
   private db: any;
   private expenses$: Subject<Expense[]>;
   private connection$: ReplaySubject<boolean>;
+  public expenseDeletedNotifier: Subject<void>;
 
   constructor(
     private indexedDBService: IndexedDBConnectionService,
@@ -29,6 +30,7 @@ export class ExpenseService {
     this.connection$ = new ReplaySubject(1);
     this.createExpenseDatabase();
     this.expenses$ = new Subject<Expense[]>();
+    this.expenseDeletedNotifier = new Subject();
   }
 
   public addExpense(expense: Expense) {
@@ -61,6 +63,7 @@ export class ExpenseService {
     let transaction = this.db.transaction("expenses", "readwrite");
     let objectStore = transaction.objectStore("expenses");
     let req = objectStore.delete(key);
+    this.expenseDeletedNotifier.next();
     req.onsuccess = () => {
       this.refreshExpenses();
     }

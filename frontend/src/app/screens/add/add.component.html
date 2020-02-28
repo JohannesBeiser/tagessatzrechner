@@ -16,6 +16,7 @@
         <mat-label>Name</mat-label>
         <input type="text" matInput formControlName="name" #focusInput>
         <mat-error *ngIf="hasError('name', 'required')">Name is required</mat-error>
+        <mat-error *ngIf="hasError('name', 'maxlength')">Max. 35 characters allowed</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="standard" class="amount-input">
@@ -52,7 +53,7 @@
         <mat-label>Description</mat-label>
         <textarea matInput formControlName="description" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
           cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
-          <mat-error *ngIf="hasError('description', 'maxlength')">More than 200 characters not allowed</mat-error>
+          <mat-error *ngIf="hasError('description', 'maxlength')">Max. 200 characters allowed</mat-error>
       </mat-form-field> 
       <input type="submit" style="display: none">
     </form>

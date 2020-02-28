@@ -27,21 +27,25 @@ export class ExpenseBottomSheetComponent implements OnInit {
     e.stopPropagation();
     if (confirm("Do you really want to delete this expense?")) {
       this.expenseService.deleteExpense(key);
-      this.bottomSheetRef.dismiss();
+      this.dismiss();
     }
     // this.detailViewShownForIndex = null;
   }
 
   editExpense(e: MouseEvent){
     this.sliderService.show('add', this.expense)
-    this.bottomSheetRef.dismiss();
+    this.dismiss();
     event.preventDefault();
   }
 
   close(event: MouseEvent): void {
+    this.dismiss();
+    event.preventDefault();
+  }
+
+  private dismiss(){
     document.body.style.backgroundColor="#76757b";
     this.bottomSheetRef.dismiss();
-    event.preventDefault();
   }
 
 }

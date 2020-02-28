@@ -37,7 +37,7 @@ export class AddComponent implements OnInit, AfterViewInit {
     this.initialData= this.sliderService.currentExpenseForEdit;
     // debugger;
     this.expenseForm = new FormGroup({
-      name: new FormControl('', Validators.required),
+      name: new FormControl('', [Validators.required, Validators.maxLength(35)]),
       amount: new FormControl('', Validators.required),
       date: new FormControl(this.currentDate(), Validators.required),
       category: new FormControl(this.categoryService.defaultCategory, Validators.required),
@@ -92,6 +92,7 @@ export class AddComponent implements OnInit, AfterViewInit {
   }
 
   createExpense(expense: Expense) {
+    // debugger;
     this.setFormGroupTouched();
     if (this.expenseForm.valid) {
       if(!this.initialData){
