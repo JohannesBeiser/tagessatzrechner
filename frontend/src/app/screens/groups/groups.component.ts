@@ -42,7 +42,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   calculateGroupsTotals(expenses: Expense[], groups_origin: GroupItem[]): GroupTotalCollections[] {
     let sorterHelper = {};
     let groups = [...groups_origin].reverse();
-    groups.push({ key: null, groupName: "general"});
+    groups.push({ key: null, groupName: "General"});
     groups.forEach((el) => {
       sorterHelper[el.groupName] = {};
       sorterHelper[el.groupName].amount = 0;

@@ -41,7 +41,8 @@ export class HomeComponent implements OnInit {
     this.monthSwitched$ = this.filterService.monthSwitched$;
     this.sortMethod$ = this.filterService.sortMethod$;
 
-    combineLatest(this.currentFilter$, this.expenses$, this.monthSwitched$, this.sortMethod$).subscribe(([filter, expenses, monthSwitch, sortMethod]) => {
+    combineLatest(this.currentFilter$, this.expenses$, this.monthSwitched$, this.sortMethod$)
+    .subscribe(([filter, expenses, monthSwitch, sortMethod]) => {
       let filtered= expenses.filter((expense) => {
         return this.matchesFilter(expense, filter, monthSwitch)
       });

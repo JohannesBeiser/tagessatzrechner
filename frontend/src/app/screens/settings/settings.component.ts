@@ -29,7 +29,7 @@ export class SettingsComponent implements OnInit {
     //TODO : Dirty workaround 
     setTimeout(() => {
       this.defaultGroupSelected = this.groupsService.defaultGroup;
-    }, 200);
+    }, 64);
     this.defaultCategorySelected = this.categoryService.defaultCategory;
   }
 

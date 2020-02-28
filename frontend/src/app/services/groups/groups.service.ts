@@ -52,6 +52,11 @@ export class GroupsService {
     return this.groups$.asObservable();
   }
 
+  // optimized for overlays which don't own a route to not request double amount
+  public getGroupsWithoutUpdate(){
+    return this.groups$.asObservable();
+  }
+
 
   public deleteGroup(key: number, groupName: string) {
     let transaction = this.db.transaction("groups", "readwrite");

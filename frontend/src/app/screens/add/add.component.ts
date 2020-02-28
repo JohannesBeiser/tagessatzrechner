@@ -30,7 +30,7 @@ export class AddComponent implements OnInit, AfterViewInit {
   }
 
   public expenseForm: FormGroup;
-  public groups$: Observable<GroupItem[]>
+  public groups$: Observable<GroupItem[]>;
   public initialData: Expense;
 
   ngOnInit(): void {
@@ -41,7 +41,7 @@ export class AddComponent implements OnInit, AfterViewInit {
       amount: new FormControl('', Validators.required),
       date: new FormControl(this.currentDate(), Validators.required),
       category: new FormControl(this.categoryService.defaultCategory, Validators.required),
-      group: new FormControl("general", Validators.required),
+      group: new FormControl("General", Validators.required),
       description: new FormControl('', Validators.maxLength(200))
     });
     //TODO : Dirty workaround
@@ -55,7 +55,7 @@ export class AddComponent implements OnInit, AfterViewInit {
           group: this.initialData.group,
           description: this.initialData.description
         })
-      }, 200);
+      }, 64);
     }else{
       setTimeout(() => {
         this.expenseForm.reset({
@@ -66,10 +66,9 @@ export class AddComponent implements OnInit, AfterViewInit {
           group: this.groupsService.defaultGroup,
           description: ''
         })
-      }, 200);
+      }, 64);
     }
-  
-    this.groups$ = this.groupsService.getGroups();
+    this.groups$ = this.groupsService.getGroupsWithoutUpdate();
   }
   
   ngAfterViewInit() {

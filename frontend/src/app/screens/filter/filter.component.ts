@@ -1,7 +1,8 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { GroupsService } from 'src/app/services/groups/groups.service';
+import { GroupsService, GroupItem } from 'src/app/services/groups/groups.service';
 import { FilterService, ExpenseFilter } from 'src/app/services/filter/filter.service';
 import {  skip, filter, } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-filter',
@@ -13,7 +14,7 @@ export class FilterComponent implements OnInit {
   @ViewChild("monthPickerInput") public monthPickerInputElement: ElementRef;
   @ViewChild("groupPickerInput") public groupPickerInputElement: ElementRef;
 
-  public groups$;
+  public groups$: Observable<GroupItem[]>;
 
   //Filters
   public dateSelected: string;
@@ -34,7 +35,7 @@ export class FilterComponent implements OnInit {
   ngOnInit(): void {
     this.groups$ = this.groupService.getGroups();
 
-    this.filterService.filterState$.subscribe((state: ExpenseFilter) => {
+    this.filterService.filterState$.subscribe((state) => {
       //FIXME : quick workaround for testing
       setTimeout(() => {
           if (state.date) {
@@ -55,7 +56,7 @@ export class FilterComponent implements OnInit {
             this.groupSelected = null;
             this.allGroupsSelected = true;
           }            
-      }, 200);
+      }, 64);
     });
 
   
@@ -72,7 +73,7 @@ export class FilterComponent implements OnInit {
   groupChanged(e: any) {
     this.allGroupsSelected = !e.checked;
     if(e.checked){
-        this.groupSelected= "general"
+        this.groupSelected= "General"
     }
   }
 
