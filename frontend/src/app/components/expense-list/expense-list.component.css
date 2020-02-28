@@ -36,9 +36,6 @@
 .expense-list .expense-item .item-content .minimal-info .info-item.date {
   margin-right: 12px;
 }
-.expense-list .expense-item .item-content .more-info {
-  flex: 1;
-}
 .expense-list .expense-item .item-content .more-info > div:first-child {
   padding-top: 16px;
 }
