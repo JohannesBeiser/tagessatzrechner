@@ -27,6 +27,9 @@ app-root {
   padding: 0px !important;
   background: none !important;
 }
+.capitalize {
+  text-transform: capitalize;
+}
 .flex-1 {
   flex: 1;
 }

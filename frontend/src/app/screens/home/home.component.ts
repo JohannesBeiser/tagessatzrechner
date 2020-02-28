@@ -104,7 +104,7 @@ export class HomeComponent implements OnInit {
     }
 
     if (matches && filter.group) {
-      matches = expense.group == filter.group;
+      matches = expense.group.toLowerCase() == filter.group.toLowerCase();
     }
 
     return matches

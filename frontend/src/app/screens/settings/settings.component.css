@@ -1,6 +1,9 @@
 .settings-component-container ::ng-deep .group-input-field {
   text-transform: capitalize;
 }
+.settings-component-container ::ng-deep .group-input-field option {
+  text-transform: capitalize;
+}
 .settings-component-container .defaults-settings-section mat-form-field {
   padding: 0 8px;
 }

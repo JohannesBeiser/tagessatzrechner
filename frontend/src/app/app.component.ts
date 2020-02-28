@@ -70,7 +70,7 @@ export class AppComponent implements OnInit{
       }
 
       if (filter.group) {
-        tempString.group = `${filter.group}`;
+        tempString.group = `${filter.group[0].toUpperCase() + filter.group.slice(1)}`;
       }
 
       this.filterTitles = tempString;
