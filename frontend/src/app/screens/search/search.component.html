@@ -3,7 +3,7 @@
         <div class="flexbox align p-0-8 h-100">
             <div class="flex-1 mr-8 search-bar-input-container" >
                 <i matIcon class="material-icons-outlined search-input-icon-prefix">search</i>
-                <input (keyup)="searchTerm$.next($event.target.value)" class="searchbar-input w-100" id="searchbar-to-focus" type="text" matInput #searchInput> 
+                <input (keyup)="searchTerm$.next($event.target.value)" [(ngModel)]="seachtext" class="searchbar-input w-100" id="searchbar-to-focus" type="text" matInput #searchInput> 
                 <i matIcon class="material-icons-outlined search-input-icon-suffix" (click)="clear()">close</i>
             </div>
             
@@ -12,6 +12,7 @@
     </app-header>
 
     <div class="search-results">
+        <div *ngIf="(results$ | async)?.length ==0 " class="no-expenses">No expenses found!</div>
         <app-expense-list [expenses]="results$ | async | slice:0:9"></app-expense-list>
     </div>
 </div>

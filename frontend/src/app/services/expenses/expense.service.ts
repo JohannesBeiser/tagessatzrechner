@@ -98,9 +98,8 @@ export class ExpenseService {
       setTimeout(() => {
         this.seedExpenses();   
         for (const group of groups) {
-          this.addGroup(group);
+          this.addGroup(group.toLowerCase());
         }
-        // this.groupsService.seedGroups();   
       }, 1000);
     }
 

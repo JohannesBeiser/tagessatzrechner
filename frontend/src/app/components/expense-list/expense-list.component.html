@@ -3,9 +3,9 @@
         <div class="category-indicator" [style.background-color]="categoryService.categoryColors[expense.category]"></div>
         <div class="item-content">
             <div class="minimal-info" >
-                <div class="amount info-item">{{expense.amount | prettyCurrency}}</div>
-                <div class="name info-item">{{expense.name}}</div>
                 <div class="date info-item">{{expense.date | dateLongShort}}</div> 
+                <div class="name info-item">{{expense.name}}</div>
+                <div class="amount info-item">{{expense.amount | prettyCurrency}}</div>
             </div>
             <div class="more-info" *ngIf="i == detailViewShownForIndex">
                 <div class="description" *ngIf="expense.description">{{expense.description}}</div>

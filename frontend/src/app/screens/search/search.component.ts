@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { SliderService } from 'src/app/services/slider/slider.service';
 import { Subject, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map, switchMap, share } from 'rxjs/operators';
 import { ExpenseService, Expense } from 'src/app/services/expenses/expense.service';
 import { FilterService } from 'src/app/services/filter/filter.service';
 
@@ -13,7 +13,7 @@ import { FilterService } from 'src/app/services/filter/filter.service';
 export class SearchComponent implements OnInit, AfterViewInit {
 
   @ViewChild("searchInput") public searchInputElement: ElementRef;
-  // public seachtext: string;
+  public seachtext: string;
   componentDestroyed$: Subject<void> = new Subject();
 
   public searchTerm$: Subject<string>;
@@ -30,6 +30,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
     this.results$ = this.searchTerm$.pipe(
       debounceTime(600),
       distinctUntilChanged(),
+      filter(term=>term.length>0),
       switchMap((term)=>this.getSearchResult(term))
     );
   }
@@ -69,7 +70,8 @@ export class SearchComponent implements OnInit, AfterViewInit {
   }
 
   public clear() {
-    // this.seachtext = "";
+    this.seachtext = "";
+    this.searchTerm$.next("");
     this.searchInputElement.nativeElement.focus();
   }
 

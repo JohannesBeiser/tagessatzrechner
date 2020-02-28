@@ -27,7 +27,7 @@
       </div>
       <mat-form-field appearance="standard" class="groups-default">
         <mat-label>Group</mat-label>
-        <select matNativeControl class="group-picker" [(ngModel)]="defaultGroupSelected"
+        <select matNativeControl class="group-picker group-input-field" [(ngModel)]="defaultGroupSelected"
           (change)="defaultGroupChanged()">
           <option value="general">General</option>
           <option *ngFor="let group of groups$ | async" [value]="group.groupName">{{group.groupName}}</option>

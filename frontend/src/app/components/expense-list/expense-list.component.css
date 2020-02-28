@@ -22,7 +22,6 @@
   display: flex;
 }
 .expense-list .expense-item .item-content .minimal-info .info-item.amount {
-  min-width: 80px;
   font-weight: bold;
 }
 .expense-list .expense-item .item-content .minimal-info .info-item.name {
@@ -35,7 +34,7 @@
   text-overflow: ellipsis;
 }
 .expense-list .expense-item .item-content .minimal-info .info-item.date {
-  margin-left: 12px;
+  margin-right: 12px;
 }
 .expense-list .expense-item .item-content .more-info {
   flex: 1;

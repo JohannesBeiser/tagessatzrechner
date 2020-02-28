@@ -44,6 +44,7 @@ export class AddComponent implements OnInit, AfterViewInit {
       group: new FormControl("general", Validators.required),
       description: new FormControl('', Validators.maxLength(200))
     });
+    //TODO : Dirty workaround
     if(this.initialData){
       setTimeout(() => {
         this.expenseForm.reset({
@@ -54,7 +55,7 @@ export class AddComponent implements OnInit, AfterViewInit {
           group: this.initialData.group,
           description: this.initialData.description
         })
-      }, 100);
+      }, 65);
     }else{
       setTimeout(() => {
         this.expenseForm.reset({
@@ -65,13 +66,12 @@ export class AddComponent implements OnInit, AfterViewInit {
           group: this.groupsService.defaultGroup,
           description: ''
         })
-      }, 100);
+      }, 65);
     }
-
-    //TODO : Dirty workaround 
   
     this.groups$ = this.groupsService.getGroups();
   }
+  
   ngAfterViewInit() {
     // this.focusInput.nativeElement.focus();
   }

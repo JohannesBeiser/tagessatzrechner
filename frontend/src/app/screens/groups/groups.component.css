@@ -4,7 +4,14 @@
 .groups-component-container {
   padding: 16px;
 }
+.groups-component-container .group-list:not(:first-child) .group-list-header {
+  margin: 32px 0 16px;
+}
+.groups-component-container .group-list .group-list-header {
+  margin-bottom: 16px;
+}
 .groups-component-container .group-list .group-list-item {
+  margin: 0 16px 16px 16px;
   margin-bottom: 16px;
   border-radius: 4px;
   background: #fff;

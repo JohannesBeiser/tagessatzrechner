@@ -2,6 +2,9 @@
   display: flex;
   flex-direction: column;
 }
+.add-component-container ::ng-deep .group-input-field {
+  text-transform: capitalize;
+}
 .add-component-container .slider-header .slider-header-icon {
   flex: 1;
   height: 40px;

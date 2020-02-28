@@ -6,7 +6,19 @@
 .groups-component-container{
     padding: 16px;
     .group-list{
+
+        &:not(:first-child){
+            .group-list-header{
+                margin: 32px 0 16px;
+            }
+        }
+
+        .group-list-header{
+            margin-bottom: 16px;
+        }
+
         .group-list-item{
+            margin: 0 16px 16px 16px;
             margin-bottom: 16px;
             border-radius: 4px;
             background: @app-white;

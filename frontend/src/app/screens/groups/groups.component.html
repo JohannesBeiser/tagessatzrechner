@@ -1,16 +1,18 @@
 <div class="groups-component-container w-100">
-  <div class="group-list">
-
-    <div *ngFor="let group of groupsTotals" class="group-list-item">
-      <div class="info-section">
-        <div class="group-name">{{group.groupName}}</div>
-        <div class="group-dates" *ngIf="group.amount > 0">
-          <span>{{ {firstExpenseDate:group.firstExpenseDate, lastExpenseDate: group.lastExpenseDate} | dateDuration }}</span>
+  <div class="group-list" *ngFor="let totals of groupsTotals">
+    <div *ngIf="totals.groupTotal.length>0">
+      <div class="group-list-header">{{totals.type == 'deleted' ? 'Old groups' : 'Active groups'}}</div>
+      <div *ngFor="let group of totals.groupTotal" class="group-list-item">
+        <div class="info-section">
+          <div class="group-name">{{group.groupName}}</div>
+          <div class="group-dates" *ngIf="group.amount > 0">
+            <span>{{ {firstExpenseDate:group.firstExpenseDate, lastExpenseDate: group.lastExpenseDate} | dateDuration }}</span>
+          </div>
         </div>
-      </div>
-      <div class="amount">
-        <span *ngIf="group.amount>0">{{group.amount | prettyCurrency}}</span>
-        <span class="no-expenses" *ngIf="!(group.amount>0)">No expenses yet</span>
+        <div class="amount">
+          <span *ngIf="group.amount>0">{{group.amount | prettyCurrency}}</span>
+          <span class="no-expenses" *ngIf="!(group.amount>0)">No expenses yet</span>
+        </div>
       </div>
     </div>
   </div>

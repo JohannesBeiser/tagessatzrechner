@@ -1,8 +1,7 @@
 
-<div class="home-component-container">
-
-    <div class="general">
-        <div class="total-amount">{{totalAmount | prettyCurrency}}</div>
+<div class="home-component-container" >
+    <div class="general" *ngIf="totalAmount >0">
+        <div class="total-amount" >{{totalAmount | prettyCurrency}}</div>
         <div class="categories-total">
             <div class="category-item" *ngFor="let total of totalCategories">
                 <div class="color-badge" [style.background-color]="categoryService.categoryColors[total.category]"></div>
@@ -12,10 +11,16 @@
         </div>
     </div>
 
-    <app-expense-list [expenses]="expenses"></app-expense-list>
+    <app-expense-list [expenses]="expenses" *ngIf="totalAmount >0"></app-expense-list>
 
     <!-- TODO remove ngIf -->
-    <div class="filter-container" [class.active]="filterService.filterShown$ | async">
+    <div class="filter-container" [class.active]="filterService.filterShown$ | async" >
         <app-filter></app-filter>
     </div>
+
+    <div class="no-expenses-placeholder" *ngIf="totalAmount === 0">
+        <div>No expenses yet</div>
+    </div>
+
 </div>
+

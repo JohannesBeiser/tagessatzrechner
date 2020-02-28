@@ -9,17 +9,13 @@ export class DateLongShortPipe implements PipeTransform {
 
   constructor(
     private datePipe: DatePipe,
-  ){
+  ){}
 
-  }
-
-  transform(date: string): unknown {
+  transform(date: string): string {
     if(getYear(new Date(date)) == getYear(new Date())){
       return this.datePipe.transform(date, 'd MMM')
     }else{
       return this.datePipe.transform(date, 'd MMM y')
     }
-
   }
-
 }

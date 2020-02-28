@@ -13,6 +13,7 @@ export interface GroupTotal extends GroupItem {
   amount: number;
   firstExpenseDate?: string;
   lastExpenseDate?: string;
+  deleted?: boolean;
 }
 
 @Injectable({
@@ -37,7 +38,7 @@ export class GroupsService {
   public addGroup(group: string) {
     let tx = this.db.transaction(['groups'], 'readwrite');
     let store = tx.objectStore('groups');
-    store.add({groupName: group});
+    store.add({groupName: group.toLowerCase()});
     tx.oncomplete = () => {
       this.refreshGroups();
     }

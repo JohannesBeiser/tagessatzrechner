@@ -8,6 +8,7 @@
   padding: 16px 12px;
   padding-top: 40px;
   overflow-y: auto;
+  height: 100%;
 }
 .home-component-container .general .total-amount {
   font-size: 2em;
@@ -47,4 +48,11 @@
   display: block;
   visibility: visible;
   transform: translateX(-12px);
+}
+.home-component-container .no-expenses-placeholder {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
