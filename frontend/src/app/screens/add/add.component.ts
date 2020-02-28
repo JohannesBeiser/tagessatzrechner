@@ -55,7 +55,7 @@ export class AddComponent implements OnInit, AfterViewInit {
           group: this.initialData.group,
           description: this.initialData.description
         })
-      }, 64);
+      }, 100);
     }else{
       setTimeout(() => {
         this.expenseForm.reset({
@@ -66,7 +66,7 @@ export class AddComponent implements OnInit, AfterViewInit {
           group: this.groupsService.defaultGroup,
           description: ''
         })
-      }, 64);
+      }, 100);
     }
     this.groups$ = this.groupsService.getGroupsWithoutUpdate();
   }

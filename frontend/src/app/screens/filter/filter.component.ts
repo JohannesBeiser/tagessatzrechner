@@ -56,7 +56,7 @@ export class FilterComponent implements OnInit {
             this.groupSelected = null;
             this.allGroupsSelected = true;
           }            
-      }, 64);
+      }, 100);
     });
 
   
