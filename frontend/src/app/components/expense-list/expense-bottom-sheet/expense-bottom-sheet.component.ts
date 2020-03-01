@@ -26,7 +26,7 @@ export class ExpenseBottomSheetComponent implements OnInit {
   public deleteExpense(e: MouseEvent, key: number) {
     e.stopPropagation();
     if (confirm("Do you really want to delete this expense?")) {
-      this.expenseService.deleteExpense(key);
+      this.expenseService.deleteExpense(key, "expenses");
       this.dismiss();
     }
     // this.detailViewShownForIndex = null;

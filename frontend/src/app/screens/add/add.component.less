@@ -1,6 +1,10 @@
+@import "../../../variables";
+
+
 .add-component-container {
     display       : flex;
     flex-direction: column;  
+    width: 100%;
     
     .slider-header {
         .slider-header-icon {
@@ -10,8 +14,9 @@
             align-items: center;
 
             &.submit-icon{
-                &.disabled{
-                    opacity: 0.3;
+                opacity: 0.3;
+                &.enabled{
+                    opacity: 1;
                 }
             }
 
@@ -22,11 +27,39 @@
         }
     }
 
+    ::ng-deep{
+        .mat-tab-label-container{
+            background: @app-header-color;
+
+            mat-ink-bar{
+                height: 3px;
+            }
+
+            .mat-tab-label{
+                height: 32px  !important;
+                opacity: 1 !important;
+
+                .mat-tab-label-content{
+                    color: white !important;
+                }
+            }
+
+        }
+    }
+
     .content-container {
         display       : flex;
         flex-direction: column;
         padding       : 0 16px;
         overflow      : auto;
+
+        &.recurring{
+            .recurring-info-text{
+                margin-top: 12px;
+                opacity: 0.8;
+                font-size: 0.9em;
+            }
+        }
 
         .expense-form {
             display  : flex;

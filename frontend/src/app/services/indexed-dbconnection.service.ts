@@ -15,6 +15,11 @@ export class IndexedDBConnectionService {
       console.log("Added IndexedDB store 'expenses'")
     }
 
+    if (!stores.contains("recurringExpenses")) {
+      db.createObjectStore('recurringExpenses', { autoIncrement: true });
+      console.log("Added IndexedDB store 'expenses'")
+    }
+
     if (!stores.contains("groups")) {
       db.createObjectStore('groups', { autoIncrement: true });
       console.log("Added IndexedDB store 'groups'")
@@ -24,9 +29,10 @@ export class IndexedDBConnectionService {
   /**
    * DB Versions:
    * 1: expense
-   * 2: expense, groups
+   * 2: +groups
+   * 3: +recurringExpenses
    */
   getConnection(): IDBOpenDBRequest{
-    return indexedDB.open('ExpenseManagerDB', 2);
+    return indexedDB.open('ExpenseManagerDB', 3);
   }
 }

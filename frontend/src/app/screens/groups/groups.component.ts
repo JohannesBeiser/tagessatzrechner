@@ -48,7 +48,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.groups$ = this.groupsService.getGroups();
-    this.expenses$ = this.expenseService.getExpenses()
+    this.expenses$ = this.expenseService.getExpenses("expenses")
 
     this.subscription = combineLatest(this.expenses$, this.groups$).subscribe(([expenses, groups]) => {
       this.groupsTotals = this.calculateGroupsTotals(expenses, groups);

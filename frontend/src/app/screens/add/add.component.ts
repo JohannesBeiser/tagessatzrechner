@@ -7,6 +7,7 @@ import { take } from 'rxjs/operators';
 import { GroupsService, GroupItem } from 'src/app/services/groups/groups.service';
 import { Observable } from 'rxjs';
 import { CategoryService } from 'src/app/services/category/category.service';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-add',
@@ -30,11 +31,14 @@ export class AddComponent implements OnInit, AfterViewInit {
   }
 
   public expenseForm: FormGroup;
+  public recurringForm: FormGroup;
+  public selectedTabIndex = 0;
+
   public groups$: Observable<GroupItem[]>;
   public initialData: Expense;
 
   ngOnInit(): void {
-    this.initialData= this.sliderService.currentExpenseForEdit;
+    this.initialData = this.sliderService.currentExpenseForEdit;
     // debugger;
     this.expenseForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.maxLength(35)]),
@@ -44,8 +48,18 @@ export class AddComponent implements OnInit, AfterViewInit {
       group: new FormControl("General", Validators.required),
       description: new FormControl('', Validators.maxLength(200))
     });
+
+    this.recurringForm = new FormGroup({
+      name_recurring: new FormControl('', [Validators.required, Validators.maxLength(35)]),
+      amount_recurring: new FormControl('', Validators.required),
+      month_recurring: new FormControl("2020-02", Validators.required),
+      category_recurring: new FormControl('general', Validators.required),
+      group_recurring: new FormControl("General", Validators.required),
+      description_recurring: new FormControl('', Validators.maxLength(200)),
+    });
+
     //TODO : Dirty workaround
-    if(this.initialData){
+    if (this.initialData) {
       setTimeout(() => {
         this.expenseForm.reset({
           name: this.initialData.name,
@@ -54,9 +68,9 @@ export class AddComponent implements OnInit, AfterViewInit {
           category: this.initialData.category,
           group: this.initialData.group,
           description: this.initialData.description
-        })
+        });
       }, 100);
-    }else{
+    } else {
       setTimeout(() => {
         this.expenseForm.reset({
           name: '',
@@ -70,18 +84,27 @@ export class AddComponent implements OnInit, AfterViewInit {
     }
     this.groups$ = this.groupsService.getGroupsWithoutUpdate();
   }
-  
+
   ngAfterViewInit() {
     // this.focusInput.nativeElement.focus();
   }
 
-  hasError(controlName: string, errorName: string) {
-    return this.expenseForm.controls[controlName].hasError(errorName);
+
+  tabChanged(e: MatTabChangeEvent) {
+    this.selectedTabIndex = e.index;
   }
 
-  private setFormGroupTouched() {
-    Object.keys(this.expenseForm.controls).forEach(field => {
-      const control = this.expenseForm.get(field);
+  hasError(controlName: string, errorName: string, formType: string) {
+    if (formType === "single") {
+      return this.expenseForm.controls[controlName].hasError(errorName);
+    } else {
+      return this.recurringForm?.controls[controlName]?.hasError(errorName);
+    }
+  }
+
+  private setFormGroupTouched(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
       control.markAsTouched({ onlySelf: true });
     });
   }
@@ -91,17 +114,35 @@ export class AddComponent implements OnInit, AfterViewInit {
     return currentDate.toISOString().substring(0, 10);
   }
 
-  createExpense(expense: Expense) {
-    // debugger;
-    this.setFormGroupTouched();
-    if (this.expenseForm.valid) {
-      if(!this.initialData){
-        this.expenseService.addExpense(expense);
-      }else{
-        let key = (this.initialData as any).key;
-        this.expenseService.updateExpense(key,expense);
+  createExpense() {
+    if (this.selectedTabIndex === 0) {
+      let expense= this.expenseForm.value;
+      this.setFormGroupTouched(this.expenseForm);
+      if (this.expenseForm.valid) {
+        if (!this.initialData) {
+          this.expenseService.addExpense(expense, "expenses");
+        } else {
+          let key = (this.initialData as any).key;
+          this.expenseService.updateExpense(key, expense, "expenses");
+        }
+        this.sliderService.hide();
       }
-      this.sliderService.hide();
+    } else {
+      let expense= {
+        name: this.recurringForm.value.name_recurring,
+        amount: this.recurringForm.value.amount_recurring,
+        date: this.recurringForm.value.month_recurring + "-01",
+        category: this.recurringForm.value.category_recurring,
+        group: this.recurringForm.value.group_recurring,
+        description: this.recurringForm.value.description_recurring,
+        recurring: true,
+        lastUpdate: this.expenseService.getFormatDate(new Date())
+      };
+      this.setFormGroupTouched(this.recurringForm);
+      if (this.recurringForm.valid) {
+        this.expenseService.addExpense(expense, "recurringExpenses");
+        this.sliderService.hide();
+      }
     }
   }
 }

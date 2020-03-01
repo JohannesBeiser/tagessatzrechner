@@ -31,6 +31,7 @@ import { EditComponent } from './screens/edit/edit.component';
 import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
 import { ExpenseBottomSheetComponent } from './components/expense-list/expense-bottom-sheet/expense-bottom-sheet.component';
 import { SettingsBottomSheetComponent } from './screens/settings/settings-bottom-sheet/settings-bottom-sheet.component';
+import {MatTabsModule} from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { SettingsBottomSheetComponent } from './screens/settings/settings-bottom
     MatChipsModule,
     MatSlideToggleModule,
     MatDatepickerModule,
+    MatTabsModule,
     ReactiveFormsModule,
     MatBottomSheetModule,
     MatNativeDateModule,

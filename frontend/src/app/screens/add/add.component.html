@@ -4,58 +4,118 @@
       <i class="slider-header-icon" (click)="sliderService.hide()" class="material-icons-outlined slider-header-icon">close</i>
       <span *ngIf="initialData">Edit</span>
       <span *ngIf="!initialData">Add</span>
-      <i class="material-icons-outlined slider-header-icon submit-icon" [class.disabled]="!expenseForm.valid" (click)="createExpense(expenseForm.value)">check</i>
+      <i class="material-icons-outlined slider-header-icon submit-icon" [class.enabled]="expenseForm.valid || recurringForm.valid" (click)="createExpense()">check</i>
     </div>
   </app-header>
 
-  <div class="content-container">
-    <form class="expense-form" [formGroup]="expenseForm" autocomplete="off" (submit)="createExpense(expenseForm.value)"
-      #formDirective="ngForm">
-      
-      <mat-form-field appearance="standard" class="w-100">
-        <mat-label>Name</mat-label>
-        <input type="text" matInput formControlName="name" #focusInput>
-        <mat-error *ngIf="hasError('name', 'required')">Name is required</mat-error>
-        <mat-error *ngIf="hasError('name', 'maxlength')">Max. 35 characters allowed</mat-error>
-      </mat-form-field>
+  <mat-tab-group  mat-stretch-tabs class="example-stretched-tab" (selectedTabChange)="tabChanged($event)">
+    <mat-tab label="Single"> 
+      <div class="content-container">
+        <form class="expense-form" [formGroup]="expenseForm" autocomplete="off" (submit)="createExpense()"
+          #formDirective="ngForm">
+          
+          <mat-form-field appearance="standard" class="w-100">
+            <mat-label>Name</mat-label>
+            <input type="text" matInput formControlName="name" #focusInput>
+            <mat-error *ngIf="hasError('name', 'required', 'single')">Name is required</mat-error>
+            <mat-error *ngIf="hasError('name', 'maxlength', 'single')">Max. 35 characters allowed</mat-error>
+          </mat-form-field>
 
-      <mat-form-field appearance="standard" class="amount-input">
-        <mat-label>Amount (€)</mat-label>
-        <input type="number" matInput formControlName="amount">
-        <mat-error *ngIf="hasError('amount', 'required')">Amount is required</mat-error>
-      </mat-form-field>
+          <mat-form-field appearance="standard" class="amount-input">
+            <mat-label>Amount (€)</mat-label>
+            <input type="number" matInput formControlName="amount">
+            <mat-error *ngIf="hasError('amount', 'required', 'single')">Amount is required</mat-error>
+          </mat-form-field>
 
-      <mat-form-field appearance="standard">
-        <mat-label>Category</mat-label>
-        <select matNativeControl formControlName="category">
-          <option value="food">Food</option>
-          <option value="accommodation">Accommodation</option>
-          <option value="transport">Transport</option>
-          <option value="multimedia">Multimedia</option>
-          <option value="general">General</option>
-        </select>
-      </mat-form-field> 
+          <mat-form-field appearance="standard">
+            <mat-label>Category</mat-label>
+            <select matNativeControl formControlName="category">
+              <option value="food">Food</option>
+              <option value="accommodation">Accommodation</option>
+              <option value="transport">Transport</option>
+              <option value="multimedia">Multimedia</option>
+              <option value="general">General</option>
+            </select>
+          </mat-form-field> 
 
-     <mat-form-field appearance="standard">
-        <mat-label>Group</mat-label>
-        <select matNativeControl formControlName="group" class="group-input-field">
-          <option value="General">General</option>
-          <option *ngFor="let group of groups$ | async" value="{{group.groupName}}">{{group.groupName}}</option>
-        </select>
-      </mat-form-field>
+        <mat-form-field appearance="standard">
+            <mat-label>Group</mat-label>
+            <select matNativeControl formControlName="group" class="group-input-field">
+              <option value="General">General</option>
+              <option *ngFor="let group of groups$ | async" value="{{group.groupName}}">{{group.groupName}}</option>
+            </select>
+          </mat-form-field>
 
-      <mat-form-field appearance="standard">
-        <mat-label>Date</mat-label>
-        <input type="date" matInput formControlName="date">
-      </mat-form-field>
+          <mat-form-field appearance="standard">
+            <mat-label>Date</mat-label>
+            <input type="date" matInput formControlName="date">
+          </mat-form-field>
 
-      <mat-form-field appearance="standard">
-        <mat-label>Description</mat-label>
-        <textarea matInput formControlName="description" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-          cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
-          <mat-error *ngIf="hasError('description', 'maxlength')">Max. 200 characters allowed</mat-error>
-      </mat-form-field> 
-      <input type="submit" style="display: none">
-    </form>
-  </div>
+          <mat-form-field appearance="standard">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+              cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+              <mat-error *ngIf="hasError('description', 'maxlength', 'single')">Max. 200 characters allowed</mat-error>
+          </mat-form-field> 
+          <input type="submit" style="display: none">
+        </form>
+      </div>  
+    </mat-tab>
+
+
+
+    <mat-tab label="Recurring"> 
+      <div class="content-container recurring">
+      <div class="recurring-info-text">Recurring expenses will automatically be added each month on the first day starting with the selected month.</div>
+      <form class="expense-form" [formGroup]="recurringForm" autocomplete="off" (submit)="createExpense()" #formDirective="ngForm">
+          <mat-form-field appearance="standard" class="w-100">
+            <mat-label>Name</mat-label>
+            <input type="text" matInput formControlName="name_recurring" >
+            <mat-error *ngIf="hasError('name_recurring', 'required', 'recurring')">Name is required</mat-error>
+            <mat-error *ngIf="hasError('name_recurring', 'maxlength', 'recurring')">Max. 35 characters allowed</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="standard" class="amount-input">
+            <mat-label>Amount (€)</mat-label>
+            <input type="number" matInput formControlName="amount_recurring">
+            <mat-error *ngIf="hasError('amount_recurring', 'required', 'recurring')">Amount is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="standard">
+            <mat-label>Category</mat-label>
+            <select matNativeControl formControlName="category_recurring">
+              <option value="food">Food</option>
+              <option value="accommodation">Accommodation</option>
+              <option value="transport">Transport</option>
+              <option value="multimedia">Multimedia</option>
+              <option value="general">General</option>
+            </select>
+          </mat-form-field> 
+
+          <mat-form-field appearance="standard">
+            <mat-label>Group</mat-label>
+            <select matNativeControl formControlName="group_recurring" class="group-input-field">
+              <option value="General">General</option>
+              <option *ngFor="let group of groups$ | async" value="{{group.groupName}}">{{group.groupName}}</option>
+            </select>
+          </mat-form-field>
+
+          <mat-form-field appearance="standard">
+            <mat-label>Start month</mat-label>
+            <input type="month" matInput formControlName="month_recurring">
+          </mat-form-field>
+
+          <mat-form-field appearance="standard">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description_recurring" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+              cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+              <mat-error *ngIf="hasError('description_recurring', 'maxlength', 'recurring')">Max. 200 characters allowed</mat-error>
+          </mat-form-field> 
+          <input type="submit" style="display: none">
+        </form>
+      </div>
+    </mat-tab>
+
+  </mat-tab-group>
+
 </div>

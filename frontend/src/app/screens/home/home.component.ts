@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit {
   public collapseNotifier: Subject<void> = new Subject();
 
   ngOnInit(): void {
-    this.expenses$ = this.expenseService.getExpenses();
+    this.expenses$ = this.expenseService.getExpenses("expenses");
     this.currentFilter$ = this.filterService.getFilter();
     this.monthSwitched$ = this.filterService.monthSwitched$;
     this.sortMethod$ = this.filterService.sortMethod$;

@@ -1,6 +1,7 @@
 .add-component-container {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 .add-component-container .slider-header .slider-header-icon {
   flex: 1;
@@ -8,18 +9,39 @@
   display: flex;
   align-items: center;
 }
-.add-component-container .slider-header .slider-header-icon.submit-icon.disabled {
+.add-component-container .slider-header .slider-header-icon.submit-icon {
   opacity: 0.3;
+}
+.add-component-container .slider-header .slider-header-icon.submit-icon.enabled {
+  opacity: 1;
 }
 .add-component-container .slider-header .slider-header-icon:last-child {
   display: flex;
   justify-content: flex-end;
+}
+.add-component-container ::ng-deep .mat-tab-label-container {
+  background: #76757b;
+}
+.add-component-container ::ng-deep .mat-tab-label-container mat-ink-bar {
+  height: 3px;
+}
+.add-component-container ::ng-deep .mat-tab-label-container .mat-tab-label {
+  height: 32px  !important;
+  opacity: 1 !important;
+}
+.add-component-container ::ng-deep .mat-tab-label-container .mat-tab-label .mat-tab-label-content {
+  color: white !important;
 }
 .add-component-container .content-container {
   display: flex;
   flex-direction: column;
   padding: 0 16px;
   overflow: auto;
+}
+.add-component-container .content-container.recurring .recurring-info-text {
+  margin-top: 12px;
+  opacity: 0.8;
+  font-size: 0.9em;
 }
 .add-component-container .content-container .expense-form {
   display: flex;

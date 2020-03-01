@@ -54,7 +54,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
       }
       return res;
     });
-    return this.expenseService.getExpenses().pipe(
+    return this.expenseService.getExpenses("expenses").pipe(
      map(expenses=>{
       return expenses.filter(expense=>{
         let matches = true;
