@@ -5,6 +5,16 @@
   background: #fff;
   margin: 6px 0;
   display: flex;
+  position: relative;
+}
+.expense-list .expense-item .recurring {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0px 4px;
+  font-size: 0.6em;
+  background: #969696;
+  color: white;
 }
 .expense-list .expense-item .category-indicator {
   background: #444;
@@ -20,6 +30,7 @@
 }
 .expense-list .expense-item .item-content .minimal-info {
   display: flex;
+  position: relative;
 }
 .expense-list .expense-item .item-content .minimal-info .info-item.amount {
   font-weight: bold;

@@ -7,6 +7,17 @@
       background: @app-white;
       margin: 6px 0;
       display: flex;
+      position: relative;
+
+      .recurring{
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 0px 4px;
+        font-size: 0.6em;
+        background: #969696;
+        color: white;
+      }
 
       .category-indicator {
         background: #444;
@@ -23,8 +34,11 @@
 
         .minimal-info {
           display: flex;
+          position: relative;
 
           .info-item {
+
+
             &.amount {
               font-weight: bold;
             }

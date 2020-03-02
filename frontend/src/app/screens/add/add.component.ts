@@ -39,7 +39,7 @@ export class AddComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.initialData = this.sliderService.currentExpenseForEdit;
-    this.selectedTabIndex = this.initialData ? 1: 0;
+    this.selectedTabIndex = (this.initialData.lastUpdate) ? 1: 0;
     // debugger;
     this.expenseForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.maxLength(35)]),
@@ -135,6 +135,9 @@ export class AddComponent implements OnInit, AfterViewInit {
           this.expenseService.addExpense(expense, "expenses");
         } else {
           let key = this.initialData.key;
+          if(this.initialData.recurring){
+            expense.recurring = true;
+          }
           this.expenseService.updateExpense(key, expense, "expenses");
         }
         this.sliderService.hide();
