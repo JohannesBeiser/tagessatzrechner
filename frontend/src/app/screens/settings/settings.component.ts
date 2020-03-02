@@ -4,6 +4,7 @@ import { GroupsService, GroupItem } from 'src/app/services/groups/groups.service
 import { CategoryService } from 'src/app/services/category/category.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { SettingsBottomSheetComponent } from './settings-bottom-sheet/settings-bottom-sheet.component';
+import { Expense, ExpenseService } from 'src/app/services/expenses/expense.service';
 
 @Component({
   selector: 'app-settings',
@@ -15,17 +16,20 @@ export class SettingsComponent implements OnInit {
   constructor(
     private groupsService: GroupsService,
     private categoryService: CategoryService,
-    private bottomSheet: MatBottomSheet
+    private bottomSheet: MatBottomSheet,
+    private expenseService: ExpenseService
   ) { }
 
   public groups$: Observable<GroupItem[]>;
   public newGroupInputValue: string;
   public defaultGroupSelected: string;
   public defaultCategorySelected: string;
+  public recurringExpenses$ : Observable<Expense[]>;
+  public collapseNotifier: Subject<void> = new Subject();
 
   ngOnInit(): void {
     this.groups$ = this.groupsService.getGroups();
-
+    this.recurringExpenses$= this.expenseService.getExpenses("recurringExpenses");
     //TODO : Dirty workaround 
     setTimeout(() => {
       this.defaultGroupSelected = this.groupsService.defaultGroup;

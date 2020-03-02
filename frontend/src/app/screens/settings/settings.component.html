@@ -1,4 +1,18 @@
-<div class="settings-component-container">
+<div class="settings-component-container" (click)="collapseNotifier.next()">
+
+  <section class="general-settings-section">
+    <div class="section-container">
+      <div class="groups-header">
+        <span>Recurring expenses</span>
+      </div>
+      <div class="p-8">
+        <app-recurring-expense-list [expenses]="recurringExpenses$ | async" [collapseNotifier]="collapseNotifier"></app-recurring-expense-list>
+      </div>
+
+    </div>
+  </section>
+
+
   <!-- <div>Categories</div> -->
   <section class="group-settings-section">
     <div class="section-container">

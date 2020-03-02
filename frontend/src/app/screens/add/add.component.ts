@@ -32,13 +32,14 @@ export class AddComponent implements OnInit, AfterViewInit {
 
   public expenseForm: FormGroup;
   public recurringForm: FormGroup;
-  public selectedTabIndex = 0;
+  public selectedTabIndex: number;
 
   public groups$: Observable<GroupItem[]>;
   public initialData: Expense;
 
   ngOnInit(): void {
     this.initialData = this.sliderService.currentExpenseForEdit;
+    this.selectedTabIndex = this.initialData ? 1: 0;
     // debugger;
     this.expenseForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.maxLength(35)]),
@@ -61,14 +62,25 @@ export class AddComponent implements OnInit, AfterViewInit {
     //TODO : Dirty workaround
     if (this.initialData) {
       setTimeout(() => {
-        this.expenseForm.reset({
-          name: this.initialData.name,
-          amount: this.initialData.amount,
-          date: this.initialData.date,
-          category: this.initialData.category,
-          group: this.initialData.group,
-          description: this.initialData.description
-        });
+        if(this.initialData.lastUpdate){
+          this.recurringForm.reset({
+            name_recurring: this.initialData.name,
+            amount_recurring: this.initialData.amount,
+            month_recurring: this.initialData.date.substring(0,7),
+            category_recurring: this.initialData.category,
+            group_recurring: this.initialData.group,
+            description_recurring: this.initialData.description
+          });
+        }else{
+          this.expenseForm.reset({
+            name: this.initialData.name,
+            amount: this.initialData.amount,
+            date: this.initialData.date,
+            category: this.initialData.category,
+            group: this.initialData.group,
+            description: this.initialData.description
+          });
+        }
       }, 100);
     } else {
       setTimeout(() => {
@@ -122,12 +134,13 @@ export class AddComponent implements OnInit, AfterViewInit {
         if (!this.initialData) {
           this.expenseService.addExpense(expense, "expenses");
         } else {
-          let key = (this.initialData as any).key;
+          let key = this.initialData.key;
           this.expenseService.updateExpense(key, expense, "expenses");
         }
         this.sliderService.hide();
       }
     } else {
+      this.setFormGroupTouched(this.recurringForm);
       let expense= {
         name: this.recurringForm.value.name_recurring,
         amount: this.recurringForm.value.amount_recurring,
@@ -136,11 +149,15 @@ export class AddComponent implements OnInit, AfterViewInit {
         group: this.recurringForm.value.group_recurring,
         description: this.recurringForm.value.description_recurring,
         recurring: true,
-        lastUpdate: this.expenseService.getFormatDate(new Date())
+        lastUpdate: this.initialData.lastUpdate
       };
-      this.setFormGroupTouched(this.recurringForm);
+      
       if (this.recurringForm.valid) {
-        this.expenseService.addExpense(expense, "recurringExpenses");
+        if(!this.initialData){
+          this.expenseService.addExpense(expense, "recurringExpenses");
+        }else{
+          this.expenseService.updateExpense(this.initialData.key, expense, "recurringExpenses")
+        }
         this.sliderService.hide();
       }
     }

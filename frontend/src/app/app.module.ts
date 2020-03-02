@@ -32,6 +32,8 @@ import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
 import { ExpenseBottomSheetComponent } from './components/expense-list/expense-bottom-sheet/expense-bottom-sheet.component';
 import { SettingsBottomSheetComponent } from './screens/settings/settings-bottom-sheet/settings-bottom-sheet.component';
 import {MatTabsModule} from '@angular/material/tabs';
+import { RecurringExpenseListComponent } from './components/recurring-expense-list/recurring-expense-list.component';
+import { RecurringExpenseBottomSheetComponent } from './components/recurring-expense-list/expense-bottom-sheet/recurring-expense-bottom-sheet.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +52,9 @@ import {MatTabsModule} from '@angular/material/tabs';
     ExpenseListComponent,
     EditComponent,
     ExpenseBottomSheetComponent,
-    SettingsBottomSheetComponent
+    SettingsBottomSheetComponent,
+    RecurringExpenseListComponent,
+    RecurringExpenseBottomSheetComponent
   ],
   imports: [
     BrowserModule,

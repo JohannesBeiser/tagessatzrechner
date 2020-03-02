@@ -57,12 +57,13 @@ export class ExpenseService {
   checkRecurringExpenses(){
     this.getExpenses("recurringExpenses").pipe(take(1)).subscribe(expenses=>{
       expenses.forEach(expense=>{
-        debugger;
         if((!expense.lastUpdate || addMonths(new Date(expense.lastUpdate),1) < new Date()) && new Date()> new Date(expense.date)){
           // update needed for this expense
-          let textExp= {...expense, ...{date:this.getFormatDate(new Date(new Date().getFullYear(), new Date().getMonth()))}}
-          this.addExpense(textExp, "expenses");
-          this.updateExpense(expense.key, {...expense, ...{lastUpdate: this.getFormatDate(new Date())}}, "recurringExpenses")
+          let key= expense.key;
+          delete expense.lastUpdate;
+          delete expense.key;
+          this.addExpense({...expense, ...{date:this.getFormatDate(new Date(new Date().getFullYear(), new Date().getMonth()))}}, "expenses");
+          this.updateExpense(key, {...expense, ...{lastUpdate: this.getFormatDate(new Date())}}, "recurringExpenses")
         }
       });
     });
@@ -77,7 +78,7 @@ export class ExpenseService {
     let tx = this.db.transaction([type], 'readwrite');
     let store = tx.objectStore(type);
     store.add(expense);
-    tx.oncomplete = (asd) => {
+    tx.oncomplete = () => {
       if(type=="recurringExpenses"){
         this.addInitialRecurrentEntries(expense)
         this.refreshExpenses(type);
@@ -96,6 +97,7 @@ export class ExpenseService {
     // becomes -1 once iterading date after expense date
     while(differenceInMonths(currentMonthDate, addMonths(new Date(expense.date), counter))>=0){
       let pastRecurrentExpense = {...expense, ...{date: this.getFormatDate(addMonths(new Date(expense.date), counter))}}
+      delete pastRecurrentExpense.lastUpdate;
       this.addExpense(pastRecurrentExpense, "expenses")
       counter++;
     }
@@ -165,12 +167,13 @@ export class ExpenseService {
     dbReq.onupgradeneeded = (event) => {
       let db = (event.target as any).result;
       this.indexedDBService.upgradeDatabase(db);
-      setTimeout(() => {
-        this.seedExpenses();   
-        for (const group of groups) {
-          this.addGroup(group);
-        }
-      }, 1000);
+      //For dev purposes only
+      // setTimeout(() => {
+      //   this.seedExpenses();   
+      //   for (const group of groups) {
+      //     this.addGroup(group);
+      //   }
+      // }, 1000);
     }
 
     dbReq.onsuccess = (event) => {

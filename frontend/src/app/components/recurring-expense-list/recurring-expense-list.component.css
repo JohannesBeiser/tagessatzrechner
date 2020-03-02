@@ -1,0 +1,62 @@
+.expense-list {
+  box-shadow: -3px 2px 20px 0px #d8d8d8;
+}
+.expense-list .expense-item {
+  background: #fff;
+  margin: 6px 0;
+  display: flex;
+}
+.expense-list .expense-item .category-indicator {
+  background: #444;
+  width: 6px;
+  opacity: 0.9;
+}
+.expense-list .expense-item .item-content {
+  padding: 14px 8px;
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.expense-list .expense-item .item-content .minimal-info {
+  display: flex;
+}
+.expense-list .expense-item .item-content .minimal-info .info-item.amount {
+  font-weight: bold;
+}
+.expense-list .expense-item .item-content .minimal-info .info-item.name {
+  flex: 1;
+}
+.expense-list .expense-item .item-content .minimal-info .info-item.name,
+.expense-list .expense-item .item-content .minimal-info .info-item.name > * {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.expense-list .expense-item .item-content .minimal-info .info-item.date {
+  margin-right: 12px;
+}
+.expense-list .expense-item .item-content .more-info > div:first-child {
+  padding-top: 16px;
+}
+.expense-list .expense-item .item-content .more-info .description {
+  padding: 8px 0;
+}
+.expense-list .expense-item .item-content .more-info .group {
+  display: flex;
+  align-items: center;
+}
+.expense-list .expense-item .item-content .more-info .group .group-title {
+  font-weight: bold;
+}
+.expense-list .expense-item .item-content .more-info .group .group-name {
+  margin-left: 8px;
+  flex: 1;
+}
+.expense-list .expense-item .item-content .more-info .group .action-buttons {
+  display: flex;
+}
+.expense-list .expense-item .item-content .more-info .group .action-buttons > i {
+  padding: 8px;
+  padding-left: 16px;
+}
