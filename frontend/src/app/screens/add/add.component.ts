@@ -39,7 +39,7 @@ export class AddComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.initialData = this.sliderService.currentExpenseForEdit;
-    this.selectedTabIndex = (this.initialData.lastUpdate) ? 1: 0;
+    this.selectedTabIndex = (this.initialData?.lastUpdate) ? 1: 0;
     // debugger;
     this.expenseForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.maxLength(35)]),

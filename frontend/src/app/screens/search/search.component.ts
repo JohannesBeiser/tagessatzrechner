@@ -19,6 +19,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
   public searchTerm$: Subject<string>;
   public results$: Observable<Expense[]>
   public collapseNotifier: Subject<void> = new Subject();
+  public matchesFound: number;
 
   constructor(
     public sliderService: SliderService,
@@ -34,6 +35,9 @@ export class SearchComponent implements OnInit, AfterViewInit {
       filter(term=>term.length>0),
       switchMap((term)=>this.getSearchResult(term))
     );
+    this.results$.subscribe(expenses=>{
+      this.matchesFound = expenses.length;
+    })
 
     //Collapse first in case of opened when new results come in
     this.results$.subscribe(()=>{
