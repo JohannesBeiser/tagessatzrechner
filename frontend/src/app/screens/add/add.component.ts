@@ -149,13 +149,15 @@ export class AddComponent implements OnInit, AfterViewInit {
         group: this.recurringForm.value.group_recurring,
         description: this.recurringForm.value.description_recurring,
         recurring: true,
-        lastUpdate: this.initialData.lastUpdate
+        lastUpdate: null
       };
       
       if (this.recurringForm.valid) {
         if(!this.initialData){
+          expense.lastUpdate= this.expenseService.getFormatDate(new Date());
           this.expenseService.addExpense(expense, "recurringExpenses");
         }else{
+          expense.lastUpdate= this.initialData.lastUpdate
           this.expenseService.updateExpense(this.initialData.key, expense, "recurringExpenses")
         }
         this.sliderService.hide();

@@ -101,8 +101,6 @@ export class ExpenseService {
       this.addExpense(pastRecurrentExpense, "expenses")
       counter++;
     }
-
-    // this.updateExpense(expen)
   }
 
 
