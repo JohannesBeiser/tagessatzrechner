@@ -20,11 +20,13 @@ type GroupTotalCollections = {
         opacity: '0',
         overflow: 'hidden',
         height: '0px',
+        margin: '0px'
       })),
       state('in', style({
         opacity: '1',
         overflow: 'hidden',
         height: '*',
+        margin: '12px 0 0 0'
       })),
       transition('out => in', animate('150ms ease-in-out')),
       transition('in => out', animate('150ms ease-in-out'))
