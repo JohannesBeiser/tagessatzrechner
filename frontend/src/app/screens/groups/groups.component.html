@@ -2,16 +2,28 @@
   <div class="group-list" *ngFor="let totals of groupsTotals">
     <div *ngIf="totals.groupTotal.length>0">
       <div class="group-list-header">{{totals.type == 'deleted' ? 'Old groups' : 'Active groups'}}</div>
-      <div *ngFor="let group of totals.groupTotal" class="group-list-item">
-        <div class="info-section">
-          <div class="group-name">{{group.groupName}}</div>
-          <div class="group-dates" *ngIf="group.amount > 0">
-            <span>{{ {firstExpenseDate:group.firstExpenseDate, lastExpenseDate: group.lastExpenseDate} | dateDuration }}</span>
+      <div *ngFor="let group of totals.groupTotal; let i = index" class="group-list-item" (click)="toggleHelpMenu(i)">
+        <div class="group-item-general">
+          <div class="info-section">
+            <div class="group-name">{{group.groupName}}</div>
+            <div class="group-dates" *ngIf="group.amount > 0">
+              <span>{{ {firstExpenseDate:group.firstExpenseDate, lastExpenseDate: group.lastExpenseDate} | dateDuration }}</span>
+            </div>
+          </div>
+          <div class="amount">
+            <span *ngIf="group.amount>0">{{group.amount | prettyCurrency}}</span>
+            <span class="no-expenses" *ngIf="!(group.amount>0)">No expenses yet</span>
           </div>
         </div>
-        <div class="amount">
-          <span *ngIf="group.amount>0">{{group.amount | prettyCurrency}}</span>
-          <span class="no-expenses" *ngIf="!(group.amount>0)">No expenses yet</span>
+        <div class="more-info" [@slideInOut]="helpMenuOpenForIndex(i)">
+          <div class="mb-8">
+            <span class="regular-font mr-8">Duration:</span>
+            <span>{{group.duration | durationWeekDay}}</span>
+          </div>
+          <div>
+            <span class="regular-font mr-8">Cost:</span>
+            <span>{{group.amount/ group.duration | number:'1.0-0':'de-DE'}}€ per day</span>
+          </div>
         </div>
       </div>
     </div>

@@ -23,27 +23,39 @@
             border-radius: 4px;
             background: @app-white;
             padding: 12px;
-            display: flex;
-        
+            
+            .group-item-general{
+                display: flex;
+                
+                .info-section{
+                    flex: 1;
 
-            .info-section{
-                flex: 1;
-
-                .group-dates{
-                    margin-top: 12px;
-                    opacity: 0.8;
-                    font-size: 0.8em;
+                    .group-name{
+                        font-family: "Roboto-Regular";
+                    }
+    
+                    .group-dates{
+                        margin-top: 12px;
+                        opacity: 0.8;
+                        font-size: 0.8em;
+                    }
+    
+                }
+                // .amount{
+                //     // display: flex;
+                //     // align-items: center;
+                //     // font-weight: bold;
+                // }
+                .no-expenses{
+                    opacity: 0.7;
                 }
 
             }
-            // .amount{
-            //     // display: flex;
-            //     // align-items: center;
-            //     // font-weight: bold;
-            // }
-            .no-expenses{
-                opacity: 0.7;
+
+            .more-info{
+                margin-top: 12px;
             }
+
 
         }
     }

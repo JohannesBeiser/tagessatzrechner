@@ -34,6 +34,10 @@ import { SettingsBottomSheetComponent } from './screens/settings/settings-bottom
 import {MatTabsModule} from '@angular/material/tabs';
 import { RecurringExpenseListComponent } from './components/recurring-expense-list/recurring-expense-list.component';
 import { RecurringExpenseBottomSheetComponent } from './components/recurring-expense-list/expense-bottom-sheet/recurring-expense-bottom-sheet.component';
+import { DurationWeekDayPipe } from './pipes/duration-week-day.pipe';
+import { registerLocaleData } from '@angular/common';
+import localeDe from '@angular/common/locales/de';
+registerLocaleData(localeDe, 'de');
 
 @NgModule({
   declarations: [
@@ -54,7 +58,8 @@ import { RecurringExpenseBottomSheetComponent } from './components/recurring-exp
     ExpenseBottomSheetComponent,
     SettingsBottomSheetComponent,
     RecurringExpenseListComponent,
-    RecurringExpenseBottomSheetComponent
+    RecurringExpenseBottomSheetComponent,
+    DurationWeekDayPipe
   ],
   imports: [
     BrowserModule,
