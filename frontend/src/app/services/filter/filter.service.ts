@@ -12,7 +12,7 @@ export interface MonthYear {
 }
 
 export interface ExpenseFilter {
-  group?: string;
+  groups?: string[];
   date?: MonthYear;
 }
 

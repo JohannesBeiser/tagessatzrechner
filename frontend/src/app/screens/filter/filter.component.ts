@@ -18,7 +18,7 @@ export class FilterComponent implements OnInit {
 
   //Filters
   public dateSelected: string;
-  public groupSelected: string;
+  public groupsSelected: string[];
   public allDatesSelected: boolean;
   public allGroupsSelected: boolean;
 
@@ -49,11 +49,11 @@ export class FilterComponent implements OnInit {
               this.monthMethod = "all";
             }
           }
-          if (state.group) {
-            this.groupSelected = state.group;
+          if (state.groups) {
+            this.groupsSelected = state.groups;
             this.allGroupsSelected = false;
           } else {
-            this.groupSelected = null;
+            this.groupsSelected = null;
             this.allGroupsSelected = true;
           }            
       }, 200);
@@ -73,7 +73,7 @@ export class FilterComponent implements OnInit {
   groupChanged(e: any) {
     this.allGroupsSelected = !e.checked;
     if(e.checked){
-        this.groupSelected= "General"
+        this.groupsSelected= ["General"]; // if newly switched on just one with default general
     }
   }
 
@@ -91,7 +91,7 @@ export class FilterComponent implements OnInit {
 
     let newFilter: Partial<ExpenseFilter>= {}
     if(!this.allGroupsSelected){
-      newFilter.group=this.groupSelected;
+      newFilter.groups=this.groupsSelected;
     }
 
     if(this.monthMethod == 'specific'){

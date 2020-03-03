@@ -13,6 +13,11 @@
   flex-wrap: wrap;
   align-items: center;
 }
+.filter-component-container .filter-section.groups .multiple .add-group-filter {
+  display: inline-flex;
+  border: 1px solid #ddd;
+  padding: 8px;
+}
 .filter-component-container .filter-section.groups mat-slide-toggle {
   padding-left: 12px;
 }

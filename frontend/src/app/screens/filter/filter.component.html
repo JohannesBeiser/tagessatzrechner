@@ -18,14 +18,20 @@
     Groups
     <mat-slide-toggle color="primary" class="example-margin" [checked]="!allGroupsSelected"
       (change)="groupChanged($event)">{{allGroupsSelected ? "All" : "Specfic"}}</mat-slide-toggle>
-
-    <mat-form-field appearance="standard" class="groups-filter" *ngIf="!allGroupsSelected">
-      <mat-label>Group</mat-label>
-      <select matNativeControl class="group-picker" [(ngModel)]="groupSelected" #groupPickerInput>
-        <option value="General">General</option>
-        <option *ngFor="let group of groups$ | async" [value]="group.groupName">{{group.groupName}}</option>
-      </select>
-    </mat-form-field>
+    <div class="multiple" *ngIf="!allGroupsSelected">
+      <mat-form-field appearance="standard" class="groups-filter" *ngFor="let singleInput of groupsSelected; let i = index">
+        <mat-label>Group</mat-label>
+        <select matNativeControl class="group-picker" [(ngModel)]="groupsSelected[i]" #groupPickerInput>
+          <option value="General">General</option>
+          <option *ngFor="let group of groups$ | async" [value]="group.groupName">{{group.groupName}}</option>
+        </select>
+      </mat-form-field>
+      <div class="align add-group-filter" (click)="groupsSelected.push('')">
+        <span>Add</span>
+        <i class="material-icons">add</i>
+      </div>
+    </div>
+   
   </div>
 
   <div class="filter-section">

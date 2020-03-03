@@ -5,6 +5,7 @@ import { FilterService, ExpenseFilter, MonthYear } from 'src/app/services/filter
 import { DatePipe } from '@angular/common';
 import { addMonths, subMonths, isWithinInterval, subDays } from "date-fns";
 import { CategoryService } from 'src/app/services/category/category.service';
+import { fi } from 'date-fns/locale';
 
 interface CategoryTotal{
   category: string;
@@ -104,8 +105,15 @@ export class HomeComponent implements OnInit {
       }
     }
 
-    if (matches && filter.group) {
-      matches = expense.group.toLowerCase() == filter.group.toLowerCase();
+    if (matches && filter.groups) {
+      let matchesInternal = false;
+      //OR-comparison, true if one of the filters is true
+      filter.groups.forEach(groupFilter=>{
+        if(!matchesInternal){
+          matchesInternal=  expense.group.toLowerCase() == groupFilter.toLowerCase()
+        }
+      })
+      matches = matchesInternal;
     }
 
     return matches

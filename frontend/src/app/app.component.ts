@@ -69,8 +69,12 @@ export class AppComponent implements OnInit{
         }
       }
 
-      if (filter.group) {
-        tempString.group = `${filter.group}`;
+      if (filter.groups) {
+        // TODO not just first but all
+        tempString.group = `${filter.groups[0]}`;
+        for(let i=1; i<filter.groups.length;i++){
+          tempString.group += `, ${filter.groups[i]}`
+        }
       }
 
       this.filterTitles = tempString;
