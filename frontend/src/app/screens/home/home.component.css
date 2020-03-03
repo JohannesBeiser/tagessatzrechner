@@ -32,6 +32,7 @@
 }
 .home-component-container .general .categories-total .category-item .category {
   flex: 1;
+  text-transform: capitalize;
 }
 .home-component-container .filter-container {
   background: white;
