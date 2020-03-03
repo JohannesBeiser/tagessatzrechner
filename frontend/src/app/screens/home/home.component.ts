@@ -46,6 +46,9 @@ export class HomeComponent implements OnInit {
     tooltip: { enabled: false },
     chart: {
       backgroundColor: "transparent",
+      scrollablePlotArea: {
+        // minWidth: 500
+      }
     },
     navigator: {
       enabled: false,
@@ -81,7 +84,10 @@ export class HomeComponent implements OnInit {
         rotation: 0,
         overflow: 'justify'
       },
-      gridLineColor: "red",
+      
+      crosshair: {
+        width: 0
+      },
       // scrollbar: {
       //   enabled: true
       // }
