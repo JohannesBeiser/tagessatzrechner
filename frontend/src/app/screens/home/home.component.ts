@@ -33,26 +33,14 @@ export class HomeComponent implements OnInit {
         color: '#272727'
       }
     },
-    rangeSelector: {
-      selected: 4,
-      inputEnabled: false,
-      buttonTheme: {
-        visibility: 'hidden'
-      },
-      labelStyle: {
-        visibility: 'hidden'
-      }
-    },
     tooltip: { enabled: false },
     chart: {
-      backgroundColor: "transparent",
+      backgroundColor: "#eee",
       scrollablePlotArea: {
-        // minWidth: 500
+        minWidth: 16*50, //amountOfEntries *50px
+        opacity: 0.9,
+        scrollPositionX: (1/14)*3 // 1/ amountOfEntries * startMonth from begin
       }
-    },
-    navigator: {
-      enabled: false,
-      outlineWidth: 0
     },
     plotOptions: {
       line: {
@@ -60,10 +48,7 @@ export class HomeComponent implements OnInit {
         pointInterval: 24 * 3600 * 1000 * 30
       },
       series: {
-        marker:{
-          enabled: true,
-          radius: 3
-        },
+        // connectNulls: true,
         states: {
           hover: {
             enabled: false
@@ -76,24 +61,19 @@ export class HomeComponent implements OnInit {
     },
     xAxis: {
       min: Date.UTC(2020, 0, 0),
-      max: Date.UTC(2020, 4, 1),
       allowDecimals: false,
       type: 'datetime',
-      tickInterval: 24 * 3600 * 1000 * 30, //one month
+      tickInterval: 30 * 24 * 3600 * 1000, //one month
       labels: {
         rotation: 0,
         overflow: 'justify'
       },
-      
       crosshair: {
         width: 0
       },
-      // scrollbar: {
-      //   enabled: true
-      // }
     },
     yAxis: {
-      opposite: false,
+      opposite: false,      
       gridLineColor: "#ccc",
       min: 0,
       title: {
@@ -120,7 +100,6 @@ export class HomeComponent implements OnInit {
   public expenses: Expense[];
   public totalAmount: number = 0;
   public totalCategories: CategoryTotal[];
-  public filterTitles: { date: string; group: string } = null;
   public collapseNotifier: Subject<void> = new Subject();
 
   ngOnInit(): void {
@@ -187,10 +166,9 @@ export class HomeComponent implements OnInit {
     } else {
       if (filter.date) {
         matches = expenseYear == filter.date.year && expenseMonth == filter.date.month;
-        // debugger;
       } else {
         //take all data change nothing...BUT if last30Days then 
-        if (localStorage.getItem("last30Active") == 'active') {
+        if (filter.last30Active) {
           let expenseDate = new Date(expense.date);
           matches = isWithinInterval(expenseDate, { start: subDays(new Date(), 30), end: new Date() })
         }
@@ -207,7 +185,6 @@ export class HomeComponent implements OnInit {
       })
       matches = matchesInternal;
     }
-
     return matches
   }
 }

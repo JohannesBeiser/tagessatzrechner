@@ -89,10 +89,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
         sorterHelper[expenseGroup].deleted = true;
       }
     })
-    
-    // let sorted = expenses.sort(this.filterService.dateSorter);
-    // debugger;
-    
+        
     let result: GroupTotal[] = groups.map<GroupTotal>((group) => {
       let amountForGroup: number = sorterHelper[group.groupName].amount;
       let expenses: Expense[] = sorterHelper[group.groupName].expenses;

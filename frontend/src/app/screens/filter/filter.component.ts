@@ -43,7 +43,7 @@ export class FilterComponent implements OnInit {
             this.monthMethod = "specific";
           } else {
             this.dateSelected = null;
-            if(localStorage.getItem("last30Active") == "active"){
+            if(state.last30Active){
               this.monthMethod = "last30"
             }else{
               this.monthMethod = "all";
@@ -82,7 +82,6 @@ export class FilterComponent implements OnInit {
   }
 
   dateChanged(e: any) {
-    // debugger;
     if(e.value == 'specific'){
       this.dateSelected= this.filterService.getCurrentMonthFilter();
     }
@@ -91,7 +90,6 @@ export class FilterComponent implements OnInit {
 
   submitFilter() {
     let currentFilter = JSON.parse(localStorage.getItem("filter"))
-    let currentLast30Active =localStorage.getItem("last30Active");
 
     let newFilter: Partial<ExpenseFilter>= {}
     if(!this.allGroupsSelected){
@@ -103,11 +101,11 @@ export class FilterComponent implements OnInit {
         month: this.dateSelected.substring(5),
         year: this.dateSelected.substring(0, 4)
       }
-      localStorage.setItem("last30Active", "inactive")
+      newFilter.last30Active= false;
     }else if(this.monthMethod == 'all'){
-      localStorage.setItem("last30Active", "inactive")
+      newFilter.last30Active = false;
     }else{
-      localStorage.setItem("last30Active", "active")
+      newFilter.last30Active= true;
     }
 
     let currentSortMethod= localStorage.getItem("sortMethod");
@@ -115,7 +113,7 @@ export class FilterComponent implements OnInit {
       this.filterService.setSortMethod(this.sortMethod);
     }
 
-    if(JSON.stringify(currentFilter) !== JSON.stringify(newFilter) || currentLast30Active !== localStorage.getItem("last30Active") ){
+    if(JSON.stringify(currentFilter) !== JSON.stringify(newFilter)){
       this.filterService.setFilter(newFilter)
     }
   }

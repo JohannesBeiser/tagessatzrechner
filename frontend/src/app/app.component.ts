@@ -64,7 +64,7 @@ export class AppComponent implements OnInit{
       } else {
         if (filter.date) {
           tempString.date = this.datePipe.transform(`${filter.date.year}-${filter.date.month}-01`, 'MMM y');
-        }else if(localStorage.getItem("last30Active") == 'active'){
+        }else if(filter.last30Active){
           tempString.date = "Last 30 days" 
         }
       }
@@ -76,7 +76,6 @@ export class AppComponent implements OnInit{
           tempString.group += `, ${filter.groups[i]}`
         }
       }
-
       this.filterTitles = tempString;
     })
   }

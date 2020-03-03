@@ -14,6 +14,7 @@ export interface MonthYear {
 export interface ExpenseFilter {
   groups?: string[];
   date?: MonthYear;
+  last30Active?: boolean;
 }
 
 @Injectable({
@@ -45,7 +46,6 @@ export class FilterService {
 
   setFilter(newFilter: Partial<ExpenseFilter>) {
     this.filterState$.next(newFilter);
-    // debugger;
     this.monthSwitched$.next(null);
     localStorage.setItem("filter", JSON.stringify(newFilter))
   }

@@ -8,6 +8,7 @@ import { GroupsService, GroupItem } from 'src/app/services/groups/groups.service
 import { Observable } from 'rxjs';
 import { CategoryService } from 'src/app/services/category/category.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { FilterService } from 'src/app/services/filter/filter.service';
 
 @Component({
   selector: 'app-add',
@@ -20,6 +21,7 @@ export class AddComponent implements OnInit, AfterViewInit {
     public expenseService: ExpenseService,
     public groupsService: GroupsService,
     public categoryService: CategoryService,
+    private filterService: FilterService,
     private _ngZone: NgZone
   ) { }
 
@@ -40,7 +42,7 @@ export class AddComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.initialData = this.sliderService.currentExpenseForEdit;
     this.selectedTabIndex = (this.initialData?.lastUpdate) ? 1: 0;
-    // debugger;
+
     this.expenseForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.maxLength(35)]),
       amount: new FormControl('', Validators.required),
@@ -53,7 +55,7 @@ export class AddComponent implements OnInit, AfterViewInit {
     this.recurringForm = new FormGroup({
       name_recurring: new FormControl('', [Validators.required, Validators.maxLength(35)]),
       amount_recurring: new FormControl('', Validators.required),
-      month_recurring: new FormControl("2020-02", Validators.required),
+      month_recurring: new FormControl(this.filterService.getCurrentMonthFilter(), Validators.required),
       category_recurring: new FormControl('general', Validators.required),
       group_recurring: new FormControl("General", Validators.required),
       description_recurring: new FormControl('', Validators.maxLength(200)),
@@ -123,7 +125,8 @@ export class AddComponent implements OnInit, AfterViewInit {
 
   currentDate() {
     const currentDate = new Date();
-    return currentDate.toISOString().substring(0, 10);
+    
+    return `${currentDate.getFullYear()}-${this.filterService.parseMonth(currentDate.getMonth()+1)}-${this.filterService.parseMonth(currentDate.getDate())}`;
   }
 
   createExpense() {
