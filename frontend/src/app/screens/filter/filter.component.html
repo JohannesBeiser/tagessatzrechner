@@ -2,7 +2,7 @@
 
   <div class="filter-section">
     <div class="flexbox align">
-      <i class="material-icons mr-8">date_range</i>
+      <i class="material-icons mr-8">today</i>
       <span>Date</span>
     </div>
        <mat-radio-group class="example-radio-group" [(ngModel)]="monthMethod" (change)="dateChanged($event)">
@@ -18,7 +18,11 @@
   </div>
 
   <div class="filter-section groups">
-    Groups
+    <div class="flexbox align">
+      <!-- <div class="image-icon groups mr-8"></div> -->
+      <i class="material-icons mr-8">folder_open</i>
+      <span>Groups</span>
+    </div>    
     <mat-slide-toggle color="primary" class="example-margin" [checked]="!allGroupsSelected"
       (change)="groupChanged($event)">{{allGroupsSelected ? "All" : "Specfic"}}</mat-slide-toggle>
     <div class="multiple" *ngIf="!allGroupsSelected">

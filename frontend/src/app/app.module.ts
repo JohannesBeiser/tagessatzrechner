@@ -35,6 +35,8 @@ import {MatTabsModule} from '@angular/material/tabs';
 import { RecurringExpenseListComponent } from './components/recurring-expense-list/recurring-expense-list.component';
 import { RecurringExpenseBottomSheetComponent } from './components/recurring-expense-list/expense-bottom-sheet/recurring-expense-bottom-sheet.component';
 import { DurationWeekDayPipe } from './pipes/duration-week-day.pipe';
+import { HighchartsChartModule } from 'highcharts-angular';
+
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 registerLocaleData(localeDe, 'de');
@@ -77,6 +79,7 @@ registerLocaleData(localeDe, 'de');
     MatNativeDateModule,
     MatRadioModule,
     FormsModule,
+    HighchartsChartModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [

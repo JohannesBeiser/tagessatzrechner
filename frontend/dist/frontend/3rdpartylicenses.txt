@@ -125,6 +125,12 @@ date-fns is licensed under the [MIT license](http://kossnocorp.mit-license.org).
 Read more about MIT at [TLDRLegal](https://tldrlegal.com/license/mit-license).
 
 
+highcharts
+https://www.highcharts.com/license
+
+highcharts-angular
+SEE LICENSE IN <LICENSE>
+
 regenerator-runtime
 MIT
 MIT License

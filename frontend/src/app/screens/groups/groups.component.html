@@ -15,7 +15,7 @@
             <span class="no-expenses" *ngIf="!(group.amount>0)">No expenses yet</span>
           </div>
         </div>
-        <div class="more-info" [@slideInOut]="helpMenuOpenForIndex(i)">
+        <div class="more-info" [@slideInOut]="helpMenuOpenForIndex(i)" *ngIf="group.duration">
           <div class="mb-8">
             <span class="regular-font mr-8">Duration:</span>
             <span>{{group.duration | durationWeekDay}}</span>

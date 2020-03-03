@@ -10,6 +10,14 @@
         </div>
     </div>
 
+    <highcharts-chart 
+        [Highcharts]="Highcharts"
+        [constructorType]="'stockChart'"
+        [options]="chartOptions"
+        style="width: 100%; height: 300px; display: block;">
+    </highcharts-chart>
+
+
     <app-expense-list [expenses]="expenses" [collapseNotifier]="collapseNotifier" *ngIf="totalAmount >0"></app-expense-list>
 
     <div class="filter-container" [class.active]="filterService.filterShown$ | async" >

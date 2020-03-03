@@ -9,9 +9,15 @@
                 <div class="amount info-item">{{expense.amount | prettyCurrency}}</div>
             </div>
             <div class="more-info" [@slideInOut]="helpMenuOpenForIndex(i)" >
-                <div class="description" *ngIf="expense.description">{{expense.description}}</div>
+                <div class="description flexbox" *ngIf="expense.description">
+                    <!-- <i class="material-icons-outlined mr-8">description</i>-->
+                    <span>{{expense.description}}</span>                    
+                </div>
                 <div class="group">
-                    <div class="group-title">Group:</div>
+                    <div class="group-title flexbox align">
+                        <div class="image-icon groups mr-8"></div>
+                        <!-- <span>Group</span> -->
+                    </div>
                     <div class="group-name"> {{expense.group}}</div>   
                     <div class="action-buttons">
                         <i  class="material-icons" (click)="openBottomSheet($event, expense)">more_horiz</i>                    

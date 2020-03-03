@@ -31,6 +31,17 @@ app-root {
 .mat-slide-toggle-content {
   font-family: "Roboto-Light" !important;
 }
+.image-icon {
+  height: 20px;
+  width: 20px;
+  background-size: contain;
+  justify-content: center;
+}
+.image-icon.groups {
+  background-image: url('/assets/images/folder_outlined.png');
+  background-repeat: no-repeat;
+  background-position: center;
+}
 .bold {
   font-weight: bold;
 }

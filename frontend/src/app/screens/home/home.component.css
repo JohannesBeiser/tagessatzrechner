@@ -4,11 +4,17 @@
   display: flex;
   flex-direction: column;
 }
+::ng-deep highcharts-chart .highcharts-credits {
+  display: none;
+}
 .home-component-container {
   padding: 16px 12px;
   padding-top: 46px;
   overflow-y: auto;
   height: 100%;
+}
+.home-component-container.no-filters {
+  padding-top: calc(46px - 32px);
 }
 .home-component-container .general .total-amount {
   font-size: 2em;
