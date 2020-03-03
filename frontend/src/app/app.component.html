@@ -12,11 +12,12 @@
     <i class="material-icons-outlined filter-icon" (click)="filterService.show()" *ngIf="!(filterService.filterShown$ | async)">filter_list</i>
   </div>
  
-  <div class="home-component-header animated faster" [className]="(!(filterService.filterShown$ | async) && appHeadline == 'Overview') ? 'slideInDown' : 'slideOutUp'">
+  <div class="home-component-header animated faster" [className]="(!(filterService.filterShown$ | async) && appHeadline == 'Overview') ? 'slideInDown' : 'slideOutUp'" *ngIf="filterTitles?.date || filterTitles?.group">
     <i class="material-icons" [class.disabled]="!currentFilter$.value.date" (click)="filterService.switchMonth('decrement')">chevron_left</i>
     <div class="filter-title" (click)="filterService.show()">
         <span *ngIf="filterTitles?.date">{{filterTitles.date}}</span>
-        <span *ngIf="filterTitles?.group"> - {{filterTitles.group}}</span>
+        <span *ngIf="filterTitles?.date && filterTitles?.group"> - </span>
+        <span *ngIf="filterTitles?.group">{{filterTitles.group}}</span>
     </div>    
     <i class="material-icons"  [class.disabled]="!currentFilter$.value.date" (click)="filterService.switchMonth('increment')">chevron_right</i>
   </div>

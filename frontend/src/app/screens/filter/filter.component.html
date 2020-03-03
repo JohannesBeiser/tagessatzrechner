@@ -1,7 +1,10 @@
 <div class="filter-component-container">
 
   <div class="filter-section">
-    Date
+    <div class="flexbox align">
+      <i class="material-icons mr-8">date_range</i>
+      <span>Date</span>
+    </div>
        <mat-radio-group class="example-radio-group" [(ngModel)]="monthMethod" (change)="dateChanged($event)">
       <mat-radio-button color="primary" class="example-radio-button" [value]="'all'">All time</mat-radio-button>
       <mat-radio-button color="primary" class="example-radio-button" [value]="'last30'">Last 30 days</mat-radio-button>
@@ -19,23 +22,28 @@
     <mat-slide-toggle color="primary" class="example-margin" [checked]="!allGroupsSelected"
       (change)="groupChanged($event)">{{allGroupsSelected ? "All" : "Specfic"}}</mat-slide-toggle>
     <div class="multiple" *ngIf="!allGroupsSelected">
-      <mat-form-field appearance="standard" class="groups-filter" *ngFor="let singleInput of groupsSelected; let i = index">
-        <mat-label>Group</mat-label>
-        <select matNativeControl class="group-picker" [(ngModel)]="groupsSelected[i]" #groupPickerInput>
-          <option value="General">General</option>
-          <option *ngFor="let group of groups$ | async" [value]="group.groupName">{{group.groupName}}</option>
-        </select>
-      </mat-form-field>
-      <div class="align add-group-filter" (click)="groupsSelected.push('')">
-        <span>Add</span>
+      <div class="group-filter-item" *ngFor="let singleInput of groupsSelected; let i = index">
+        <mat-form-field appearance="standard" class="groups-filter">
+          <mat-label>Group</mat-label>
+          <select matNativeControl class="group-picker" [(ngModel)]="groupsSelected[i]" #groupPickerInput>
+            <option value="General">General</option>
+            <option *ngFor="let group of groups$ | async" [value]="group.groupName">{{group.groupName}}</option>
+          </select>
+        </mat-form-field>
+        <div class="remove-item mat-form-field-wrapper" (click)="removeGroupFilter(i)" *ngIf="groupsSelected.length > 1">
+          <i class="material-icons">close</i>
+        </div>
+      </div>
+      <div class="align add-group-filter" (click)="groupsSelected.push('General')">
         <i class="material-icons">add</i>
+        <span class="ml-8">Add new group filter</span>
       </div>
     </div>
    
   </div>
 
   <div class="filter-section">
-    <label id="example-radio-group-label">Sort by</label>
+    <label id="example-radio-group-label" class="flexbox align"><i class="material-icons mr-8">sort</i> Sort by</label>
     <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" [(ngModel)]="sortMethod">
       <mat-radio-button color="primary" class="example-radio-button" *ngFor="let method of sortMethods"
         [value]="method">

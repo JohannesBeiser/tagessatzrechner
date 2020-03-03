@@ -1,5 +1,4 @@
-
-<div class="home-component-container" (click)="collapseNotifier.next()">
+<div class="home-component-container" (click)="collapseNotifier.next()" [class.no-filters]="!(currentFilter$ | async)?.date && !(currentFilter$ | async)?.groups">
     <div class="general" *ngIf="totalAmount >0">
         <div class="total-amount" >{{totalAmount | prettyCurrency}}</div>
         <div class="categories-total">

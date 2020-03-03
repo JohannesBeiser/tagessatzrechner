@@ -70,6 +70,10 @@ export class FilterComponent implements OnInit {
     this.sortMethod = localStorage.getItem("sortMethod") || "date";
   }
   
+  removeGroupFilter(index:number){
+    this.groupsSelected.splice(index,1);
+  }
+
   groupChanged(e: any) {
     this.allGroupsSelected = !e.checked;
     if(e.checked){

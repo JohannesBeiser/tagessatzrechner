@@ -56,7 +56,7 @@ export class AppComponent implements OnInit{
   ngOnInit(){
     combineLatest(this.currentFilter$, this.filterService.monthSwitched$).subscribe(([filter, monthSwitch]) => {
       let tempString = {
-        date: "All time",
+        date: null,
         group: null
       }
       if (monthSwitch) {
