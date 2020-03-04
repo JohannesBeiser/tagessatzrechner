@@ -4,7 +4,13 @@
   display: flex;
   flex-direction: column;
 }
+::ng-deep highcharts-chart * {
+  font-family: "Roboto-Light";
+}
 ::ng-deep highcharts-chart .highcharts-credits {
+  display: none;
+}
+::ng-deep highcharts-chart .highcharts-axis-labels.highcharts-xaxis-labels text:last-child {
   display: none;
 }
 .home-component-container {
@@ -16,9 +22,32 @@
 .home-component-container.no-filters {
   padding-top: calc(46px - 32px);
 }
+.home-component-container .general {
+  position: relative;
+}
+.home-component-container .general .chart-section .chart-info-box {
+  padding: 16px;
+  font-size: 0.8em;
+}
 .home-component-container .general .total-amount {
   font-size: 2em;
   border-bottom: 1px solid #ddd;
+}
+.home-component-container .general .chart-icon {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: white;
+  border-radius: 50%;
+  padding: 4px;
+  font-size: 20px;
+  border: 1px solid #cacaca;
+  z-index: 1;
+}
+.home-component-container .general .chart-icon.active {
+  background: #76757b;
+  color: white;
+  border-color: transparent;
 }
 .home-component-container .general .categories-total {
   padding: 8px;
@@ -41,6 +70,7 @@
   text-transform: capitalize;
 }
 .home-component-container .filter-container {
+  z-index: 1;
   background: white;
   position: absolute;
   height: calc(100% - 40px);

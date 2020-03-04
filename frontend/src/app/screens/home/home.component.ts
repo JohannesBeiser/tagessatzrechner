@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ExpenseService, Expense } from 'src/app/services/expenses/expense.service';
 import { Observable, combineLatest, Subject, BehaviorSubject } from 'rxjs';
 import { FilterService, ExpenseFilter, MonthYear } from 'src/app/services/filter/filter.service';
-import { isWithinInterval, subDays, addMonths } from "date-fns";
+import { isWithinInterval, subDays, addMonths, subMonths } from "date-fns";
 import { CategoryService } from 'src/app/services/category/category.service';
 import * as Highcharts from 'highcharts';
 import { map } from 'rxjs/operators';
@@ -13,7 +13,7 @@ interface CategoryTotal {
 }
 
 interface ChartData{
-  data: number[];
+  data: {x:number, y:number}[];
   chartStartDate: number;
   currentMonthIndex: number;
 }
@@ -90,6 +90,12 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  chartOpened= false;
+  toggleChart(){
+    this.chartOpened = !this.chartOpened
+  }
+
+
   /**
    * Since the chart starts with 5 entries and scroll position equals left border, we want 
    * the scroll position to be in the middle of the chart
@@ -105,13 +111,27 @@ export class HomeComponent implements OnInit {
 
 
   private calculateChartData(): Observable<ChartData>{
-    return this.expenses$.pipe(
-      map((expenses)=>{        
+    return combineLatest(this.expenses$, this.currentFilter$).pipe(
+      map(([expenses,filter])=>{        
         if(expenses.length>0){
           //TODO
         }
         // group all expensses in new object with accummulated amount
-        let monthTotalsObject = expenses.reduce((acc, cur)=>{
+        let monthTotalsObject =
+        expenses.filter((expense)=>{
+          let matches = false;
+          if(filter.groups){
+            filter.groups.forEach(groupFilter => {
+              if (!matches) {
+                matches = expense.group.toLowerCase() == groupFilter.toLowerCase()
+              }
+            });
+          }else{
+            //no groups selected so all expenses valid
+            matches = true;
+          }
+          return matches;
+        }).reduce((acc, cur)=>{
           let oldAmount = acc[cur.date.substring(0,7)]?.amount ? acc[cur.date.substring(0,7)]?.amount : 0;
           acc[cur.date.substring(0,7)]= {...acc[cur.date.substring(0,7)], ...{amount: oldAmount+cur.amount}}
           return acc;
@@ -141,21 +161,20 @@ export class HomeComponent implements OnInit {
           filledTotals[indexForFilled].amount = monthTotal.amount;
         });
 
-        debugger;
+        
         // reduce to array of just amounts for chart
-        let chartData = filledTotals.map(el=>el.amount)
-        let temp= []
-        chartData.forEach((el,i)=>{
-          temp.push({x: Date.UTC(firstMonth.getFullYear(), (firstMonth.getMonth())+i, 1), y:el})
-        })
+        let chartData = filledTotals.map(el=>{
+          return{x:Date.UTC(new Date(el.month).getFullYear(), (new Date(el.month).getMonth()), 1), y: el.amount}          
+        });
+      
+        chartData.push({x: Date.UTC(new Date().getFullYear(), new Date().getMonth()+1,0),y:null})      
         
         let currentIndex = filledTotals.findIndex(el=>{
           return el.month === this.filterService.getCurrentMonthFilter()
         });
 
-        chartData.push(null)      
         return {
-          data: temp,
+          data: chartData,
           chartStartDate:  Date.UTC(new Date(filledTotals[0].month).getFullYear(), new Date(filledTotals[0].month).getMonth(), 0),
           currentMonthIndex: currentIndex
         }
@@ -204,7 +223,8 @@ export class HomeComponent implements OnInit {
         type: 'datetime',
         tickInterval: 30 * 24 * 3600 * 1000, //one month
         labels: {
-          rotation: 0,
+          // rotation: 90,
+          // align: "left",
           overflow: 'justify'
         },
         crosshair: {
@@ -246,8 +266,6 @@ export class HomeComponent implements OnInit {
       return { month: key, amount: obj[key].amount }
     });
   }
-
-
 
   private matchesFilter(expense: Expense, filter: ExpenseFilter, monthSwitch: MonthYear): boolean {
     let matches = true;
