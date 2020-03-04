@@ -2,14 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { ExpenseService, Expense } from 'src/app/services/expenses/expense.service';
 import { Observable, combineLatest, Subject, BehaviorSubject } from 'rxjs';
 import { FilterService, ExpenseFilter, MonthYear } from 'src/app/services/filter/filter.service';
-import { isWithinInterval, subDays } from "date-fns";
+import { isWithinInterval, subDays, addMonths } from "date-fns";
 import { CategoryService } from 'src/app/services/category/category.service';
 import * as Highcharts from 'highcharts';
+import { map } from 'rxjs/operators';
 
 interface CategoryTotal {
   category: string;
   amount: number;
 }
+
+interface ChartData{
+  data: number[];
+  chartStartDate: number;
+  currentMonthIndex: number;
+}
+
 
 @Component({
   selector: 'app-home',
@@ -75,14 +83,81 @@ export class HomeComponent implements OnInit {
         }).sort((a, b) => {
           return b.amount - a.amount;
         });
-      })
-    this.initChart();
+    })
+
+    this.calculateChartData().subscribe((options)=>{
+      this.drawChart(options);
+    });
   }
 
-  private initChart() {
+  /**
+   * Since the chart starts with 5 entries and scroll position equals left border, we want 
+   * the scroll position to be in the middle of the chart
+   * @param number: index of item in array
+   */
+  getNormalizedStartMonth(number: number){
+    if(number>=3){
+      return number-3;
+    }else{
+      return 0;
+    }
+  }
 
-    let data= [750, 630, 820, 600, 610, 580, 670, 750, 630, 820, 600, 610, 580, 670];
 
+  private calculateChartData(): Observable<ChartData>{
+    return this.expenses$.pipe(
+      map((expenses)=>{        
+        if(expenses.length>0){
+          //TODO
+        }
+        // group all expensses in new object with accummulated amount
+        let monthTotalsObject = expenses.reduce((acc, cur)=>{
+          let oldAmount = acc[cur.date.substring(0,7)]?.amount ? acc[cur.date.substring(0,7)]?.amount : 0;
+          acc[cur.date.substring(0,7)]= {...acc[cur.date.substring(0,7)], ...{amount: oldAmount+cur.amount}}
+          return acc;
+        }, {});
+
+        //sort groups by month and convert to array
+        let monthTotalsSorted = this.monthTotalObjectToArray(monthTotalsObject).sort((a,b)=>{
+          return new Date(a.month).getTime() - new Date(b.month).getTime()
+        }).filter(el=>{
+          return new Date(el.month) <= new Date()
+        });
+
+        //create new array with all of the months from begin to finish adn initialize for chart with null
+        let filledTotals: {month: string, amount: number}[]= [];
+        let firstMonth = new Date(monthTotalsSorted[0].month);
+        let lastMonth = new Date();
+        for (let month = firstMonth; month <=lastMonth; month=addMonths(month,1)) {
+          let monthString = this.filterService.getMonthDateString(month)
+          filledTotals.push({month: monthString, amount: 0});      
+        }
+
+        // Now fill in the amounts calculated in monthTotalsSorted
+        monthTotalsSorted.forEach(monthTotal=> {
+          let indexForFilled = filledTotals.findIndex(el=>{
+            return el.month === monthTotal.month
+          });
+          filledTotals[indexForFilled].amount = monthTotal.amount;
+        });
+
+        // reduce to array of just amounts for chart
+        let chartData = filledTotals.map(el=>el.amount)
+        let currentIndex = filledTotals.findIndex(el=>{
+          return el.month === this.filterService.getCurrentMonthFilter()
+        });
+
+        chartData.push(null)      
+        return {
+          data: chartData,
+          chartStartDate:  Date.UTC(new Date(filledTotals[0].month).getFullYear(), new Date(filledTotals[0].month).getMonth(), 0),
+          currentMonthIndex: currentIndex
+        }
+      })
+    )
+  }
+
+  private drawChart(chartData: ChartData ) {
     this.chartOptions = {
       title: {
         text: null,
@@ -93,19 +168,20 @@ export class HomeComponent implements OnInit {
       tooltip: { enabled: false },
       chart: {
         backgroundColor: "#eee",
+        animation: false,
         scrollablePlotArea: {
-          minWidth: 16*50, //amountOfEntries *50px
+          minWidth: chartData.data.length*50, //amountOfEntries *50px
           opacity: 0.9,
-          scrollPositionX: (1/14)*3 // 1/ amountOfEntries * startMonth from begin
+          scrollPositionX: (1/(chartData.data.length-5))*this.getNormalizedStartMonth(chartData.currentMonthIndex) // 1/ amountOfEntries * startMonth from begin ignoring 5 first entries 
         }
       },
       plotOptions: {
         line: {
-          pointStart: Date.UTC(2020, 0, 0),
+          animation: false,
+          pointStart: chartData.chartStartDate,
           pointInterval: 24 * 3600 * 1000 * 30
         },
         series: {
-          // connectNulls: true,
           states: {
             hover: {
               enabled: false
@@ -117,7 +193,7 @@ export class HomeComponent implements OnInit {
         enabled: false
       },
       xAxis: {
-        min: Date.UTC(2020, 0, 0),
+        min: chartData.chartStartDate,
         allowDecimals: false,
         type: 'datetime',
         tickInterval: 30 * 24 * 3600 * 1000, //one month
@@ -144,8 +220,9 @@ export class HomeComponent implements OnInit {
       },
       colors: ["#444"],
       series: [{
-        data: data,
-        type: 'line'
+        data: chartData.data,
+        type: 'line',
+        softThreshold: true
       }]
     };
   }
@@ -157,6 +234,13 @@ export class HomeComponent implements OnInit {
       return { category: key, amount: obj[key] }
     });
   }
+
+  private monthTotalObjectToArray(obj: any): {month: string, amount: number}[] {
+    return Object.keys(obj).map(key => {
+      return { month: key, amount: obj[key].amount }
+    });
+  }
+
 
 
   private matchesFilter(expense: Expense, filter: ExpenseFilter, monthSwitch: MonthYear): boolean {

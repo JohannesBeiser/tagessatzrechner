@@ -112,6 +112,10 @@ export class FilterService {
     return '' + new Date().getFullYear() + '-' + this.parseMonth(new Date().getMonth() + 1)
   }
 
+  public getMonthDateString(date: Date){
+    return `${date.getFullYear()}-${this.parseMonth(date.getMonth()+1)}`
+  }
+
   public parseMonth(month: number): string {
     if (month > 9) {
       return month.toString();
