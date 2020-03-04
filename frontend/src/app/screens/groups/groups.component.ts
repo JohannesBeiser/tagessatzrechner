@@ -48,7 +48,6 @@ export class GroupsComponent implements OnInit, OnDestroy {
   public expenses$: Observable<Expense[]>;
   private subscription: Subscription;
   public groupsTotals: GroupTotalCollections[];
-  public detailViewShownForIndex: number;
   public helper = {}
 
   ngOnInit(): void {
@@ -57,12 +56,19 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
     this.subscription = combineLatest(this.expenses$, this.groups$).subscribe(([expenses, groups]) => {
       this.groupsTotals = this.calculateGroupsTotals(expenses, groups);
+      this.initializeHelper();
     })
     this.helper = {}
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  initializeHelper(){
+    for (let i = 0; i < this.groupsTotals.length; i++) {
+      this.helper[i]={};        
+    }
   }
 
   calculateGroupsTotals(expenses: Expense[], groups_origin: GroupItem[]): GroupTotalCollections[] {
@@ -130,17 +136,17 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
 
   
-  helpMenuOpenForIndex(index: number):string{
-    return this.helper[index] || 'out';
+  helpMenuOpenForIndex(index: number, outer: number):string{
+    return this.helper[outer][index] || 'out';
   }
   
-  toggleHelpMenu(index: number): void {
-    if(this.helper[index]){
+  toggleHelpMenu(index: number, outer: number): void {
+    if(this.helper[outer][index]){
       //already exists --> is open
-      this.helper = {};
+      this.initializeHelper();
     }else{
-      this.helper = {};
-      this.helper[index] =  'in';
+      this.initializeHelper();
+      this.helper[outer][index] =  'in';
     }
   }
 }
