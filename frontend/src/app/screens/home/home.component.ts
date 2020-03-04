@@ -141,15 +141,21 @@ export class HomeComponent implements OnInit {
           filledTotals[indexForFilled].amount = monthTotal.amount;
         });
 
+        debugger;
         // reduce to array of just amounts for chart
         let chartData = filledTotals.map(el=>el.amount)
+        let temp= []
+        chartData.forEach((el,i)=>{
+          temp.push({x: Date.UTC(firstMonth.getFullYear(), (firstMonth.getMonth())+i, 1), y:el})
+        })
+        
         let currentIndex = filledTotals.findIndex(el=>{
           return el.month === this.filterService.getCurrentMonthFilter()
         });
 
         chartData.push(null)      
         return {
-          data: chartData,
+          data: temp,
           chartStartDate:  Date.UTC(new Date(filledTotals[0].month).getFullYear(), new Date(filledTotals[0].month).getMonth(), 0),
           currentMonthIndex: currentIndex
         }
@@ -179,7 +185,7 @@ export class HomeComponent implements OnInit {
         line: {
           animation: false,
           pointStart: chartData.chartStartDate,
-          pointInterval: 24 * 3600 * 1000 * 30
+          // pointInterval: 24 * 3600 * 1000 * 30
         },
         series: {
           states: {
