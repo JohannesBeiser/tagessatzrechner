@@ -4,7 +4,7 @@ import { Observable, combineLatest, Subject, BehaviorSubject } from 'rxjs';
 import { FilterService, ExpenseFilter, MonthYear } from 'src/app/services/filter/filter.service';
 import { isWithinInterval, subDays } from "date-fns";
 import { CategoryService } from 'src/app/services/category/category.service';
-import * as Highcharts from 'highcharts/highstock';
+import * as Highcharts from 'highcharts';
 
 interface CategoryTotal {
   category: string;
@@ -26,71 +26,7 @@ export class HomeComponent implements OnInit {
 
 
   Highcharts: typeof Highcharts = Highcharts;
-  chartOptions: Highcharts.Options = {
-    title: {
-      text: null,
-      style: {
-        color: '#272727'
-      }
-    },
-    tooltip: { enabled: false },
-    chart: {
-      backgroundColor: "#eee",
-      scrollablePlotArea: {
-        minWidth: 16*50, //amountOfEntries *50px
-        opacity: 0.9,
-        scrollPositionX: (1/14)*3 // 1/ amountOfEntries * startMonth from begin
-      }
-    },
-    plotOptions: {
-      line: {
-        pointStart: Date.UTC(2020, 0, 0),
-        pointInterval: 24 * 3600 * 1000 * 30
-      },
-      series: {
-        // connectNulls: true,
-        states: {
-          hover: {
-            enabled: false
-          }
-        }
-      }
-    },
-    legend: {
-      enabled: false
-    },
-    xAxis: {
-      min: Date.UTC(2020, 0, 0),
-      allowDecimals: false,
-      type: 'datetime',
-      tickInterval: 30 * 24 * 3600 * 1000, //one month
-      labels: {
-        rotation: 0,
-        overflow: 'justify'
-      },
-      crosshair: {
-        width: 0
-      },
-    },
-    yAxis: {
-      opposite: false,      
-      gridLineColor: "#ccc",
-      min: 0,
-      title: {
-        text: null
-      },
-      labels: {
-        formatter: function () {
-          return this.value + "€"
-        }
-      }
-    },
-    colors: ["#444"],
-    series: [{
-      data: [750, 630, 820, 600, 610, 580, 670, 750, 630, 820, 600, 610, 580, 670],
-      type: 'line'
-    }]
-  };
+  chartOptions: Highcharts.Options = {};
 
   private expenses$: Observable<Expense[]>;
   public currentFilter$: BehaviorSubject<ExpenseFilter>;
@@ -145,6 +81,73 @@ export class HomeComponent implements OnInit {
 
   private initChart() {
 
+    let data= [750, 630, 820, 600, 610, 580, 670, 750, 630, 820, 600, 610, 580, 670];
+
+    this.chartOptions = {
+      title: {
+        text: null,
+        style: {
+          color: '#272727'
+        }
+      },
+      tooltip: { enabled: false },
+      chart: {
+        backgroundColor: "#eee",
+        scrollablePlotArea: {
+          minWidth: 16*50, //amountOfEntries *50px
+          opacity: 0.9,
+          scrollPositionX: (1/14)*3 // 1/ amountOfEntries * startMonth from begin
+        }
+      },
+      plotOptions: {
+        line: {
+          pointStart: Date.UTC(2020, 0, 0),
+          pointInterval: 24 * 3600 * 1000 * 30
+        },
+        series: {
+          // connectNulls: true,
+          states: {
+            hover: {
+              enabled: false
+            }
+          }
+        }
+      },
+      legend: {
+        enabled: false
+      },
+      xAxis: {
+        min: Date.UTC(2020, 0, 0),
+        allowDecimals: false,
+        type: 'datetime',
+        tickInterval: 30 * 24 * 3600 * 1000, //one month
+        labels: {
+          rotation: 0,
+          overflow: 'justify'
+        },
+        crosshair: {
+          width: 0
+        },
+      },
+      yAxis: {
+        opposite: false,      
+        gridLineColor: "#ccc",
+        min: 0,
+        title: {
+          text: null
+        },
+        labels: {
+          formatter: function () {
+            return this.value + "€"
+          }
+        }
+      },
+      colors: ["#444"],
+      series: [{
+        data: data,
+        type: 'line'
+      }]
+    };
   }
 
   public initialFocus: string;
