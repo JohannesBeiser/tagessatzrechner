@@ -8,8 +8,8 @@
     </div>
   </app-header>
 
-  <mat-tab-group  mat-stretch-tabs class="example-stretched-tab" (selectedTabChange)="tabChanged($event)" [selectedIndex]="initialData?.lastUpdate? '1': '0'">
-    <mat-tab label="Single"> 
+  <mat-tab-group mat-stretch-tabs class="example-stretched-tab" (selectedTabChange)="tabChanged($event)" [selectedIndex]="initialData?.lastUpdate? '1': '0'">
+    <mat-tab [disabled]="initialData?.lastUpdate && initialData" label="Single"> 
       <div class="content-container">
         <form class="expense-form" [formGroup]="expenseForm" autocomplete="off" (submit)="createExpense()"
           #formDirective="ngForm">
@@ -63,8 +63,7 @@
     </mat-tab>
 
 
-
-    <mat-tab label="Recurring"> 
+    <mat-tab [disabled]="!initialData?.lastUpdate && initialData" label="Recurring"> 
       <div class="content-container recurring">
       <div class="recurring-info-text">Recurring expenses will automatically be added each month on the first day starting with the selected month.</div>
       <form class="expense-form" [formGroup]="recurringForm" autocomplete="off" (submit)="createExpense()" #formDirective="ngForm">
