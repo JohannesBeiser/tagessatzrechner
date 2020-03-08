@@ -11,8 +11,6 @@
           "/index.html",
           "/manifest.webmanifest",
           "/*.css",
-          "!/assets/update-pwa.js",
-          "/assets/delayed-reload.js",
           "/*.js"
         ]
       }
