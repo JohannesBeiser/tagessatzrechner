@@ -1,42 +1,43 @@
-<div class="home-component-container" (click)="collapseNotifier.next()" [class.no-filters]="!(currentFilter$ | async)?.date && !(currentFilter$ | async)?.groups && !(currentFilter$ | async)?.last30Active">
-    <div class="general" *ngIf="totalAmount >0">
-        <div class="total-amount" *ngIf="!chartOpened">
-            <span >{{totalAmount | prettyCurrency}}</span>
-        </div>
-
-        <i class="material-icons chart-icon" [class.active]="chartOpened" (click)="toggleChart()">timeline</i>
-
-        <div style="position: relative; z-index: 0;" *ngIf="chartOpened" class="chart-section">
-            <highcharts-chart 
-                [Highcharts]="Highcharts"
-                [options]="chartOptions"
-                style="width: 100%; height: 265px; display: block;">
-            </highcharts-chart>
-            <div class="chart-info-box flexbox">
-                <i class="material-icons-outlined mr-8">info</i>
-                <span>The chart will show all the months matching the groups filter. Selected date filters won't be applied!</span>            
-            </div>
-        </div>
-
-        <div class="categories-total" *ngIf="!chartOpened">
-            <div class="category-item" *ngFor="let total of totalCategories">
-                <div class="color-badge" [style.background-color]="categoryService.categoryColors[total.category]"></div>
-                <span class="category" *ngIf="total.category !== 'health_insurance'">{{total.category}} </span>
-                <span class="category" *ngIf="total.category === 'health_insurance'">Health & Insurance </span>
-                <span class="amount"> {{total.amount | prettyCurrency}}</span>
-            </div>
-        </div>
+<div class="home-component-container" (click)="collapseNotifier.next()"
+  [class.no-filters]="!(currentFilter$ | async)?.date && !(currentFilter$ | async)?.groups && !(currentFilter$ | async)?.last30Active">
+  <div class="general" *ngIf="totalAmount >0">
+    <div class="total-amount" *ngIf="!chartOpened">
+      <span>{{totalAmount | prettyCurrency}}</span>
     </div>
 
-    <app-expense-list  [expenses]="expenses" [collapseNotifier]="collapseNotifier" *ngIf="totalAmount >0 && !chartOpened"></app-expense-list>
+    <i class="material-icons chart-icon" [class.active]="chartOpened" (click)="toggleChart()">timeline</i>
 
-    <div class="filter-container" [class.active]="filterService.filterShown$ | async" >
-        <app-filter></app-filter>
+    <div style="position: relative; z-index: 0;" *ngIf="chartOpened" class="chart-section">
+      <highcharts-chart [Highcharts]="Highcharts" [options]="chartOptions"
+        style="width: 100%; height: 265px; display: block;">
+      </highcharts-chart>
+      <div class="chart-info-box flexbox">
+        <i class="material-icons-outlined mr-8">info</i>
+        <span>The chart will show all the months matching the groups filter. Selected date filters won't be
+          applied!</span>
+      </div>
     </div>
 
-    <div class="no-expenses-placeholder" *ngIf="totalAmount === 0">
-        <div>No expenses yet</div>
+    <div class="categories-total" *ngIf="!chartOpened">
+      <div class="category-item" *ngFor="let total of totalCategories; let i= index" (click)="toggleCategory(i,total)" [class.category-limited]="activeCategory !== null" [class.selected]="activeCategory == i">
+        <div class="color-badge" [style.background-color]="categoryService.categoryColors[total.category]"></div>
+        <span class="category" *ngIf="total.category !== 'health_insurance'">{{total.category}} </span>
+        <span class="category" *ngIf="total.category === 'health_insurance'">Health & Insurance </span>
+        <span class="amount"> {{total.amount | prettyCurrency}}</span>
+      </div>
+
     </div>
+  </div>
+
+  <app-expense-list [expenses]="expenses" [collapseNotifier]="collapseNotifier" *ngIf="totalAmount >0 && !chartOpened">
+  </app-expense-list>
+
+  <div class="filter-container" [class.active]="filterService.filterShown$ | async">
+    <app-filter></app-filter>
+  </div>
+
+  <div class="no-expenses-placeholder" *ngIf="totalAmount === 0">
+    <div>No expenses yet</div>
+  </div>
 
 </div>
-

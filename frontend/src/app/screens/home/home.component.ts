@@ -40,6 +40,7 @@ export class HomeComponent implements OnInit {
   public currentFilter$: BehaviorSubject<ExpenseFilter>;
   public monthSwitched$: BehaviorSubject<MonthYear>;
   public sortMethod$: BehaviorSubject<string>;
+  public limitedCategory$: BehaviorSubject<string>
 
   public expenses: Expense[];
   public totalAmount: number = 0;
@@ -51,9 +52,10 @@ export class HomeComponent implements OnInit {
     this.currentFilter$ = this.filterService.getFilter();
     this.monthSwitched$ = this.filterService.monthSwitched$;
     this.sortMethod$ = this.filterService.sortMethod$;
+    this.limitedCategory$ = new BehaviorSubject(null);
 
-    combineLatest(this.currentFilter$, this.expenses$, this.monthSwitched$, this.sortMethod$)
-      .subscribe(([filter, expenses, monthSwitch, sortMethod]) => {
+    combineLatest(this.currentFilter$, this.expenses$, this.monthSwitched$, this.sortMethod$, this.limitedCategory$)
+      .subscribe(([filter, expenses, monthSwitch, sortMethod, limitedCategory]) => {
         let filtered = expenses.filter((expense) => {
           return this.matchesFilter(expense, filter, monthSwitch)
         });
@@ -62,6 +64,13 @@ export class HomeComponent implements OnInit {
           this.expenses = filtered.reverse().sort(this.filterService.amountSorter);
         } else {
           this.expenses = filtered.reverse().sort((a,b)=>this.filterService.dateSorter(a.date, b.date));
+        }
+
+        // If category limited only view expenses mathihc this category, but dont actually filter like emitting a new expense value. just change the view. Leave category-totals untouched
+        if(limitedCategory){
+          this.expenses = this.expenses.filter(expense=>{
+            return expense.category == limitedCategory;
+          })
         }
 
         this.totalAmount = filtered.reduce((acc, cur) => {
@@ -112,6 +121,17 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  public activeCategory= null;
+
+  public toggleCategory(index:number, categoryTotal: CategoryTotal){
+    if(this.activeCategory == index){
+      this.activeCategory = null;
+      this.limitedCategory$.next(null)
+    }else{
+      this.activeCategory= index;
+      this.limitedCategory$.next(categoryTotal.category)
+    }
+  }
 
   private calculateChartData(): Observable<ChartData>{
     return combineLatest(this.expenses$, this.currentFilter$).pipe(
