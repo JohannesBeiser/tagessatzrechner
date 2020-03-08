@@ -23,7 +23,7 @@
 
           <mat-form-field appearance="standard" class="amount-input">
             <mat-label>Amount (€)</mat-label>
-            <input type="number" matInput formControlName="amount" #focusInput>
+            <input type="number" matInput formControlName="amount" #focusInputAdd>
             <mat-error *ngIf="hasError('amount', 'required', 'single')">Amount is required</mat-error>
           </mat-form-field>
 
@@ -90,6 +90,7 @@
               <option value="transport">Transport</option>
               <option value="leisure">Leisure</option>
               <option value="multimedia">Multimedia</option>
+              <option value="health_insurance">Health & Insurance</option>
               <option value="general">General</option>
             </select>
           </mat-form-field> 

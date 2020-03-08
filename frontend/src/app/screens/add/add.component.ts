@@ -25,7 +25,7 @@ export class AddComponent implements OnInit, AfterViewInit {
     private _ngZone: NgZone
   ) { }
 
-  @ViewChild("focusInput") public focusInput: ElementRef;
+  @ViewChild("focusInputAdd") public focusInput: ElementRef;
   @ViewChild('autosize') autosize: CdkTextareaAutosize;
   triggerResize() {
     // Wait for changes to be applied, then trigger textarea resize.
