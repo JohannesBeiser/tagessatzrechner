@@ -61,7 +61,7 @@ export class HomeComponent implements OnInit {
         if (sortMethod == "amount") {
           this.expenses = filtered.reverse().sort(this.filterService.amountSorter);
         } else {
-          this.expenses = filtered.reverse().sort(this.filterService.dateSorter);
+          this.expenses = filtered.reverse().sort((a,b)=>this.filterService.dateSorter(a.date, b.date));
         }
 
         this.totalAmount = filtered.reduce((acc, cur) => {
@@ -76,8 +76,11 @@ export class HomeComponent implements OnInit {
           accommodation: 0,
           transport: 0,
           multimedia: 0,
+          leisure: 0,
+          health_insurance: 0,
           general: 0
         });
+                
         this.totalCategories = this.objectToArray(temp).filter((item) => {
           return item.amount > 0;
         }).sort((a, b) => {

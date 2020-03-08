@@ -6,6 +6,7 @@ export interface CategoryColor{
   accommodation: string;
   multimedia: string;
   leisure: string;
+  health_insurance: string;
   general: string;
 }
 
@@ -24,7 +25,8 @@ export class CategoryService {
     accommodation: "#5979a9",//"rgb(84, 94, 117)",
     transport: "rgb(192, 87, 70)",
     multimedia: "rgb(150, 123, 92)",//"rgb(189, 155, 117)",
-    leisure: "deeppink",
+    leisure: "rgb(202, 179, 99)",
+    health_insurance: "#afafaf",
     general: "rgb(82, 82, 82)",
   }
 

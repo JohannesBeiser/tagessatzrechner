@@ -21,7 +21,8 @@
         <div class="categories-total" *ngIf="!chartOpened">
             <div class="category-item" *ngFor="let total of totalCategories">
                 <div class="color-badge" [style.background-color]="categoryService.categoryColors[total.category]"></div>
-                <span class="category">{{total.category}} </span>
+                <span class="category" *ngIf="total.category !== 'health_insurance'">{{total.category}} </span>
+                <span class="category" *ngIf="total.category === 'health_insurance'">Health & Insurance </span>
                 <span class="amount"> {{total.amount | prettyCurrency}}</span>
             </div>
         </div>

@@ -104,7 +104,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
       let result: GroupTotal ;
       
       if(expenses.length >0){
-        let expensesSorted = expenses.sort(this.filterService.dateSorter);
+        let expensesSorted = expenses.sort((a,b)=>this.filterService.dateSorter(a.date,b.date));
         let first= expensesSorted[expensesSorted.length-1].date;
         let last = expensesSorted[0].date;
         let durationInDays = differenceInDays(new Date(last), new Date(first))+1; 
@@ -120,17 +120,32 @@ export class GroupsComponent implements OnInit, OnDestroy {
       return result
     });
     
+    let generalGroup;
     let mapped=  result.reduce((acc, cur)=>{
       if(!cur.deleted){
-        let next = acc;
-        next[0].groupTotal.push(cur)
-        return next
+        if(cur.groupName !== "General"){
+          let next = acc;
+          next[0].groupTotal.push(cur)
+          return next
+        }else{
+          generalGroup = cur;
+          return acc
+        }
       }else{
         let next = acc;
         next[1].groupTotal.push(cur)
         return next
       }
-    },[{type: "active", groupTotal: []},{type: "deleted", groupTotal: []}])
+    },[{type: "active", groupTotal: []},{type: "deleted", groupTotal: []}]);
+
+    mapped.forEach(groupCollection=>{
+      groupCollection.groupTotal.sort((a,b)=>this.filterService.dateSorter(a.firstExpenseDate, b.firstExpenseDate))
+    });
+
+    mapped[0].groupTotal.push(generalGroup);
+
+    // mapped[0].groupTotal.fo
+
     return mapped;
   }
 

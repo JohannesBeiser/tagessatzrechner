@@ -101,7 +101,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
           }          
         });
         return matches;
-      }).reverse().sort(this.filterService.dateSorter)
+      }).reverse().sort((a,b)=>this.filterService.dateSorter(a.date, b.date))
      })
     )
   }

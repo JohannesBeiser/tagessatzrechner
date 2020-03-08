@@ -92,8 +92,8 @@ export class FilterService {
   /**
    * comparator function to sort by date descending (latest first)
    */
-  public dateSorter= (a: Expense, b: Expense)=> {
-    return this.createComparatorNumber(b.date) - this.createComparatorNumber(a.date);
+  public dateSorter= (a_date: string, b_date: string)=> {
+    return this.createComparatorNumber(b_date) - this.createComparatorNumber(a_date);
   }
 
   public amountSorter = (a: Expense, b: Expense)=>{

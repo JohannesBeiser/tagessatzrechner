@@ -100,7 +100,7 @@ export class AddComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // this.focusInput.nativeElement.focus();
+    this.focusInput.nativeElement.focus();
   }
 
 
