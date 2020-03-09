@@ -77,8 +77,18 @@
         <i class="material-icons-outlined mr-8">update</i>
         <span>Update Application</span>
       </div>
+      <div class="flexbox align p-8" (click)="downloadBackup()">
+        <i class="material-icons-outlined mr-8">cloud_download</i>
+        <span>Download backup</span>
+      </div>
+      <div class="flexbox align p-8">
+        <i class="material-icons-outlined mr-8">cloud_upload</i>
+        <input type="file" (change)="onImport($event)"/>
+      </div>
+
     </div>
   </section>
+
 
   <!-- <div>Monthly</div> -->
 

@@ -24,12 +24,12 @@ export class SettingsComponent implements OnInit {
   public newGroupInputValue: string;
   public defaultGroupSelected: string;
   public defaultCategorySelected: string;
-  public recurringExpenses$ : Observable<Expense[]>;
+  public recurringExpenses$: Observable<Expense[]>;
   public collapseNotifier: Subject<void> = new Subject();
 
   ngOnInit(): void {
     this.groups$ = this.groupsService.getGroups();
-    this.recurringExpenses$= this.expenseService.getExpenses("recurringExpenses");
+    this.recurringExpenses$ = this.expenseService.getExpenses("recurringExpenses");
     //TODO : Dirty workaround 
     setTimeout(() => {
       this.defaultGroupSelected = this.groupsService.defaultGroup;
@@ -53,6 +53,40 @@ export class SettingsComponent implements OnInit {
     window.location.reload();
   }
 
+  public downloadBackup() {
+    this.expenseService.getExpenses("expenses").subscribe(expenses => {
+      console.log("expenses retrieved nhow forming json")
+      let data = { expenses: expenses }
+      this.downloadObjectAsJson(data,"expense_backup")
+      // debugger;
+    })
+  }
+
+  onImport(event) {
+    var file = event.srcElement.files[0];
+    if (file) {
+        var reader = new FileReader();
+        reader.readAsText(file, "UTF-8");
+        reader.onload = (evt) =>{
+            console.log(JSON.parse(evt.target.result as string));
+        }
+        reader.onerror = (evt)=> {
+            console.log('error reading file');
+        }
+    }
+  }
+
+  private downloadObjectAsJson(exportObj, exportName){
+    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
+    var downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href",     dataStr);
+    downloadAnchorNode.setAttribute("download", exportName + ".json");
+    document.body.appendChild(downloadAnchorNode); // required for firefox
+    downloadAnchorNode.click();
+    console.log("should download now")
+    downloadAnchorNode.remove();
+  }
+
   /**
    * call group/category service and update currently selected in subnject and localstorage
    */
@@ -68,16 +102,16 @@ export class SettingsComponent implements OnInit {
   }
 
   addGroup() {
-    if(this.newGroupInputValue){
+    if (this.newGroupInputValue) {
       this.groupsService.addGroup(this.newGroupInputValue);
       this.newGroupInputValue = "";
     }
   }
 
-  openBottomSheet(e:MouseEvent, group: any): void {
-    document.body.style.backgroundColor="#4f5053";
+  openBottomSheet(e: MouseEvent, group: any): void {
+    document.body.style.backgroundColor = "#4f5053";
     e.stopPropagation();
-    this.bottomSheet.open(SettingsBottomSheetComponent,{data: group});
+    this.bottomSheet.open(SettingsBottomSheetComponent, { data: group });
   }
 
 }

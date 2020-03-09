@@ -103,7 +103,10 @@ export class ExpenseService {
     }
   }
 
-
+  /**
+   * Gets all of the expenses from the IndexedDB
+   * @param type either "expenses" or "recurring"
+   */
   public getExpenses(type:string): Observable<Expense[]> {
     this.connection$.subscribe(()=>this.refreshExpenses(type));
     if(type=="expenses"){
