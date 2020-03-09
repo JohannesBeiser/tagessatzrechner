@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Observable, Subject, combineLatest } from 'rxjs';
 import { GroupsService, GroupItem } from 'src/app/services/groups/groups.service';
 import { CategoryService } from 'src/app/services/category/category.service';
@@ -6,6 +6,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { SettingsBottomSheetComponent } from './settings-bottom-sheet/settings-bottom-sheet.component';
 import { Expense, ExpenseService } from 'src/app/services/expenses/expense.service';
 import { take } from 'rxjs/operators';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-settings',
@@ -14,12 +15,15 @@ import { take } from 'rxjs/operators';
 })
 export class SettingsComponent implements OnInit {
 
+  @ViewChild("addGroupsInput") public addGroupsInputElement: ElementRef;
+
   constructor(
     private groupsService: GroupsService,
     private categoryService: CategoryService,
     private bottomSheet: MatBottomSheet,
-    private expenseService: ExpenseService
-  ) { }
+    private expenseService: ExpenseService,
+    private datePipe: DatePipe
+    ) { }
 
   public groups$: Observable<GroupItem[]>;
   public newGroupInputValue: string;
@@ -61,9 +65,9 @@ export class SettingsComponent implements OnInit {
     combineLatest(this.expenseService.getExpenses("expenses"), this.expenseService.getExpenses("recurringExpenses"), this.groupsService.getGroups())
     .pipe(take(1))
     .subscribe(([expenses, recurringExpenses, groups]) => {
-      console.log("expenses retrieved nhow forming json")
-      let data = { expenses, recurringExpenses, groups }
-      this.downloadObjectAsJson(data,"expense_backup")
+      let data = { expenses, recurringExpenses, groups };
+      let fileName= `Expense_backup_${this.datePipe.transform(new Date(),'MMM y').split(' ').join('_')}`
+      this.downloadObjectAsJson(data,fileName)
     })
   }
 
@@ -110,6 +114,8 @@ export class SettingsComponent implements OnInit {
       json.groups.forEach(group=>{
         this.groupsService.addGroup(group.groupName);
       });
+
+      alert("Data loaded successfully")
     }
 
   }
@@ -150,7 +156,9 @@ export class SettingsComponent implements OnInit {
   }
 
   addGroup() {
-    if (this.newGroupInputValue) {
+    if(!this.newGroupInputValue){
+      this.addGroupsInputElement.nativeElement.focus();
+    }else{
       this.groupsService.addGroup(this.newGroupInputValue);
       this.newGroupInputValue = "";
     }

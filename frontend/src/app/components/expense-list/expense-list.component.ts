@@ -5,7 +5,8 @@ import { SliderService } from 'src/app/services/slider/slider.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ExpenseBottomSheetComponent } from './expense-bottom-sheet/expense-bottom-sheet.component';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { Observable } from 'rxjs';
+import { Observable, merge } from 'rxjs';
+import { FilterService } from 'src/app/services/filter/filter.service';
 
 @Component({
   selector: 'app-expense-list',
@@ -33,21 +34,18 @@ export class ExpenseListComponent implements OnInit {
   constructor(
     public expenseService: ExpenseService,
     public categoryService: CategoryService,
+    public filterService: FilterService,
     public sliderService: SliderService,
     private bottomSheet: MatBottomSheet
   ) { }
 
   @Input() public expenses: Expense[];
   @Input() public collapseNotifier: Observable<void>;
-  public detailViewShownForIndex: number;
 
   ngOnInit(): void {
-    this.expenseService.expenseDeletedNotifier.subscribe(()=>{
-      this.helper = {}
+    merge(this.expenseService.expenseDeletedNotifier,this.collapseNotifier).subscribe(()=>{
+      this.helper= {}
     });
-    this.collapseNotifier.subscribe(()=>{
-      this.helper = {}
-    })
   }
 
   public helper = {}
@@ -69,19 +67,10 @@ export class ExpenseListComponent implements OnInit {
     e.stopPropagation();
   }
 
-  // public toggleDetailView(index: number) {
-  //   if (this.detailViewShownForIndex != null && this.detailViewShownForIndex == index) {
-  //     this.detailViewShownForIndex = null;
-  //   } else {
-  //     this.detailViewShownForIndex = index;
-  //   }
-  // }
-
   openBottomSheet(e:MouseEvent, expense: any): void {
     e.stopPropagation();
     document.body.style.backgroundColor="#4f5053";
     this.bottomSheet.open(ExpenseBottomSheetComponent,{data: expense});
-    // ExpenseBottomSheetComponent.
   }
 
 }
