@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, combineLatest } from 'rxjs';
 import { GroupsService, GroupItem } from 'src/app/services/groups/groups.service';
 import { CategoryService } from 'src/app/services/category/category.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { SettingsBottomSheetComponent } from './settings-bottom-sheet/settings-bottom-sheet.component';
 import { Expense, ExpenseService } from 'src/app/services/expenses/expense.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-settings',
@@ -53,26 +54,71 @@ export class SettingsComponent implements OnInit {
     window.location.reload();
   }
 
+  /**
+   * Downloads all of the data (expenses, recurringExpenses, groups) as a snapshot in a .json file
+   */
   public downloadBackup() {
-    this.expenseService.getExpenses("expenses").subscribe(expenses => {
+    combineLatest(this.expenseService.getExpenses("expenses"), this.expenseService.getExpenses("recurringExpenses"), this.groupsService.getGroups())
+    .pipe(take(1))
+    .subscribe(([expenses, recurringExpenses, groups]) => {
       console.log("expenses retrieved nhow forming json")
-      let data = { expenses: expenses }
+      let data = { expenses, recurringExpenses, groups }
       this.downloadObjectAsJson(data,"expense_backup")
-      // debugger;
     })
   }
 
+  /**
+   * gets called when a file has been chosen in the file-input
+   * @param event FileUploadEvent
+   */
   onImport(event) {
     var file = event.srcElement.files[0];
     if (file) {
         var reader = new FileReader();
         reader.readAsText(file, "UTF-8");
-        reader.onload = (evt) =>{
-            console.log(JSON.parse(evt.target.result as string));
+        reader.onload = (e) =>{
+          this.loadDataIntoApp(JSON.parse(e.target.result as string))
         }
-        reader.onerror = (evt)=> {
-            console.log('error reading file');
+        reader.onerror = (e)=> {
+          console.log('error reading file');
         }
+    }
+  }
+
+  /**
+   * loads all of the backup into the IndexedDB
+   * @param json data containing expenses, recurringExpenses, groups
+   */
+  loadDataIntoApp(json: {expenses: Expense[], recurringExpenses: Expense[], groups: GroupItem[]}){
+    // add normal expenses
+
+    if(confirm("Please confirm you want to load this backup into your app")){
+      json.expenses.forEach(expense=>{
+        delete expense.key;
+        this.expenseService.addExpense(expense, "expenses")
+      });
+  
+      // add recurring expenses
+      json.recurringExpenses.forEach(expense=>{
+        delete expense.key;
+        this.expenseService.addExpense(expense, "recurringExpenses")
+      });
+  
+      // add groups
+      json.groups.forEach(group=>{
+        this.groupsService.addGroup(group.groupName);
+      });
+    }
+
+  }
+
+  public deleteData(){
+    if(confirm("This will delete all expenses and data associated on this device")){
+      if(confirm("Are you REALLY sure?")){
+        this.expenseService.clearData("expenses");
+        this.expenseService.clearData("recurringExpenses")
+        this.groupsService.clearData();
+      }
     }
   }
 

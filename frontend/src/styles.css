@@ -45,6 +45,12 @@ app-root {
 .bold {
   font-weight: bold;
 }
+.smaller-font {
+  font-size: 0.8em;
+}
+.bigger-font {
+  font-size: 1.2em;
+}
 .regular-font {
   font-family: "Roboto-Regular";
 }

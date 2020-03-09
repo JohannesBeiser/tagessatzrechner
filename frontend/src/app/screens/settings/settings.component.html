@@ -67,6 +67,31 @@
   <section class="general-settings-section">
     <div class="section-container">
       <div class="groups-header">
+        <span>Data management</span>
+      </div>
+      <div class="flexbox p-8" >
+        <i class="material-icons-outlined mr-8 bigger-font">info</i>
+        <p class="smaller-font">This app operates fully locally on your device without any cloud backup. Uninstalling the app will delete all of your data. You can download your data as a file and load it back into the app any time after re-installing the app as long as you own that file.</p>
+      </div>
+      <div class="flexbox align p-8" (click)="downloadBackup()">
+        <i class="material-icons-outlined mr-8">cloud_download</i>
+        <span>Download backup</span>
+      </div>
+      <div class="flexbox align p-8">
+        <i class="material-icons-outlined mr-8">cloud_upload</i>
+        <input type="file" (change)="onImport($event)"/>
+      </div>
+      <div class="flexbox align p-8" (click)="deleteData()">
+        <i class="material-icons-outlined mr-8">delete</i>
+        <span>Delete all data</span>
+      </div>
+      
+    </div>
+  </section>
+  
+  <section class="general-settings-section">
+    <div class="section-container">
+      <div class="groups-header">
         <span>General</span>
       </div>
       <div class="flexbox align p-8" (click)="reloadApp()">
@@ -77,19 +102,9 @@
         <i class="material-icons-outlined mr-8">update</i>
         <span>Update Application</span>
       </div>
-      <div class="flexbox align p-8" (click)="downloadBackup()">
-        <i class="material-icons-outlined mr-8">cloud_download</i>
-        <span>Download backup</span>
-      </div>
-      <div class="flexbox align p-8">
-        <i class="material-icons-outlined mr-8">cloud_upload</i>
-        <input type="file" (change)="onImport($event)"/>
-      </div>
-
     </div>
   </section>
-
-
+  
   <!-- <div>Monthly</div> -->
-
+  
 </div>

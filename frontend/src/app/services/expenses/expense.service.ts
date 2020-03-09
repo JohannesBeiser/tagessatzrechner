@@ -135,6 +135,12 @@ export class ExpenseService {
     }
   }
 
+  clearData(type:string){
+    let transaction = this.db.transaction(type, "readwrite");
+    var objectStore = transaction.objectStore(type);
+    objectStore.clear();
+  }
+
   /**
    * Makes the Observable emit all of the new values from the DB
    */

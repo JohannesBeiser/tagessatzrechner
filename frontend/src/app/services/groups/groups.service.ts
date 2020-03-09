@@ -57,6 +57,12 @@ export class GroupsService {
     return this.groups$.asObservable();
   }
 
+  clearData(){
+    let transaction = this.db.transaction("groups", "readwrite");
+    let objectStore = transaction.objectStore("groups");
+    objectStore.clear();
+  }
+
 
   public deleteGroup(key: number, groupName: string) {
     let transaction = this.db.transaction("groups", "readwrite");
