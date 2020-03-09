@@ -79,7 +79,10 @@
       </div>
       <div class="flexbox align p-8">
         <i class="material-icons-outlined mr-8">cloud_upload</i>
-        <input type="file" (change)="onImport($event)"/>
+        <label class="backup-upload-imput">
+          <span>Load backup</span>
+          <input type="file" id="backupUploader" (change)="onImport($event)"/>
+        </label>
       </div>
       <div class="flexbox align p-8" (click)="deleteData()">
         <i class="material-icons-outlined mr-8">delete</i>

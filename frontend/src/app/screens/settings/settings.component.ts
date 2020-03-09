@@ -95,13 +95,15 @@ export class SettingsComponent implements OnInit {
     if(confirm("Please confirm you want to load this backup into your app")){
       json.expenses.forEach(expense=>{
         delete expense.key;
-        this.expenseService.addExpense(expense, "expenses")
+        // if(!expense.recurring){
+          this.expenseService.addExpense(expense, "expenses")
+        // }
       });
   
       // add recurring expenses
       json.recurringExpenses.forEach(expense=>{
         delete expense.key;
-        this.expenseService.addExpense(expense, "recurringExpenses")
+        this.expenseService.addExpense(expense, "recurringExpenses", true)
       });
   
       // add groups

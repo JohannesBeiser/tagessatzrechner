@@ -74,13 +74,15 @@ export class ExpenseService {
    * @param expense 
    * @param type either 'expenses' or 'recurringExpenses'
    */
-  public addExpense(expense: Expense, type: string) {
+  public addExpense(expense: Expense, type: string, fromBackup?: boolean) {
     let tx = this.db.transaction([type], 'readwrite');
     let store = tx.objectStore(type);
     store.add(expense);
     tx.oncomplete = () => {
       if(type=="recurringExpenses"){
-        this.addInitialRecurrentEntries(expense)
+        if(!fromBackup){
+          this.addInitialRecurrentEntries(expense)
+        }
         this.refreshExpenses(type);
       }else{
         this.refreshExpenses(type);

@@ -12,6 +12,9 @@
   display: flex;
   flex-direction: column;
 }
+.settings-component-container section .section-container .backup-upload-imput input {
+  display: none;
+}
 .settings-component-container section .section-container .groups-header {
   font-weight: bold;
   margin-bottom: 8px;
