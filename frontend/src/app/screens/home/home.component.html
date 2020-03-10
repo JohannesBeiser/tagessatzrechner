@@ -37,14 +37,14 @@
     </div>
   </div>
 
-  <app-expense-list [expenses]="expenses" [collapseNotifier]="collapseNotifier" *ngIf="totalAmount >0 && !chartOpened">
+  <app-expense-list [expenses]="expenses" [collapseNotifier]="collapseNotifier" *ngIf="expenses?.length >0 && !chartOpened">
   </app-expense-list>
 
   <div class="filter-container" [class.active]="filterService.filterShown$ | async">
     <app-filter></app-filter>
   </div>
 
-  <div class="no-expenses-placeholder" *ngIf="totalAmount === 0">
+  <div class="no-expenses-placeholder" *ngIf="expenses?.length === 0">
     <div>No expenses yet</div>
   </div>
 

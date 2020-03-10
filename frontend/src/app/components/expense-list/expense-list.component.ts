@@ -41,11 +41,19 @@ export class ExpenseListComponent implements OnInit {
 
   @Input() public expenses: Expense[];
   @Input() public collapseNotifier: Observable<void>;
+    public refresh: boolean = true;
 
   ngOnInit(): void {
     merge(this.expenseService.expenseDeletedNotifier,this.collapseNotifier).subscribe(()=>{
       this.helper= {}
     });
+    //TODO : Quick fix for testing --> Debug! 
+    this.filterService.sortMethod$.subscribe(()=>{
+      this.refresh = false;
+      setTimeout(() => {
+        this.refresh=true;
+      }, 0);
+    })
   }
 
   public helper = {}

@@ -22,7 +22,7 @@ export class SettingsBottomSheetComponent implements OnInit {
   }
 
   deleteGroup() {
-    if (confirm(`Are you sure you want to delete ${this.group.groupName}? This won't delete the expenses you added! You simply can't assign any more expenses to it.`)) {
+    if (confirm(`Are you sure you want to finish "${this.group.groupName}"? This won't delete the expenses you added! You simply can't assign any more expenses to it.`)) {
       this.groupsService.deleteGroup(this.group.key, this.group.groupName);
       this.dismiss();
     }
