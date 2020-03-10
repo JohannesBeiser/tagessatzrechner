@@ -22,7 +22,7 @@
       &.highcharts-xaxis-labels{
         text{
           &:last-child{
-            display: none;
+            // display: none;
           }
         }
       }
@@ -44,8 +44,38 @@
     position: relative;
 
     .chart-section{
+      .highcharts-chart{
+        margin-top: 16px;
+      }
+
+      .chart-list{
+        margin-top: 16px;
+
+        .month-item{
+          padding: 8px;
+          border-bottom: 1px solid #ccc;
+          display: flex;
+          align-items: center;
+
+          &:nth-child(odd){
+            background: #e4e4e4;
+          }
+          &:last-child{
+            border: none;
+          }
+
+          .month{
+            font-weight: bold;
+            margin-right: 8px;
+          }
+          .amount{
+            flex: 1;
+            text-align: right;
+          }
+        }
+      }
       .chart-info-box{
-        padding: 16px;
+        padding: 16px 0;
         font-size: 0.8em;
       }
     }

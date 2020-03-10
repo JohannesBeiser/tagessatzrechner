@@ -46,6 +46,8 @@ export class HomeComponent implements OnInit {
   public totalAmount: number = 0;
   public totalCategories: CategoryTotal[];
   public collapseNotifier: Subject<void> = new Subject();
+  public chartData;
+  public initialFocus: string;
 
   ngOnInit(): void {
     this.expenses$ = this.expenseService.getExpenses("expenses");
@@ -98,7 +100,12 @@ export class HomeComponent implements OnInit {
     })
 
     this.calculateChartData().subscribe((options)=>{
-      this.drawChart(options);
+      if(options){
+        this.chartData = [...options.data].reverse().splice(1).filter((element)=>{
+          return element.y >0
+        });
+        this.drawChart(options);
+      }
     });
   }
 
@@ -135,7 +142,7 @@ export class HomeComponent implements OnInit {
 
   private calculateChartData(): Observable<ChartData>{
     return combineLatest(this.expenses$, this.currentFilter$).pipe(
-      map(([expenses,filter])=>{        
+      map(([expenses,filter])=>{   
         if(expenses.length>0){
           //TODO
         }
@@ -166,41 +173,43 @@ export class HomeComponent implements OnInit {
         }).filter(el=>{
           return new Date(el.month) <= new Date()
         });
+        if(monthTotalsSorted.length >0){
 
-        //create new array with all of the months from begin to finish adn initialize for chart with null
-        let filledTotals: {month: string, amount: number}[]= [];
-        let firstMonth = new Date(monthTotalsSorted[0].month);
-        let lastMonth = new Date();
-        for (let month = firstMonth; month <=lastMonth; month=addMonths(month,1)) {
-          let monthString = this.filterService.getMonthDateString(month)
-          filledTotals.push({month: monthString, amount: 0});      
-        }
-
-        // Now fill in the amounts calculated in monthTotalsSorted
-        monthTotalsSorted.forEach(monthTotal=> {
-          let indexForFilled = filledTotals.findIndex(el=>{
-            return el.month === monthTotal.month
+          let filledTotals: {month: string, amount: number}[]= [];
+          let firstMonth = new Date(monthTotalsSorted[0].month);
+          let lastMonth = new Date();
+          for (let month = firstMonth; month <=lastMonth; month=addMonths(month,1)) {
+            let monthString = this.filterService.getMonthDateString(month)
+            filledTotals.push({month: monthString, amount: 0});      
+          }
+  
+          // Now fill in the amounts calculated in monthTotalsSorted
+          monthTotalsSorted.forEach(monthTotal=> {
+            let indexForFilled = filledTotals.findIndex(el=>{
+              return el.month === monthTotal.month
+            });
+            filledTotals[indexForFilled].amount = monthTotal.amount;
           });
-          filledTotals[indexForFilled].amount = monthTotal.amount;
-        });
-
+  
+          
+          // reduce to array of just amounts for chart
+          let chartData = filledTotals.map(el=>{
+            return{x:Date.UTC(new Date(el.month).getFullYear(), (new Date(el.month).getMonth()), 1), y: el.amount}          
+          });
         
-        // reduce to array of just amounts for chart
-        let chartData = filledTotals.map(el=>{
-          return{x:Date.UTC(new Date(el.month).getFullYear(), (new Date(el.month).getMonth()), 1), y: el.amount}          
-        });
-      
-        chartData.push({x: Date.UTC(new Date().getFullYear(), new Date().getMonth()+1,0),y:null})      
-        
-        let currentIndex = filledTotals.findIndex(el=>{
-          return el.month === this.filterService.getCurrentMonthFilter()
-        });
-
-        return {
-          data: chartData,
-          chartStartDate:  Date.UTC(new Date(filledTotals[0].month).getFullYear(), new Date(filledTotals[0].month).getMonth(), 0),
-          currentMonthIndex: currentIndex
+          chartData.push({x: Date.UTC(new Date().getFullYear(), new Date().getMonth()+1,0),y:null})      
+          
+          let currentIndex = filledTotals.findIndex(el=>{
+            return el.month === this.filterService.getCurrentMonthFilter()
+          });
+  
+          return {
+            data: chartData,
+            chartStartDate:  Date.UTC(new Date(filledTotals[0].month).getFullYear(), new Date(filledTotals[0].month).getMonth(), 0),
+            currentMonthIndex: currentIndex
+          }
         }
+        //create new array with all of the months from begin to finish adn initialize for chart with null
       })
     )
   }
@@ -275,8 +284,6 @@ export class HomeComponent implements OnInit {
       }]
     };
   }
-
-  public initialFocus: string;
 
   private objectToArray(obj: any): CategoryTotal[] {
     return Object.keys(obj).map(key => {

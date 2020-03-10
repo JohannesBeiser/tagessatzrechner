@@ -10,9 +10,6 @@
 ::ng-deep highcharts-chart .highcharts-credits {
   display: none;
 }
-::ng-deep highcharts-chart .highcharts-axis-labels.highcharts-xaxis-labels text:last-child {
-  display: none;
-}
 .home-component-container {
   padding: 16px 12px;
   padding-top: 46px;
@@ -25,8 +22,34 @@
 .home-component-container .general {
   position: relative;
 }
+.home-component-container .general .chart-section .highcharts-chart {
+  margin-top: 16px;
+}
+.home-component-container .general .chart-section .chart-list {
+  margin-top: 16px;
+}
+.home-component-container .general .chart-section .chart-list .month-item {
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+}
+.home-component-container .general .chart-section .chart-list .month-item:nth-child(odd) {
+  background: #e4e4e4;
+}
+.home-component-container .general .chart-section .chart-list .month-item:last-child {
+  border: none;
+}
+.home-component-container .general .chart-section .chart-list .month-item .month {
+  font-weight: bold;
+  margin-right: 8px;
+}
+.home-component-container .general .chart-section .chart-list .month-item .amount {
+  flex: 1;
+  text-align: right;
+}
 .home-component-container .general .chart-section .chart-info-box {
-  padding: 16px;
+  padding: 16px 0;
   font-size: 0.8em;
 }
 .home-component-container .general .total-amount {
