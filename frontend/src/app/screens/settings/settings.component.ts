@@ -33,6 +33,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 export class SettingsComponent implements OnInit {
 
   @ViewChild("addGroupsInput") public addGroupsInputElement: ElementRef;
+  @ViewChild("qrCode") QrCode: ElementRef;
 
   constructor(
     private groupsService: GroupsService,
@@ -40,7 +41,7 @@ export class SettingsComponent implements OnInit {
     private bottomSheet: MatBottomSheet,
     private expenseService: ExpenseService,
     private datePipe: DatePipe
-    ) { }
+  ) { }
 
   public groups$: Observable<GroupItem[]>;
   public newGroupInputValue: string;
@@ -48,7 +49,7 @@ export class SettingsComponent implements OnInit {
   public defaultCategorySelected: string;
   public recurringExpenses$: Observable<Expense[]>;
   public collapseNotifier: Subject<void> = new Subject();
-  public shareShown: boolean= false;
+  public shareShown: boolean = false;
 
   ngOnInit(): void {
     this.groups$ = this.groupsService.getGroups();
@@ -72,10 +73,6 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-  toggleShare(){
-    this.shareShown = !this.shareShown;
-  }
-
   reloadApp() {
     window.location.reload();
   }
@@ -85,12 +82,12 @@ export class SettingsComponent implements OnInit {
    */
   public downloadBackup() {
     combineLatest(this.expenseService.getExpenses("expenses"), this.expenseService.getExpenses("recurringExpenses"), this.groupsService.getGroups())
-    .pipe(take(1))
-    .subscribe(([expenses, recurringExpenses, groups]) => {
-      let data = { expenses, recurringExpenses, groups };
-      let fileName= `Expense_backup_${this.datePipe.transform(new Date(),'MMM y').split(' ').join('_')}`
-      this.downloadObjectAsJson(data,fileName)
-    })
+      .pipe(take(1))
+      .subscribe(([expenses, recurringExpenses, groups]) => {
+        let data = { expenses, recurringExpenses, groups };
+        let fileName = `Expense_backup_${this.datePipe.transform(new Date(), 'MMM y').split(' ').join('_')}`
+        this.downloadObjectAsJson(data, fileName)
+      })
   }
 
   /**
@@ -100,14 +97,14 @@ export class SettingsComponent implements OnInit {
   onImport(event) {
     var file = event.srcElement.files[0];
     if (file) {
-        var reader = new FileReader();
-        reader.readAsText(file, "UTF-8");
-        reader.onload = (e) =>{
-          this.loadDataIntoApp(JSON.parse(e.target.result as string))
-        }
-        reader.onerror = (e)=> {
-          console.log('error reading file');
-        }
+      var reader = new FileReader();
+      reader.readAsText(file, "UTF-8");
+      reader.onload = (e) => {
+        this.loadDataIntoApp(JSON.parse(e.target.result as string))
+      }
+      reader.onerror = (e) => {
+        console.log('error reading file');
+      }
     }
   }
 
@@ -115,25 +112,25 @@ export class SettingsComponent implements OnInit {
    * loads all of the backup into the IndexedDB
    * @param json data containing expenses, recurringExpenses, groups
    */
-  loadDataIntoApp(json: {expenses: Expense[], recurringExpenses: Expense[], groups: GroupItem[]}){
+  loadDataIntoApp(json: { expenses: Expense[], recurringExpenses: Expense[], groups: GroupItem[] }) {
     // add normal expenses
 
-    if(confirm("Please confirm you want to load this backup into your app")){
-      json.expenses.forEach(expense=>{
+    if (confirm("Please confirm you want to load this backup into your app")) {
+      json.expenses.forEach(expense => {
         delete expense.key;
         // if(!expense.recurring){
-          this.expenseService.addExpense(expense, "expenses")
+        this.expenseService.addExpense(expense, "expenses")
         // }
       });
-  
+
       // add recurring expenses
-      json.recurringExpenses.forEach(expense=>{
+      json.recurringExpenses.forEach(expense => {
         delete expense.key;
         this.expenseService.addExpense(expense, "recurringExpenses", true)
       });
-  
+
       // add groups
-      json.groups.forEach(group=>{
+      json.groups.forEach(group => {
         this.groupsService.addGroup(group.groupName);
       });
 
@@ -142,9 +139,9 @@ export class SettingsComponent implements OnInit {
 
   }
 
-  public deleteData(){
-    if(confirm("This will delete all expenses and data associated on this device")){
-      if(confirm("Are you REALLY sure?")){
+  public deleteData() {
+    if (confirm("This will delete all expenses and data associated on this device")) {
+      if (confirm("Are you REALLY sure?")) {
         this.expenseService.clearData("expenses");
         this.expenseService.clearData("recurringExpenses")
         this.groupsService.clearData();
@@ -152,10 +149,10 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-  private downloadObjectAsJson(exportObj, exportName){
+  private downloadObjectAsJson(exportObj, exportName) {
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
     var downloadAnchorNode = document.createElement('a');
-    downloadAnchorNode.setAttribute("href",     dataStr);
+    downloadAnchorNode.setAttribute("href", dataStr);
     downloadAnchorNode.setAttribute("download", exportName + ".json");
     document.body.appendChild(downloadAnchorNode); // required for firefox
     downloadAnchorNode.click();
@@ -178,9 +175,9 @@ export class SettingsComponent implements OnInit {
   }
 
   addGroup() {
-    if(!this.newGroupInputValue){
+    if (!this.newGroupInputValue) {
       this.addGroupsInputElement.nativeElement.focus();
-    }else{
+    } else {
       this.groupsService.addGroup(this.newGroupInputValue);
       this.newGroupInputValue = "";
     }
@@ -190,6 +187,33 @@ export class SettingsComponent implements OnInit {
     document.body.style.backgroundColor = "#4f5053";
     e.stopPropagation();
     this.bottomSheet.open(SettingsBottomSheetComponent, { data: group });
+  }
+
+  /**
+   * Since the height animation overflows the end of scroll by making the container higher then before, one can't see he animation since its happening off-screen
+   * Therefore during the animation each frame we scroll to the bottom of the currently animated box
+   */
+  public animating = false;
+
+  toggleShare() {
+    const _scrollWithAnimation = () => {
+      if (this.animating) {
+        requestAnimationFrame(() => {
+          console.log("animated")
+          this.QrCode.nativeElement.scrollIntoView({ block: "end" });
+          _scrollWithAnimation();
+        })
+      }
+    }
+
+    if (!this.shareShown) {
+      this.animating = true
+      _scrollWithAnimation()
+      setTimeout(() => {
+        this.animating = false;
+      }, 250);
+    }
+    this.shareShown = !this.shareShown;
   }
 
 }
