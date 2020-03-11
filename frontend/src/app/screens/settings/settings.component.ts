@@ -7,9 +7,26 @@ import { SettingsBottomSheetComponent } from './settings-bottom-sheet/settings-b
 import { Expense, ExpenseService } from 'src/app/services/expenses/expense.service';
 import { take } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-settings',
+  animations: [
+    trigger('slideInOut', [
+      state('out', style({
+        opacity: '0',
+        overflow: 'hidden',
+        height: '0px',
+      })),
+      state('in', style({
+        opacity: '1',
+        overflow: 'hidden',
+        height: '*',
+      })),
+      transition('out => in', animate('150ms ease-in-out')),
+      transition('in => out', animate('150ms ease-in-out'))
+    ])
+  ],
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.less']
 })
@@ -31,6 +48,7 @@ export class SettingsComponent implements OnInit {
   public defaultCategorySelected: string;
   public recurringExpenses$: Observable<Expense[]>;
   public collapseNotifier: Subject<void> = new Subject();
+  public shareShown: boolean= false;
 
   ngOnInit(): void {
     this.groups$ = this.groupsService.getGroups();
@@ -52,6 +70,10 @@ export class SettingsComponent implements OnInit {
       })
       this.reloadApp();
     }
+  }
+
+  toggleShare(){
+    this.shareShown = !this.shareShown;
   }
 
   reloadApp() {

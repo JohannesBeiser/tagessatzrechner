@@ -105,6 +105,13 @@
         <i class="material-icons-outlined mr-8">update</i>
         <span>Update Application</span>
       </div>
+      <div class="share-section flexbox column">
+        <div class="flexbox align p-8" (click)="toggleShare()">
+          <i class="material-icons-outlined mr-8">share</i>
+          <span>Share</span>
+        </div>
+        <img [@slideInOut]="shareShown ? 'in': 'out'" src="../../../assets/images/qr_code.svg" alt="QR-Code" class="qr-code">
+      </div>
     </div>
   </section>
   

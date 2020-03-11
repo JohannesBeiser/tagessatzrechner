@@ -19,6 +19,11 @@
   font-weight: bold;
   margin-bottom: 8px;
 }
+.settings-component-container section .section-container .qr-code {
+  box-sizing: border-box;
+  width: calc(100% - 32px);
+  align-self: center;
+}
 .settings-component-container section.group-settings-section .groups-header {
   display: flex;
   align-items: center;

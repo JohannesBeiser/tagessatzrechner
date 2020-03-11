@@ -63,6 +63,12 @@ app-root {
 .flexbox {
   display: flex;
 }
+.column {
+  flex-direction: column;
+}
+.w-50 {
+  width: 50%;
+}
 .justify {
   justify-content: center;
 }
