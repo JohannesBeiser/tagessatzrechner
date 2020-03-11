@@ -4,6 +4,12 @@
 .groups-component-container {
   padding: 16px;
 }
+.groups-component-container .group-list .totals-info-section {
+  padding: 0 16px;
+}
+.groups-component-container .group-list .totals-info-section .totals-info-item {
+  padding: 8px 0;
+}
 .groups-component-container .group-list:not(:first-child) .group-list-header {
   margin: 32px 0 16px;
 }

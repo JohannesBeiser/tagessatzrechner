@@ -28,4 +28,25 @@
       </div>
     </div>
   </div>
+  <div class="group-list" *ngIf="allTotals">
+    <div>
+      <div class="group-list-header">Totals</div>
+      <div class="totals-info-section">
+        <div class="totals-info-item">
+          <span class="regular-font mr-8">Total amount:</span>
+          <span>{{allTotals.amount | prettyCurrency}}</span>
+        </div>
+        <div class="totals-info-item">
+          <span class="regular-font mr-8">Duration:</span>
+          <span>{{allTotals.duration | durationWeekDay}}</span>
+        </div>
+        <div class="totals-info-item">
+          <span class="regular-font mr-8">Average cost/day:</span>
+          <span>{{(allTotals.amount / allTotals.duration) | number:'1.0-0':'de-DE'}}€ per day</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </div>

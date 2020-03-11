@@ -14,6 +14,7 @@ export interface GroupTotal extends GroupItem {
   firstExpenseDate?: string;
   lastExpenseDate?: string;
   deleted?: boolean;
+  duration?: number;
 }
 
 @Injectable({
