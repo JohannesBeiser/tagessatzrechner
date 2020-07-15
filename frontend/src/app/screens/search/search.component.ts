@@ -20,6 +20,8 @@ export class SearchComponent implements OnInit, AfterViewInit {
   public results$: Observable<Expense[]>
   public collapseNotifier: Subject<void> = new Subject();
   public matchesFound: number;
+  public matchesTotalAmount: number;
+
 
   constructor(
     public sliderService: SliderService,
@@ -37,6 +39,9 @@ export class SearchComponent implements OnInit, AfterViewInit {
     );
     this.results$.subscribe(expenses=>{
       this.matchesFound = expenses.length;
+      this.matchesTotalAmount = expenses.reduce((acc,cur)=>{
+        return acc + cur.amount
+      },0)
     })
 
     //Collapse first in case of opened when new results come in

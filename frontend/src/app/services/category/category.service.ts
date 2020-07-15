@@ -27,7 +27,7 @@ export class CategoryService {
     transport: "rgb(192, 87, 70)",
     multimedia: "rgb(150, 123, 92)",//"rgb(189, 155, 117)",
     leisure: "rgb(202, 179, 99)",
-    gear: "rgb(200, 0, 0)",
+    gear: "rgb(65, 97, 68)",
     health_insurance: "#afafaf",
     general: "rgb(82, 82, 82)",
   }

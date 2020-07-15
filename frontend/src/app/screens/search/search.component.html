@@ -12,7 +12,7 @@
     </app-header>
 
     <div class="search-results"  (click)="collapseNotifier.next()">
-        <div *ngIf="(results$ | async)?.length >0">{{matchesFound}} results</div>
+        <div *ngIf="(results$ | async)?.length >0">{{matchesFound}} results ( {{matchesTotalAmount | prettyCurrency}})</div>
         <div *ngIf="(results$ | async)?.length ==0 " class="no-expenses">No expenses found!</div>
         <app-expense-list [expenses]="results$ | async"  [collapseNotifier]="collapseNotifier" ></app-expense-list>
     </div>
