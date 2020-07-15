@@ -88,6 +88,7 @@ export class HomeComponent implements OnInit {
           transport: 0,
           multimedia: 0,
           leisure: 0,
+          gear: 0,
           health_insurance: 0,
           general: 0
         });

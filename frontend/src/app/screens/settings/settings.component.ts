@@ -17,11 +17,13 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
         opacity: '0',
         overflow: 'hidden',
         height: '0px',
+        width: '0px',
       })),
       state('in', style({
         opacity: '1',
         overflow: 'hidden',
         height: '*',
+        width: '*'
       })),
       transition('out => in', animate('150ms ease-in-out')),
       transition('in => out', animate('150ms ease-in-out'))
