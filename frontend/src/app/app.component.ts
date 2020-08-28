@@ -80,6 +80,11 @@ export class AppComponent implements OnInit{
     })
   }
 
+  resetTemporary(){
+    this.filterService.resetFilter();
+    // this.router.navigate(['/groups']);
+  }
+
   prepareRoute(outlet: RouterOutlet) {
     return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
   }

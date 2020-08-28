@@ -6,6 +6,7 @@ import { ExpenseService, Expense } from 'src/app/services/expenses/expense.servi
 import { FilterService } from 'src/app/services/filter/filter.service';
 import { transition, trigger, state, style, animate } from '@angular/animations';
 import { differenceInDays } from 'date-fns';
+import { Router } from '@angular/router';
 
 type GroupTotalCollections = {
   type: string;
@@ -41,7 +42,8 @@ export class GroupsComponent implements OnInit, OnDestroy {
     public sliderService: SliderService,
     public groupsService: GroupsService,
     public expenseService: ExpenseService,
-    private filterService: FilterService
+    private filterService: FilterService,
+    private router: Router
   ) { }
 
   public groups$: Observable<GroupItem[]>
@@ -74,6 +76,19 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  /**
+   * Shows a expense list just like on home for this group. Opens a slighly modified "home" site with a "x" button to reset the site to its former state
+   */
+  showDetailList(groupName: string){
+    this.filterService.setFilter(
+      {
+        temporaryFilter: true,
+        groups: [groupName]
+      }
+    )
+    this.router.navigate(['/home']);
   }
 
   initializeHelper() {
