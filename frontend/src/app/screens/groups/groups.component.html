@@ -24,8 +24,8 @@
             <span class="regular-font mr-8">Cost:</span>
             <span>{{group.amount/ group.duration | number:'1.0-0':'de-DE'}}€ per day</span>
           </div>
-          <div class="show-list-wrapper">
-            <span class="regular-font mr-8" (click)="showDetailList(group.groupName)">Show List</span>
+          <div class="show-list-wrapper" (click)="showDetailList(group.groupName)">
+            <span class="regular-font mr-8" >Show List</span>
             <!-- <i class="material-icons-outlined" (click)="showDetailList(group.groupName)">read_more</i> -->
           </div>
         </div>
