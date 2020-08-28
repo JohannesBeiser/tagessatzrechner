@@ -82,7 +82,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   calculateGroupsTotals(expenses: Expense[], groups_origin: GroupItem[]): GroupTotalCollections[] {
     let sorterHelper = {};
     let groups = [...groups_origin].reverse();
-    groups.push({ key: null, groupName: "General" });
+    // groups.push({ key: null, groupName: "General" });
     groups.forEach((el) => {
       sorterHelper[el.groupName] = {};
       sorterHelper[el.groupName].amount = 0;
@@ -128,7 +128,6 @@ export class GroupsComponent implements OnInit, OnDestroy {
       return result
     });
 
-    let generalGroup;
     let mapped = result.reduce((acc, cur) => {
       if (!cur.deleted) {
         if (cur.groupName !== "General") {
@@ -136,7 +135,6 @@ export class GroupsComponent implements OnInit, OnDestroy {
           next[0].groupTotal.push(cur)
           return next
         } else {
-          generalGroup = cur;
           return acc
         }
       } else {
@@ -150,7 +148,6 @@ export class GroupsComponent implements OnInit, OnDestroy {
       groupCollection.groupTotal.sort((a, b) => this.filterService.dateSorter(a.firstExpenseDate, b.firstExpenseDate))
     });
 
-    mapped[0].groupTotal.push(generalGroup);
 
     // mapped[0].groupTotal.fo
 
