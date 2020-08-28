@@ -93,6 +93,9 @@ export class FilterService {
    * comparator function to sort by date descending (latest first)
    */
   public dateSorter= (a_date: string, b_date: string)=> {
+    if(!a_date || !b_date){
+      return;
+    }
     return this.createComparatorNumber(b_date) - this.createComparatorNumber(a_date);
   }
 

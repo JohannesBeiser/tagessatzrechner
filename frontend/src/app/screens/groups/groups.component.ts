@@ -59,6 +59,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
       this.groupsTotals = this.calculateGroupsTotals(expenses, groups);
       this.allTotals = this.groupsTotals.map((el) => {
         return el.groupTotal.reduce((acc, cur) => {
+          if(!cur.duration){
+            return acc;
+          }
           return { duration: acc.duration + cur.duration, amount: acc.amount + cur.amount }
         }, { duration: 0, amount: 0 })
       }).reduce((acc, cur) => {
@@ -92,15 +95,17 @@ export class GroupsComponent implements OnInit, OnDestroy {
     expenses.forEach(expense => {
       let expenseGroup = expense.group;
       //Skip expenses who have a group that has been deleted
-      if (sorterHelper[expenseGroup]) {
-        sorterHelper[expenseGroup].amount += expense.amount;
-        sorterHelper[expenseGroup].expenses.push(expense)
-      } else {
-        groups.push({ key: null, groupName: expenseGroup });
-        sorterHelper[expenseGroup] = {}
-        sorterHelper[expenseGroup].amount = expense.amount;
-        sorterHelper[expenseGroup].expenses = [expense];
-        sorterHelper[expenseGroup].deleted = true;
+      if (expenseGroup !=="General") {
+        if (sorterHelper[expenseGroup]) {
+          sorterHelper[expenseGroup].amount += expense.amount;
+          sorterHelper[expenseGroup].expenses.push(expense)
+        } else {
+          groups.push({ key: null, groupName: expenseGroup });
+          sorterHelper[expenseGroup] = {}
+          sorterHelper[expenseGroup].amount = expense.amount;
+          sorterHelper[expenseGroup].expenses = [expense];
+          sorterHelper[expenseGroup].deleted = true;
+        }
       }
     })
 
@@ -129,19 +134,19 @@ export class GroupsComponent implements OnInit, OnDestroy {
     });
 
     let mapped = result.reduce((acc, cur) => {
-      if (!cur.deleted) {
-        if (cur.groupName !== "General") {
-          let next = acc;
-          next[0].groupTotal.push(cur)
-          return next
+        if (!cur.deleted) {
+          if (cur.groupName !== "General") {
+            let next = acc;
+            next[0].groupTotal.push(cur)
+            return next
+          } else {
+            return acc
+          }
         } else {
-          return acc
+          let next = acc;
+          next[1].groupTotal.push(cur)
+          return next
         }
-      } else {
-        let next = acc;
-        next[1].groupTotal.push(cur)
-        return next
-      }
     }, [{ type: "active", groupTotal: [] }, { type: "deleted", groupTotal: [] }]);
 
     mapped.forEach(groupCollection => {
