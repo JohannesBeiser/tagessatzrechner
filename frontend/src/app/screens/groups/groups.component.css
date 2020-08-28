@@ -43,3 +43,8 @@
 .groups-component-container .group-list .group-list-item .more-info {
   margin-top: 12px;
 }
+.groups-component-container .group-list .group-list-item .more-info .show-list-wrapper {
+  padding: 4px 8px;
+  text-align: center;
+  background: #ccc;
+}

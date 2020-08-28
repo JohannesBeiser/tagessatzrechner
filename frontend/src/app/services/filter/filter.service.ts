@@ -15,6 +15,7 @@ export interface ExpenseFilter {
   groups?: string[];
   date?: MonthYear;
   last30Active?: boolean;
+  temporaryFilter?: boolean;
 }
 
 @Injectable({
@@ -27,6 +28,8 @@ export class FilterService {
   public monthSwitched$: BehaviorSubject<MonthYear>
   public sortMethod$: BehaviorSubject<string>
 
+  //Used for saving the current filter and re using it after a temrprary filter has been applied
+  public temporaryFilterStateClipboard: Partial<ExpenseFilter>
 
   private defaultFilter: ExpenseFilter = {
     date: {
@@ -41,10 +44,24 @@ export class FilterService {
     let initialFilter: ExpenseFilter = JSON.parse(localStorage.getItem("filter")) || this.defaultFilter;
     this.filterState$ = new BehaviorSubject(initialFilter);
     this.monthSwitched$ = new BehaviorSubject(null);
-    this.sortMethod$ = new BehaviorSubject(localStorage.getItem("sortMethod")|| "date")
+    this.sortMethod$ = new BehaviorSubject(localStorage.getItem("sortMethod") || "date")
+  }
+
+  //resets a filter to its state before the temporary filter change
+  resetFilter() {
+    if (this.temporaryFilterStateClipboard) {
+      this.setFilter(this.temporaryFilterStateClipboard);
+      this.temporaryFilterStateClipboard = null;
+    }
   }
 
   setFilter(newFilter: Partial<ExpenseFilter>) {
+    //When choosing a cloes group a temporary filter is applied since the group isnt selectable in filter panel by default when closed. This lets you still see the groups details listing.
+    //This temporary filter has to be reset to its former state by pressing "x" on the UI since the expense-list should just eb a temporary overlay.
+    // pressing "x" will bring the expense list to its default state as it was before
+    if (newFilter.temporaryFilter && !this.temporaryFilterStateClipboard) {
+      this.temporaryFilterStateClipboard = this.filterState$.value;
+    }
     this.filterState$.next(newFilter);
     this.monthSwitched$.next(null);
     localStorage.setItem("filter", JSON.stringify(newFilter))
@@ -92,18 +109,21 @@ export class FilterService {
   /**
    * comparator function to sort by date descending (latest first)
    */
-  public dateSorter= (a_date: string, b_date: string)=> {
+  public dateSorter = (a_date: string, b_date: string) => {
+    if (!a_date || !b_date) {
+      return;
+    }
     return this.createComparatorNumber(b_date) - this.createComparatorNumber(a_date);
   }
 
-  public amountSorter = (a: Expense, b: Expense)=>{
-    return b.amount-a.amount;
+  public amountSorter = (a: Expense, b: Expense) => {
+    return b.amount - a.amount;
   }
 
 
-   /**
-   * Transforms "2020-02-15" to 20200215, for quick sorting after date
-   */
+  /**
+  * Transforms "2020-02-15" to 20200215, for quick sorting after date
+  */
   private createComparatorNumber(date: string) {
     return parseInt(date.split('-').join(''))
   }
@@ -112,8 +132,8 @@ export class FilterService {
     return '' + new Date().getFullYear() + '-' + this.parseMonth(new Date().getMonth() + 1)
   }
 
-  public getMonthDateString(date: Date){
-    return `${date.getFullYear()}-${this.parseMonth(date.getMonth()+1)}`
+  public getMonthDateString(date: Date) {
+    return `${date.getFullYear()}-${this.parseMonth(date.getMonth() + 1)}`
   }
 
   public parseMonth(month: number): string {

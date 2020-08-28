@@ -6,6 +6,7 @@ import { ExpenseService, Expense } from 'src/app/services/expenses/expense.servi
 import { FilterService } from 'src/app/services/filter/filter.service';
 import { transition, trigger, state, style, animate } from '@angular/animations';
 import { differenceInDays } from 'date-fns';
+import { Router } from '@angular/router';
 
 type GroupTotalCollections = {
   type: string;
@@ -41,7 +42,8 @@ export class GroupsComponent implements OnInit, OnDestroy {
     public sliderService: SliderService,
     public groupsService: GroupsService,
     public expenseService: ExpenseService,
-    private filterService: FilterService
+    private filterService: FilterService,
+    private router: Router
   ) { }
 
   public groups$: Observable<GroupItem[]>
@@ -59,6 +61,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
       this.groupsTotals = this.calculateGroupsTotals(expenses, groups);
       this.allTotals = this.groupsTotals.map((el) => {
         return el.groupTotal.reduce((acc, cur) => {
+          if(!cur.duration){
+            return acc;
+          }
           return { duration: acc.duration + cur.duration, amount: acc.amount + cur.amount }
         }, { duration: 0, amount: 0 })
       }).reduce((acc, cur) => {
@@ -73,6 +78,19 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  /**
+   * Shows a expense list just like on home for this group. Opens a slighly modified "home" site with a "x" button to reset the site to its former state
+   */
+  showDetailList(groupName: string){
+    this.filterService.setFilter(
+      {
+        temporaryFilter: true,
+        groups: [groupName]
+      }
+    )
+    this.router.navigate(['/home']);
+  }
+
   initializeHelper() {
     for (let i = 0; i < this.groupsTotals.length; i++) {
       this.helper[i] = {};
@@ -82,7 +100,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   calculateGroupsTotals(expenses: Expense[], groups_origin: GroupItem[]): GroupTotalCollections[] {
     let sorterHelper = {};
     let groups = [...groups_origin].reverse();
-    groups.push({ key: null, groupName: "General" });
+    // groups.push({ key: null, groupName: "General" });
     groups.forEach((el) => {
       sorterHelper[el.groupName] = {};
       sorterHelper[el.groupName].amount = 0;
@@ -92,15 +110,17 @@ export class GroupsComponent implements OnInit, OnDestroy {
     expenses.forEach(expense => {
       let expenseGroup = expense.group;
       //Skip expenses who have a group that has been deleted
-      if (sorterHelper[expenseGroup]) {
-        sorterHelper[expenseGroup].amount += expense.amount;
-        sorterHelper[expenseGroup].expenses.push(expense)
-      } else {
-        groups.push({ key: null, groupName: expenseGroup });
-        sorterHelper[expenseGroup] = {}
-        sorterHelper[expenseGroup].amount = expense.amount;
-        sorterHelper[expenseGroup].expenses = [expense];
-        sorterHelper[expenseGroup].deleted = true;
+      if (expenseGroup !=="General") {
+        if (sorterHelper[expenseGroup]) {
+          sorterHelper[expenseGroup].amount += expense.amount;
+          sorterHelper[expenseGroup].expenses.push(expense)
+        } else {
+          groups.push({ key: null, groupName: expenseGroup });
+          sorterHelper[expenseGroup] = {}
+          sorterHelper[expenseGroup].amount = expense.amount;
+          sorterHelper[expenseGroup].expenses = [expense];
+          sorterHelper[expenseGroup].deleted = true;
+        }
       }
     })
 
@@ -128,29 +148,26 @@ export class GroupsComponent implements OnInit, OnDestroy {
       return result
     });
 
-    let generalGroup;
     let mapped = result.reduce((acc, cur) => {
-      if (!cur.deleted) {
-        if (cur.groupName !== "General") {
-          let next = acc;
-          next[0].groupTotal.push(cur)
-          return next
+        if (!cur.deleted) {
+          if (cur.groupName !== "General") {
+            let next = acc;
+            next[0].groupTotal.push(cur)
+            return next
+          } else {
+            return acc
+          }
         } else {
-          generalGroup = cur;
-          return acc
+          let next = acc;
+          next[1].groupTotal.push(cur)
+          return next
         }
-      } else {
-        let next = acc;
-        next[1].groupTotal.push(cur)
-        return next
-      }
     }, [{ type: "active", groupTotal: [] }, { type: "deleted", groupTotal: [] }]);
 
     mapped.forEach(groupCollection => {
       groupCollection.groupTotal.sort((a, b) => this.filterService.dateSorter(a.firstExpenseDate, b.firstExpenseDate))
     });
 
-    mapped[0].groupTotal.push(generalGroup);
 
     // mapped[0].groupTotal.fo
 

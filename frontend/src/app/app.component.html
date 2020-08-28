@@ -7,6 +7,7 @@
 <app-header *ngIf="appHeadline === 'Overview'">
   <div class="home-general-header flexbox justify align h-100">
     <i class="material-icons-outlined back-icon" (click)="filterService.hide()" *ngIf="filterService.filterShown$ | async">arrow_back_ios</i>
+    <i class="material-icons-outlined back-icon" (click)="resetTemporary()" *ngIf="(filterService.filterState$ | async).temporaryFilter && !(filterService.filterShown$ | async)">close</i>
     <span *ngIf="!(filterService.filterShown$ | async)">{{appHeadline}}</span>
     <span *ngIf="filterService.filterShown$ | async">Filter</span>
     <i class="material-icons-outlined filter-icon" (click)="filterService.show()" *ngIf="!(filterService.filterShown$ | async)">filter_list</i>
