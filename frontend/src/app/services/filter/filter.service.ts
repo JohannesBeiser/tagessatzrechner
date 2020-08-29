@@ -77,6 +77,7 @@ export class FilterService {
   }
 
   show() {
+    this.resetFilter();
     this.filterShown$.next(true);
   }
 

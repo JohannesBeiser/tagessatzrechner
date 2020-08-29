@@ -35,19 +35,18 @@ export class AppComponent implements OnInit{
       let url = event.url.substring(1);
       switch (url) {
         case "home":
-          this.appHeadline = "Overview"
+          this.appHeadline = "Overview";
           break;
-          
         case "groups":
-          this.appHeadline = "Groups"
+          this.appHeadline = "Groups";
+          this.resetTemporary();
           break;
-
         case "settings":
-          this.appHeadline = "Settings"
+          this.appHeadline = "Settings";
+          this.resetTemporary();
           break;
-
         default:
-          this.appHeadline = "Overview"
+          this.appHeadline = "Overview";
           break;
       }
     });
