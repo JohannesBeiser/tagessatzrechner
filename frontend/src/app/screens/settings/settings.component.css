@@ -1,3 +1,10 @@
+.settings-component-container .general-settings-section .no-recurring-expenses {
+  padding: 8px 0;
+  opacity: 0.7;
+}
+.settings-component-container .general-settings-section .empty-list {
+  padding: 0;
+}
 .settings-component-container .defaults-settings-section mat-form-field {
   padding: 0 8px;
 }

@@ -5,7 +5,8 @@
       <div class="groups-header">
         <span>Recurring expenses</span>
       </div>
-      <div class="p-8">
+      <div *ngIf="!recurringExists" class="no-recurring-expenses">No recurring expenses yet</div>
+      <div class="p-8" [class.empty-list]="!recurringExists">
         <app-recurring-expense-list [expenses]="recurringExpenses$ | async" [collapseNotifier]="collapseNotifier"></app-recurring-expense-list>
       </div>
 

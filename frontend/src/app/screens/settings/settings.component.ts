@@ -61,6 +61,7 @@ export class SettingsComponent implements OnInit {
       this.defaultGroupSelected = this.groupsService.defaultGroup;
     }, 100);
     this.defaultCategorySelected = this.categoryService.defaultCategory;
+    this.checkRecurringExists();
   }
 
   hardReloadApp() {
@@ -216,6 +217,18 @@ export class SettingsComponent implements OnInit {
       }, 250);
     }
     this.shareShown = !this.shareShown;
+  }
+
+  public recurringExists: boolean =false;
+  checkRecurringExists(){
+    this.recurringExpenses$.subscribe((rec=>{
+      if(rec.length>0){
+        this.recurringExists= true;
+      }else{
+        this.recurringExists= false;
+      }
+    }))
+    
   }
 
 }

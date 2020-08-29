@@ -1,8 +1,24 @@
 :host {
   display: flex;
+  height: 100%;
 }
 .groups-component-container {
   padding: 16px;
+}
+.groups-component-container .no-groups {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.groups-component-container .group-list {
+  overflow: auto;
+}
+.groups-component-container .group-list .isSingle {
+  padding-top: 16px;
+}
+.groups-component-container .group-list .isSingle .group-list-header {
+  display: none;
 }
 .groups-component-container .group-list .totals-info-section {
   padding: 0 16px;
@@ -11,7 +27,7 @@
   padding: 8px 0;
 }
 .groups-component-container .group-list:not(:first-child) .group-list-header {
-  margin: 32px 0 16px;
+  margin: 16px 0;
 }
 .groups-component-container .group-list .group-list-header {
   margin-bottom: 16px;

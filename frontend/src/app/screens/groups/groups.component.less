@@ -1,11 +1,28 @@
 @import "../../../variables";
 :host{
     display: flex;
+    height: 100%;
 }
 
 .groups-component-container{
     padding: 16px;
+
+    .no-groups{
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     .group-list{
+        overflow: auto;
+        
+        .isSingle{
+            padding-top: 16px;
+            .group-list-header{
+                display: none;
+            }
+        }
 
         .totals-info-section{
             padding: 0 16px;
@@ -17,7 +34,7 @@
 
         &:not(:first-child){
             .group-list-header{
-                margin: 32px 0 16px;
+                margin: 16px 0;
             }
         }
 

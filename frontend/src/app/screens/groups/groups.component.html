@@ -1,6 +1,6 @@
 <div class="groups-component-container w-100">
-  <div class="group-list" *ngFor="let totals of groupsTotals; let j = index">
-    <div *ngIf="totals.groupTotal.length>0">
+  <div class="group-list" *ngFor="let totals of groupsTotals; let j = index" >
+    <div *ngIf="totals.groupTotal.length>0" [class.isSingle]="groupsTotals[0].groupTotal.length==0">
       <div class="group-list-header">{{totals.type == 'deleted' ? 'Old groups' : 'Active groups'}}</div>
       <div *ngFor="let group of totals.groupTotal; let i = index" class="group-list-item" (click)="toggleHelpMenu(i,j)">
         <div class="group-item-general">
@@ -32,7 +32,7 @@
       </div>
     </div>
   </div>
-  <div class="group-list" *ngIf="allTotals">
+  <div class="group-list" *ngIf="allTotals && (groupsTotals[0].groupTotal.length>0 || groupsTotals[1].groupTotal.length>0) ">
     <div>
       <div class="group-list-header">Totals</div>
       <div class="totals-info-section">
@@ -49,8 +49,10 @@
           <span>{{(allTotals.amount / allTotals.duration) | number:'1.0-0':'de-DE'}}€ per day</span>
         </div>
       </div>
-
     </div>
+  </div>
+  <div class="no-groups" *ngIf="groupsTotals && (groupsTotals[0].groupTotal.length==0 && groupsTotals[1].groupTotal.length==0)">
+    No groups yet
   </div>
 
 </div>
