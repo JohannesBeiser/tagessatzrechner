@@ -311,7 +311,8 @@ export class HomeComponent implements OnInit {
       } else {
         //take all data change nothing...BUT if last30Days then 
         if (filter.last30Active) {
-          let expenseDate = new Date(expense.date);
+          //leading zeros lead to wrong time for the Date. FIXME: Dirty solution 
+          let expenseDate = new Date(new Date(expense.date).getFullYear(),new Date(expense.date).getMonth(),new Date(expense.date).getDate());
           matches = isWithinInterval(expenseDate, { start: subDays(new Date(), 30), end: new Date() })
         }
       }
