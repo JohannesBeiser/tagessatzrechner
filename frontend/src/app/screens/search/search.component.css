@@ -36,3 +36,27 @@
 .search-component-container ::ng-deep .header-component-container {
   height: 50px;
 }
+.search-component-container .major-system-container {
+  padding: 16px;
+}
+.search-component-container .major-system-container input {
+  font-size: 1.2em;
+  line-height: 1.6em;
+}
+.search-component-container .major-system-container .major-table {
+  margin-top: 32px;
+}
+.search-component-container .major-system-container .major-table div {
+  padding: 6px;
+  color: #aaa;
+}
+.search-component-container .major-system-container .major-table div span {
+  text-transform: uppercase;
+}
+.search-component-container .major-system-container .major-table div span:first-child {
+  margin-right: 16px;
+  font-weight: bold;
+}
+.search-component-container .major-system-container .major-table div span:last-child {
+  font-size: 1.2em;
+}

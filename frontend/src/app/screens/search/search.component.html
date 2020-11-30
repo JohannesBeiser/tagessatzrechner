@@ -1,19 +1,39 @@
 <div class="search-component-container w-100">
-    <app-header>
-        <div class="flexbox align p-0-8 h-100">
-            <div class="flex-1 mr-8 search-bar-input-container" >
-                <i matIcon class="material-icons-outlined search-input-icon-prefix">search</i>
-                <input (keyup)="searchTerm$.next($event.target.value)" [(ngModel)]="seachtext" class="searchbar-input w-100" id="searchbar-to-focus" type="text" matInput #searchInput> 
-                <i matIcon class="material-icons-outlined search-input-icon-suffix" (click)="clear()">close</i>
-            </div>
-            
-           <span (click)="sliderService.hide()">cancel</span>
-        </div>
-    </app-header>
+  <app-header>
+    <div class="flexbox align p-0-8 h-100">
+      <div class="flex-1 mr-8 search-bar-input-container">
+        <i matIcon class="material-icons-outlined search-input-icon-prefix">search</i>
+        <input (keyup)="searchTerm$.next($event.target.value)" [(ngModel)]="seachtext" class="searchbar-input w-100"
+          id="searchbar-to-focus" type="text" matInput #searchInput>
+        <i matIcon class="material-icons-outlined search-input-icon-suffix" (click)="clear()">close</i>
+      </div>
 
-    <div class="search-results"  (click)="collapseNotifier.next()">
-        <div *ngIf="(results$ | async)?.length >0">{{matchesFound}} results ( {{matchesTotalAmount | prettyCurrency}})</div>
-        <div *ngIf="(results$ | async)?.length ==0 " class="no-expenses">No expenses found!</div>
-        <app-expense-list [expenses]="results$ | async"  [collapseNotifier]="collapseNotifier" ></app-expense-list>
+      <span (click)="sliderService.hide()">cancel</span>
     </div>
+  </app-header>
+
+  <div class="search-results" (click)="collapseNotifier.next()" *ngIf="!majorSystemEasterEggActive">
+    <div *ngIf="(results$ | async)?.length >0">{{matchesFound}} results ( {{matchesTotalAmount | prettyCurrency}})</div>
+    <div *ngIf="(results$ | async)?.length ==0 " class="no-expenses">No expenses found!</div>
+    <app-expense-list [expenses]="results$ | async" [collapseNotifier]="collapseNotifier"></app-expense-list>
+  </div>
+
+  <div class="major-system-container" *ngIf="majorSystemEasterEggActive">
+      <div class="header">Major System Easter-Egg</div>
+    <input type="text" (keyup)="majorTerm$.next($event.target.value)" matInput>
+    {{majorResult$ | async}}
+    <div class="major-table">
+        <div><span>0</span><span>s, z</span> (House)</div>
+        <div><span>1</span><span>t, d, th</span> (Taxi)</div>
+        <div><span>2</span><span>n</span> (Honey)</div>
+        <div><span>3</span><span>m</span> (Omaha)</div>
+        <div><span>4</span><span>r</span> (Hurry)</div>
+        <div><span>5</span><span>l</span> (Holy)</div>
+        <div><span>6</span><span>j, ch, sh, sch</span> (Joy)</div>
+        <div><span>7</span><span>c, k, g, q, ck</span> (High)</div>
+        <div><span>8</span><span>v, f, ph, w</span> (Fee)</div>
+        <div><span>9</span><span>p, b</span> (Bee)</div>
+    </div>
+  
+  </div>
 </div>
