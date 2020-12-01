@@ -6,6 +6,7 @@
   width: 100%;
   background: #76757b;
   font-family: 'Roboto-Regular';
+  padding-top: env(safe-area-inset-top, 0px);
 }
 .header-component-container ::ng-deep * {
   color: #efefef;
