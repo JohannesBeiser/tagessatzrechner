@@ -13,6 +13,8 @@ html,
 body,
 app-root {
   height: 100%;
+  width: 100%;
+  overflow: hidden;
 }
 body {
   margin: 0;
@@ -22,6 +24,13 @@ app-root {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  position: relative;
+}
+.background-helper {
+  width: 100%;
+  position: absolute;
+  background: white;
+  height: env(safe-area-inset-top, 0px);
 }
 .mat-bottom-sheet-container {
   padding: 0px !important;
