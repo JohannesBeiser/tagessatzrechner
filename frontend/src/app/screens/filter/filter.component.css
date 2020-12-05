@@ -1,6 +1,7 @@
 .filter-component-container {
   height: 100%;
   overflow-y: auto;
+  padding-top: env(safe-area-inset-top, 0px);
 }
 .filter-component-container .filter-section {
   padding: 16px;
