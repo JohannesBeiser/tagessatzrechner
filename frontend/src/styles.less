@@ -13,16 +13,24 @@
     // user-select: none;
 }
 
-html, body, app-root { height: 100%; }
-body{
-    overflow: hidden;
-}
+html, body, app-root { height: 100%; width: 100%; overflow: hidden; }
+
 body { margin: 0; font-family: "Roboto-Light" }
 app-root {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    position: relative;
 }
+
+// Used to style the color of the new iPhones bottom safe area since no home-buttom is present. If this need to be understoof later, keep an eye on which parent elements are relative and overflow hidden
+// Also check paddings and margins. 
+.background-helper{
+    width: 100%;
+    position: absolute;
+    background: white;
+    height: env(safe-area-inset-top, 0px);
+  }
 
 // Global overrides
 

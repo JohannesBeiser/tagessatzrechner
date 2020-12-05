@@ -4,16 +4,6 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
-.background-helper {
-  width: 100%;
-  position: absolute;
-  overflow: auto;
-  margin-top: env(safe-area-inset-top, 0px);
-  background: white;
-  height: 64px;
-  /* margin-top: 100vh; */
-  bottom: -64px;
-}
 .back-icon {
   position: absolute;
   left: 0;
