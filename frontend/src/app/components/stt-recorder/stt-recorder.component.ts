@@ -41,11 +41,11 @@ export class SttRecorderComponent implements OnInit {
     if (this.recordingState$.value === 'recording') {
       this.stopResampling();
       this.recordingState$.next('inactive');
-      debugger;
-      let metadataResult = await this.audioService.getTextFromAudio(this.data);
-      if (metadataResult.transcription !== "") {
-        this.results.push(metadataResult);
-      }
+      let result = await this.audioService.getTextFromAudio(this.data);
+      alert(result.transcription);
+      // if (metadataResult.transcription !== "") {
+      //   this.results.push(metadataResult);
+      // }
     }
   }
 
