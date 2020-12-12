@@ -1,3 +1,6 @@
+:host {
+  user-select: none !important;
+}
 .footer-component-container {
   min-height: 40px;
   width: 100%;
@@ -7,6 +10,10 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+  user-select: none !important;
+}
+.footer-component-container * {
+  user-select: none !important;
 }
 .footer-component-container .stt-overlay {
   height: 40px;

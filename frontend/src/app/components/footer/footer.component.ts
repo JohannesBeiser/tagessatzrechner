@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SliderService } from 'src/app/services/slider/slider.service';
 import { BehaviorSubject } from 'rxjs';
+import { AudioService } from 'src/app/services/audio/audio.service';
 
 @Component({
   selector: 'app-footer',
@@ -10,7 +11,8 @@ import { BehaviorSubject } from 'rxjs';
 export class FooterComponent implements OnInit {
 
   constructor(
-    public sliderService: SliderService
+    public sliderService: SliderService,
+    private audioService: AudioService
   ) { }
 
   public recordingState$: BehaviorSubject<string> = new BehaviorSubject('inactive');
@@ -21,10 +23,5 @@ export class FooterComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public handleAddClicked(e:MouseEvent){
-    e.stopPropagation();
-    e.preventDefault();
-    this.sliderService.show('add');
-  }
 
 }

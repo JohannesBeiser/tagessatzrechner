@@ -2,6 +2,7 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { BehaviorSubject, Subject, Observable } from 'rxjs';
 import { AudioService } from 'src/app/services/audio/audio.service';
 import { takeUntil, bufferTime, map } from 'rxjs/operators';
+import { SliderService } from 'src/app/services/slider/slider.service';
 
 
 @Component({
@@ -13,19 +14,47 @@ export class SttRecorderComponent implements OnInit {
 
   constructor(
     private audioService: AudioService,
-    private zone: NgZone,
+    private sliderService: SliderService
   ) { }
 
   public recordingState$: BehaviorSubject<string> = new BehaviorSubject('inactive');
   private data: Int16Array;
   public results: any[] = [];
 
-
   ngOnInit(): void {
   }
 
-  async startRecording(e: MouseEvent) {
+  navigateToAddSlider() {
+    this.sliderService.show('add');
+  }
+
+  pointerDown: boolean = false;
+
+  onPointerDown(e: PointerEvent) {
     e.preventDefault();
+    e.stopPropagation();
+    this.pointerDown = true;
+    setTimeout(()=>{
+      if(this.pointerDown){
+        this.startRecording()
+      }else{
+        this.navigateToAddSlider();
+      }
+    },250)
+  }
+
+  onPointerUp(e: PointerEvent) {
+    this.pointerDown = false;
+    e.preventDefault();
+    e.stopPropagation();
+
+    if(this.recordingState$.value == 'recording'){
+      this.stopRecording();
+    }
+  }
+
+  async startRecording() {
+    this.audioService.recentStt$.next(true);
     if (this.recordingState$.value === 'inactive') {
       let audioStream = await this.audioService.getUserMediaStream();
 
@@ -38,7 +67,7 @@ export class SttRecorderComponent implements OnInit {
     }
   }
 
-  async stopRecording(e: MouseEvent) {
+  async stopRecording() {
     if (this.recordingState$.value === 'recording') {
       this.stopResampling();
       this.recordingState$.next('inactive');
@@ -82,50 +111,50 @@ export class SttRecorderComponent implements OnInit {
   }
   mergeInt16Arrays(arrays: Int16Array[]): Int16Array {
     return arrays.reduce((previous, current) => {
-        return new Int16Array([...previous, ...current]);
+      return new Int16Array([...previous, ...current]);
     }, new Int16Array())
-}
+  }
 
   inputBuffer = [];
 
   processAudioFrame(inputFrame, inputSampleRate: number) {
     for (let i = 0; i < inputFrame.length; i++) {
-        this.inputBuffer.push((inputFrame[i]) * 32767);
+      this.inputBuffer.push((inputFrame[i]) * 32767);
     }
 
     const goalSampleRate = 16000;
     const frameLength = 512;
 
     while ((this.inputBuffer.length * goalSampleRate / inputSampleRate) > frameLength) {
-        let outputFrame = new Int16Array(frameLength);
-        let sum = 0;
-        let num = 0;
-        let outputIndex = 0;
-        let inputIndex = 0;
+      let outputFrame = new Int16Array(frameLength);
+      let sum = 0;
+      let num = 0;
+      let outputIndex = 0;
+      let inputIndex = 0;
 
-        while (outputIndex < frameLength) {
-            sum = 0;
-            num = 0;
-            while (inputIndex < Math.min(this.inputBuffer.length, (outputIndex + 1) * inputSampleRate / goalSampleRate)) {
-                sum += this.inputBuffer[inputIndex];
-                num++;
-                inputIndex++;
-            }
-            outputFrame[outputIndex] = sum / num;
-            outputIndex++;
+      while (outputIndex < frameLength) {
+        sum = 0;
+        num = 0;
+        while (inputIndex < Math.min(this.inputBuffer.length, (outputIndex + 1) * inputSampleRate / goalSampleRate)) {
+          sum += this.inputBuffer[inputIndex];
+          num++;
+          inputIndex++;
         }
+        outputFrame[outputIndex] = sum / num;
+        outputIndex++;
+      }
 
-        this.resampledFrames$.next(outputFrame);
-        this.inputBuffer = this.inputBuffer.slice(inputIndex);
+      this.resampledFrames$.next(outputFrame);
+      this.inputBuffer = this.inputBuffer.slice(inputIndex);
     }
-}
-stopResampling() {
-  //emit last ping since intervall won't ping last time at say 800ms 
-  this.streamEndNotifier$.next(); 
-  this.audioContext.close();
-  this.gumStream.getAudioTracks()[0].stop();
-  this.inputBuffer = [];
-}
+  }
+  stopResampling() {
+    //emit last ping since intervall won't ping last time at say 800ms 
+    this.streamEndNotifier$.next();
+    this.audioContext.close();
+    this.gumStream.getAudioTracks()[0].stop();
+    this.inputBuffer = [];
+  }
 
 
 
