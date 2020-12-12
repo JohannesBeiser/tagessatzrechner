@@ -24,7 +24,8 @@ export class SttRecorderComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  async startRecording() {
+  async startRecording(e: MouseEvent) {
+    e.preventDefault();
     if (this.recordingState$.value === 'inactive') {
       let audioStream = await this.audioService.getUserMediaStream();
 
@@ -37,7 +38,7 @@ export class SttRecorderComponent implements OnInit {
     }
   }
 
-  async stopRecording() {
+  async stopRecording(e: MouseEvent) {
     if (this.recordingState$.value === 'recording') {
       this.stopResampling();
       this.recordingState$.next('inactive');

@@ -8,6 +8,9 @@
   justify-content: center;
   text-align: center;
 }
+.footer-component-container .stt-overlay {
+  height: 40px;
+}
 .footer-component-container i {
   flex: 1;
 }
@@ -29,9 +32,6 @@
 }
 .footer-component-container span .groups {
   background-image: url('../../../assets/images/folder_outlined.png');
-}
-.footer-component-container span .add {
-  background-image: url('../../../assets/images/add.png');
 }
 .footer-component-container span .search {
   background-image: url('../../../assets/images/search.png');

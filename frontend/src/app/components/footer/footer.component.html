@@ -8,9 +8,8 @@
     <div class="image-icon groups" ></div>
   </span>
 
-  <span class="flex-1 flexbox justify h-100 align" (click)="sliderService.show('add')">
-    <div class="image-icon add" ></div>
-  </span>
+  <app-stt-recorder class="flex-1 flexbox justify h-100 align" (click)="handleAddClicked($event)"></app-stt-recorder>
+
 
   <span  class="flex-1 flexbox justify h-100 align" (click)="sliderService.show('search')">
     <div class="image-icon search"></div>
@@ -20,7 +19,7 @@
   <span routerLink="/settings" routerLinkActive="active" class="flex-1 flexbox justify h-100 align">
     <div class="image-icon settings"></div>
   </span>
-  <app-stt-recorder></app-stt-recorder>
+  <!-- <app-stt-recorder></app-stt-recorder> -->
 
   <!-- <i routerLink="/settings" routerLinkActive="active" class="material-icons-outlined">settings</i> -->
 </div>
