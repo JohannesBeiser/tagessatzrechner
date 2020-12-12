@@ -11,6 +11,7 @@ export interface CategoryColor{
   general: string;
 }
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -35,6 +36,19 @@ export class CategoryService {
   public setDefaultCategory(category:string){
     localStorage.setItem("defaultCategory", category)
     this.defaultCategory = category;
+  }
+
+  public getCategories(): string[]{
+    return [
+      "food",
+      "transport",
+      "accommodation",
+      "multimedia",
+      "leisure",
+      "gear",
+      "health_insurance",
+      "general"
+    ]
   }
 
 

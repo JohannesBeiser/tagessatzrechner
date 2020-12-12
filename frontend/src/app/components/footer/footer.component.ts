@@ -12,12 +12,7 @@ export class FooterComponent implements OnInit {
 
   constructor(
     public sliderService: SliderService,
-    private audioService: AudioService
   ) { }
-
-  public recordingState$: BehaviorSubject<string> = new BehaviorSubject('inactive');
-  private data: Int16Array;
-  public results: any[] = [];
 
 
   ngOnInit(): void {
