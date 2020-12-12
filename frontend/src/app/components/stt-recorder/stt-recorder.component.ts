@@ -89,7 +89,7 @@ export class SttRecorderComponent implements OnInit {
   
 createExpenseFromSttResult(sttResult: ExpenseSTTResult){
   let expense: Expense = {...{
-    date: this.expenseService.getFormatDate(new Date()),
+    date: `${new Date().getFullYear()}-${new Date().getMonth() +1}-${new Date().getDate()}`,
     group: this.groupsService.defaultGroup,
   }, ...sttResult};
 

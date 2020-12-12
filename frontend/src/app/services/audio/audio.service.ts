@@ -84,7 +84,7 @@ private getAmountFromText(text: string): number{
   let numbers = text.replace(',', '.').replace(/[a-zA-Z€]/g, '').replace('euro', '').replace('eur', '').split(' ');
   let result="";
   for (const number of numbers) {
-    if(parseInt(number)){ // 
+    if(parseInt(number)){
       if(result){
         result += (parseInt(number)/100).toString().slice(1)
         return parseFloat(result);
