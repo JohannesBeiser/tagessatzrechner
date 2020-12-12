@@ -30,7 +30,7 @@ res.send('audio endpoint');
 const client = new speech.SpeechClient();
 
 
-app.post('/audio', (req, res) => {
+app.post('/api/audio', (req, res) => {
   let chunks = [];
   req.on('data', (chunk) => {
       chunks.push(chunk)

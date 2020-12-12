@@ -1,0 +1,102 @@
+{
+  "configVersion": 1,
+  "timestamp": 1607785954343,
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "urls": [
+        "/assets/images/qr_code.png",
+        "/favicon.ico",
+        "/index.html",
+        "/main-es2015.e72513db5f62ab684932.js",
+        "/main-es5.e72513db5f62ab684932.js",
+        "/manifest.webmanifest",
+        "/polyfills-es2015.442fa3cc45520cc0d518.js",
+        "/polyfills-es5.abdd41dcd206a6689f72.js",
+        "/runtime-es2015.0811dcefd377500b5b1a.js",
+        "/runtime-es5.0811dcefd377500b5b1a.js",
+        "/styles.4c65ff1e92d236a65ff3.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "urls": [
+        "/Roboto-Light.88823c2015ffd5fa89d5.ttf",
+        "/Roboto-Regular.11eabca2251325cfc558.ttf",
+        "/SFMono-Light.761bd0787c7aed01f9dd.otf",
+        "/SFMono-Regular.41b67f4d3dcf092055b3.otf",
+        "/add.10682ec0f07ab2d3b9ad.png",
+        "/assets/animate.css",
+        "/folder.067f701110952beeced8.png",
+        "/folder_outlined.2d92837727a0da231e92.png",
+        "/home_filled.d2c6c7ce194eb385a994.png",
+        "/home_outlined.ea2bcf657c6f0fc3d081.png",
+        "/normal.0509ab09c1b0d2200a41.woff2",
+        "/outlined.073e8094d0c8a90de1c1.woff2",
+        "/round.ac58bbf517792d818142.woff2",
+        "/search.120aedd1f072146b54ec.png",
+        "/settings_filled.1596acd5c99ad48de21c.png",
+        "/settings_outlined.34a7c004c6d454979b93.png",
+        "/sharp.5f8cffd0b48fda3fc6a1.woff2",
+        "/two_tone.8cedbfd8f99c9e44c4f4.woff2"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/Roboto-Light.88823c2015ffd5fa89d5.ttf": "92cc3b6f9440193c12fd02ed690e434d685a9cc8",
+    "/Roboto-Regular.11eabca2251325cfc558.ttf": "096c9245b6a192d1403a82848e104a65f578a8ec",
+    "/SFMono-Light.761bd0787c7aed01f9dd.otf": "232f6c9ac378edbd52b20ba438832f56bc223827",
+    "/SFMono-Regular.41b67f4d3dcf092055b3.otf": "4fe5bd007afdbb1b6864c5627e7825703cf1d784",
+    "/add.10682ec0f07ab2d3b9ad.png": "9bb4bc220822109ced1a375b9043e9bbc265c93d",
+    "/assets/animate.css": "4514e6bec37168af20ba3c0c2f3a05aea53bfff4",
+    "/assets/images/qr_code.png": "3d7e7c068e6f77533f23ca32a7d4ed863195b1be",
+    "/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
+    "/folder.067f701110952beeced8.png": "c0254f9842b4ad9717292ccedabf52fa446dcb36",
+    "/folder_outlined.2d92837727a0da231e92.png": "c2de139bd1574833c934c4a1243dfde828935f7c",
+    "/home_filled.d2c6c7ce194eb385a994.png": "257159a9b867a97d4dd6b216efd0cab3aaf32bd0",
+    "/home_outlined.ea2bcf657c6f0fc3d081.png": "956a0cbacaa7d79bd648c0b9c00d8e1e6f1a0970",
+    "/index.html": "3778344307c9b5c40883e9aaa6f0fbffe69701a5",
+    "/main-es2015.e72513db5f62ab684932.js": "2a9a6c9e064a557a0bcbec3a2892d8ab54290a6e",
+    "/main-es5.e72513db5f62ab684932.js": "fb62a70d27e87b4724c8eeb5e3d5f35a58de37ee",
+    "/manifest.webmanifest": "9f49aa78bf006119e4d6a42f703090edb81234cc",
+    "/normal.0509ab09c1b0d2200a41.woff2": "308ee3580a4a34bd230025d460762d53b5344efc",
+    "/outlined.073e8094d0c8a90de1c1.woff2": "ab8cba2f280fecf267fb1b702f2775ad9ed975af",
+    "/polyfills-es2015.442fa3cc45520cc0d518.js": "8779ed8d9bf0580e1b50b352a9b8fd520be24433",
+    "/polyfills-es5.abdd41dcd206a6689f72.js": "8d03638471d7374e81cf33adfdea439f84ac3873",
+    "/round.ac58bbf517792d818142.woff2": "ba4bea927d21aaf9024158b2270183b3fe666ac4",
+    "/runtime-es2015.0811dcefd377500b5b1a.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
+    "/runtime-es5.0811dcefd377500b5b1a.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
+    "/search.120aedd1f072146b54ec.png": "c477deddb61c6b339fc6b4afc9ca60c6559830f7",
+    "/settings_filled.1596acd5c99ad48de21c.png": "5c4ff5e444b182134f9e20ea3da58c0133d4db66",
+    "/settings_outlined.34a7c004c6d454979b93.png": "407cfc854f9189e456c48345775f794d6fb74d2b",
+    "/sharp.5f8cffd0b48fda3fc6a1.woff2": "4e39455f33fc331118928a03a321838b5e21fb7d",
+    "/styles.4c65ff1e92d236a65ff3.css": "09b8f44005b13962f16e85c592234121bccc83c8",
+    "/two_tone.8cedbfd8f99c9e44c4f4.woff2": "b1ea9695afe9c8525cb72d856e1f57ff167c8a60"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ]
+}
