@@ -36,9 +36,10 @@ import { RecurringExpenseListComponent } from './components/recurring-expense-li
 import { RecurringExpenseBottomSheetComponent } from './components/recurring-expense-list/expense-bottom-sheet/recurring-expense-bottom-sheet.component';
 import { DurationWeekDayPipe } from './pipes/duration-week-day.pipe';
 import { HighchartsChartModule } from 'highcharts-angular';
-
+import {HttpClientModule} from "@angular/common/http";
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
+import { SttRecorderComponent } from './components/stt-recorder/stt-recorder.component';
 registerLocaleData(localeDe, 'de');
 
 @NgModule({
@@ -61,7 +62,8 @@ registerLocaleData(localeDe, 'de');
     SettingsBottomSheetComponent,
     RecurringExpenseListComponent,
     RecurringExpenseBottomSheetComponent,
-    DurationWeekDayPipe
+    DurationWeekDayPipe,
+    SttRecorderComponent
   ],
   imports: [
     BrowserModule,
@@ -80,6 +82,7 @@ registerLocaleData(localeDe, 'de');
     MatRadioModule,
     FormsModule,
     HighchartsChartModule,
+    HttpClientModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
