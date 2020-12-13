@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
-export type ExpenseSTTResult ={
+export type ExpenseSTTResult = {
   name: string;
   amount: number;
   category: string;
+  description?: string;
 }
 
 
@@ -17,9 +18,9 @@ export class AudioService {
   constructor(private http: HttpClient) { }
 
   public recentStt$ = new BehaviorSubject(false);
-  
+
   public getTextFromAudio(binaryData: Int16Array): Promise<any> {
-    setTimeout(()=>this.recentStt$.next(false),500)
+    setTimeout(() => this.recentStt$.next(false), 500)
     return this.http.post<any>("/api/audio", binaryData.buffer, { responseType: 'json' }).toPromise()
   }
 
@@ -33,12 +34,12 @@ export class AudioService {
     return navigator.mediaDevices.getUserMedia(constraints);
   }
 
-
+private numbersAsText = ["eins", "zwei", "drei", "view", "fünf", "sechs", "sieben", "acht", "neun", "zehn"];
   /**
    * Reads information from the text and returns an object containing information like expense-amount, -name and category
    * @param text result from stt API call
    */
-  public parseSttResult(text: string):ExpenseSTTResult {
+  public parseSttResult(text: string): ExpenseSTTResult {
     text = text.toLowerCase();
     let remainingText: string = "";
     let result: ExpenseSTTResult = {
@@ -59,44 +60,66 @@ export class AudioService {
     };
 
     // find which category is contained in text and remove it from the string
-    outerLoop: for(let singleCategory in categorySynonyms){
-      innerLoop: for(let synonym of categorySynonyms[singleCategory]){
-          if(text.includes(synonym)){
-            result.category = singleCategory;
-            remainingText = text.replace(synonym, "").toLowerCase();
-            break outerLoop;
-          }
+    outerLoop: for (let singleCategory in categorySynonyms) {
+      innerLoop: for (let synonym of categorySynonyms[singleCategory]) {
+        if (text.includes(synonym)) {
+          result.category = singleCategory;
+          remainingText = text.replace(synonym, "").toLowerCase();
+          break outerLoop;
+        }
       }
-    } 
-    
-    result.amount = this.getAmountFromText(remainingText);
+    }
 
-    
-    result.name=  remainingText.replace(/[0-9€,.]/g, '').replace('euro', '').replace('eur','').replace('cent', '').trim();
+    const descriptionSynonyms = ["description", "beschreibung"]
+    descriptionSynonyms.forEach(synonym=>{
+      if(remainingText.includes(synonym)){
+        let index = remainingText.indexOf(synonym);
+        result.description = remainingText.substr(index+synonym.length).trim();
+        remainingText = remainingText.substr(0, index);
+      }
+    });
+
+    result.amount = this.getAmountFromText(remainingText);
+    remainingText = this.removeWordsFromString(remainingText, ["euro", "eur", "cent", ...this.numbersAsText]).replace(/[0-9€,.]/g, '').trim();
+
+    result.name = remainingText.trim();
     return result;
   }
 
 
- //Find amount from text and remove it
-    // accounts for "20 € 35" and "20,35 €" and "20,45€" etc
-private getAmountFromText(text: string): number{
-  // gives you an array of either spaces or numbers (spaces needed since speech api sometimes understands "20 € 50")
-  let numbers = text.replace(',', '.').replace(/[a-zA-Z€]/g, '').replace('euro', '').replace('eur', '').split(' ');
-  let result="";
-  for (const number of numbers) {
-    if(parseInt(number)){
-      if(result){
-        result += (parseInt(number)/100).toString().slice(1)
-        return parseFloat(result);
-      }else{
-        if(text.includes("cent")){
-          return (parseInt(number)/100);
+  private removeWordsFromString(text: string, words: string[]): string{
+    words.forEach(word=>text = text.replace(word, ''));
+    return text;
+  }
+
+  //Find amount from text and remove it
+  // accounts for "20 € 35" and "20,35 €" and "20,45€" etc
+  private getAmountFromText(text: string): number {
+    // gives you an array of either spaces or numbers (spaces needed since speech api sometimes understands "20 € 50")
+    let numbers = this.numbersAsTextToNumberString(text).replace(',', '.').replace(/[a-zA-Z€]/g, '').replace('euro', '').replace('eur', '').split(' ');
+    let result = "";
+    for (const number of numbers) {
+      if (parseInt(number)) {
+        if (result) {
+          result += (parseInt(number) / 100).toString().slice(1)
+          return parseFloat(result);
+        } else {
+          if (text.includes("cent")) {
+            return (parseInt(number) / 100);
+          }
+          result = number.toString();
         }
-        result = number.toString();
       }
     }
+    return parseFloat(result);
   }
-  return parseFloat(result);
-}
+
+  //parses "five dollar" to "5 dollar"
+  private numbersAsTextToNumberString(text: string): string {
+    this.numbersAsText.forEach((number, index) => {
+      text = text.replace(number, '' + (index + 1));
+    })
+    return text
+  }
 
 }
