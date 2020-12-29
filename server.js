@@ -26,6 +26,11 @@ app.get('/audio', (req, res) => {
 res.send('audio endpoint');
 });
 
+app.get('/api/sheets', (req,res)=>{
+console.log("route reached")
+
+})
+
 
 const client = new speech.SpeechClient();
 

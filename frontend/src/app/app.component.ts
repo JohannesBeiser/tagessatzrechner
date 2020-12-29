@@ -6,6 +6,7 @@ import { filter } from 'rxjs/operators';
 import { FilterService } from './services/filter/filter.service';
 import { combineLatest } from 'rxjs';
 import { DatePipe } from '@angular/common';
+import { GoogleSheetsService } from './services/google-sheets/google-sheets.service';
 
 @Component({
   selector: 'app-root',
@@ -28,6 +29,7 @@ export class AppComponent implements OnInit{
     public sliderService: SliderService,
     public filterService: FilterService,
     private datePipe: DatePipe,
+    private sheetService: GoogleSheetsService
   ) {
     router.events.pipe(
       filter(event => event instanceof NavigationStart)
@@ -53,6 +55,9 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit(){
+
+    this.sheetService.getData();
+    
     combineLatest(this.currentFilter$, this.filterService.monthSwitched$).subscribe(([filter, monthSwitch]) => {
       let tempString = {
         date: null,
