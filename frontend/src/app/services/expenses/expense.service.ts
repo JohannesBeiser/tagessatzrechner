@@ -10,10 +10,12 @@ import { take } from 'rxjs/operators';
 export interface Expense {
   name: string;
   amount: number;
+  amount_foreign?: number;
   category: string;
   group: string;
   date: string;
   description?: string;
+  currency?: string;
   recurring?: boolean;
   lastUpdate?: string;
   key?: number;

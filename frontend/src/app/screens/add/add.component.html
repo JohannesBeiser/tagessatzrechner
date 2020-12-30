@@ -27,6 +27,20 @@
             <mat-error *ngIf="hasError('amount', 'required', 'single')">Amount is required</mat-error>
           </mat-form-field>
 
+          <mat-form-field *ngIf="options" appearance="standard" class="">
+            <input type="text"
+                   placeholder="Currency"
+                   aria-label="Number"
+                   matInput
+                   formControlName="currency"
+                   [matAutocomplete]="auto">
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+              <mat-option *ngFor="let option of filteredOptions$ | async" [value]="option">
+                {{option}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
           <mat-form-field appearance="standard">
             <mat-label>Category</mat-label>
             <select matNativeControl formControlName="category">

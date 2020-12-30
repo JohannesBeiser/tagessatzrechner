@@ -40,6 +40,8 @@ import {HttpClientModule} from "@angular/common/http";
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { SttRecorderComponent } from './components/stt-recorder/stt-recorder.component';
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+
 registerLocaleData(localeDe, 'de');
 
 @NgModule({
@@ -79,6 +81,7 @@ registerLocaleData(localeDe, 'de');
     ReactiveFormsModule,
     MatBottomSheetModule,
     MatNativeDateModule,
+    MatAutocompleteModule,
     MatRadioModule,
     FormsModule,
     HighchartsChartModule,

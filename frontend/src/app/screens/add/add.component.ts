@@ -2,10 +2,12 @@ import { Component, OnInit, ViewChild, ElementRef, NgZone, AfterViewInit, Input 
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SliderService } from 'src/app/services/slider/slider.service';
 import { Expense, ExpenseService } from 'src/app/services/expenses/expense.service';
+import { CurrencyService } from 'src/app/services/currency/currency.service';
+
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
-import { take } from 'rxjs/operators';
+import { take, map, startWith } from 'rxjs/operators';
 import { GroupsService, GroupItem } from 'src/app/services/groups/groups.service';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { CategoryService } from 'src/app/services/category/category.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { FilterService } from 'src/app/services/filter/filter.service';
@@ -22,7 +24,8 @@ export class AddComponent implements OnInit, AfterViewInit {
     public groupsService: GroupsService,
     public categoryService: CategoryService,
     private filterService: FilterService,
-    private _ngZone: NgZone
+    private _ngZone: NgZone,
+    private currencyService: CurrencyService
   ) { }
 
   @ViewChild("focusInputAdd") public focusInput: ElementRef;
@@ -35,19 +38,22 @@ export class AddComponent implements OnInit, AfterViewInit {
   public expenseForm: FormGroup;
   public recurringForm: FormGroup;
   public selectedTabIndex: number;
-
+  public currencyRates;
+  public options: string[];
+  public filteredOptions$: Observable<string[]>;
   public groups$: Observable<GroupItem[]>;
   public initialData: Expense;
 
   ngOnInit(): void {
     this.initialData = this.sliderService.currentExpenseForEdit;
-    this.selectedTabIndex = (this.initialData?.lastUpdate) ? 1: 0;
+    this.selectedTabIndex = (this.initialData?.lastUpdate) ? 1 : 0;
 
     this.expenseForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.maxLength(35)]),
       amount: new FormControl('', Validators.required),
       date: new FormControl(this.currentDate(), Validators.required),
       category: new FormControl(this.categoryService.defaultCategory, Validators.required),
+      currency: new FormControl('EUR'),
       group: new FormControl("General", Validators.required),
       description: new FormControl('', Validators.maxLength(200))
     });
@@ -58,28 +64,40 @@ export class AddComponent implements OnInit, AfterViewInit {
       month_recurring: new FormControl(this.filterService.getCurrentMonthFilter(), Validators.required),
       category_recurring: new FormControl('general', Validators.required),
       group_recurring: new FormControl("General", Validators.required),
+      currency_recurring: new FormControl('EUR'),
       description_recurring: new FormControl('', Validators.maxLength(200)),
+    });
+
+    this.currencyService.getCurrencyValues().subscribe(response=>{
+      this.options = Object.keys(response.rates);
+      this.currencyRates = response.rates;
+      this.filteredOptions$ = this.expenseForm.get('currency').valueChanges.pipe(
+        startWith(''),
+        map(value => this._filter(value))
+      )
     });
 
     //TODO : Dirty workaround
     if (this.initialData) {
       setTimeout(() => {
-        if(this.initialData.lastUpdate){
+        if (this.initialData.lastUpdate) {
           this.recurringForm.reset({
             name_recurring: this.initialData.name,
             amount_recurring: this.initialData.amount,
-            month_recurring: this.initialData.date.substring(0,7),
+            month_recurring: this.initialData.date.substring(0, 7),
             category_recurring: this.initialData.category,
             group_recurring: this.initialData.group,
+            currency_recurring: 'EUR',
             description_recurring: this.initialData.description
           });
-        }else{
+        } else {
           this.expenseForm.reset({
             name: this.initialData.name,
             amount: this.initialData.amount,
             date: this.initialData.date,
             category: this.initialData.category,
             group: this.initialData.group,
+            currency: 'EUR',
             description: this.initialData.description
           });
         }
@@ -92,6 +110,7 @@ export class AddComponent implements OnInit, AfterViewInit {
           date: this.currentDate(),
           category: this.categoryService.defaultCategory,
           group: this.groupsService.defaultGroup,
+          currency: 'EUR',
           description: ''
         })
       }, 100);
@@ -100,9 +119,14 @@ export class AddComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if(!this.initialData){
+    if (!this.initialData) {
       this.focusInput.nativeElement.focus();
     }
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.options.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
   }
 
 
@@ -127,20 +151,27 @@ export class AddComponent implements OnInit, AfterViewInit {
 
   currentDate() {
     const currentDate = new Date();
-    
-    return `${currentDate.getFullYear()}-${this.filterService.parseMonth(currentDate.getMonth()+1)}-${this.filterService.parseMonth(currentDate.getDate())}`;
+
+    return `${currentDate.getFullYear()}-${this.filterService.parseMonth(currentDate.getMonth() + 1)}-${this.filterService.parseMonth(currentDate.getDate())}`;
   }
 
   createExpense() {
+    // new expense
     if (this.selectedTabIndex === 0) {
-      let expense= this.expenseForm.value;
+      let expense = this.expenseForm.value;
       this.setFormGroupTouched(this.expenseForm);
       if (this.expenseForm.valid) {
+        if(expense.currency && expense.currency !== 'EUR'){
+          // foreign currency--> alter data
+          expense.amount_foreign = expense.amount; 
+          expense.amount = parseFloat((expense.amount / this.currencyRates[expense.currency]).toFixed(2));
+        }
+
         if (!this.initialData) {
           this.expenseService.addExpense(expense, "expenses");
         } else {
           let key = this.initialData.key;
-          if(this.initialData.recurring){
+          if (this.initialData.recurring) {
             expense.recurring = true;
           }
           this.expenseService.updateExpense(key, expense, "expenses");
@@ -148,8 +179,9 @@ export class AddComponent implements OnInit, AfterViewInit {
         this.sliderService.hide();
       }
     } else {
+      // Update expense
       this.setFormGroupTouched(this.recurringForm);
-      let expense= {
+      let expense = {
         name: this.recurringForm.value.name_recurring,
         amount: this.recurringForm.value.amount_recurring,
         date: this.recurringForm.value.month_recurring + "-01",
@@ -159,13 +191,13 @@ export class AddComponent implements OnInit, AfterViewInit {
         recurring: true,
         lastUpdate: null
       };
-      
+
       if (this.recurringForm.valid) {
-        if(!this.initialData){
-          expense.lastUpdate= this.expenseService.getFormatDate(new Date());
+        if (!this.initialData) {
+          expense.lastUpdate = this.expenseService.getFormatDate(new Date());
           this.expenseService.addExpense(expense, "recurringExpenses");
-        }else{
-          expense.lastUpdate= this.initialData.lastUpdate
+        } else {
+          expense.lastUpdate = this.initialData.lastUpdate
           this.expenseService.updateExpense(this.initialData.key, expense, "recurringExpenses")
         }
         this.sliderService.hide();
