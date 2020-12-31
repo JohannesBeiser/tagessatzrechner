@@ -8,9 +8,11 @@
     </div>
   </app-header>
 
+
   <mat-tab-group disableRipple mat-stretch-tabs class="example-stretched-tab" (selectedTabChange)="tabChanged($event)" [selectedIndex]="initialData?.lastUpdate? '1': '0'">
-    <mat-tab [disabled]="initialData?.lastUpdate && initialData" label="Single"> 
-      <div class="content-container">
+    <mat-tab [disabled]="initialData?.lastUpdate && initialData" label="Single">     
+      <div class="content-container">       
+        
         <form class="expense-form" [formGroup]="expenseForm" autocomplete="off" (submit)="createExpense()"
           #formDirective="ngForm">
           

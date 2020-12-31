@@ -68,14 +68,12 @@ export class AddComponent implements OnInit, AfterViewInit {
       description_recurring: new FormControl('', Validators.maxLength(200)),
     });
 
-    this.currencyService.getCurrencyValues().subscribe(response=>{
-      this.options = Object.keys(response.rates);
-      this.currencyRates = response.rates;
-      this.filteredOptions$ = this.expenseForm.get('currency').valueChanges.pipe(
-        startWith(''),
-        map(value => this._filter(value))
-      )
-    });
+    this.options = this.currencyService.getCurrencies();
+
+    this.filteredOptions$ = this.expenseForm.get('currency').valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value))
+    );
 
     //TODO : Dirty workaround
     if (this.initialData) {
@@ -155,16 +153,19 @@ export class AddComponent implements OnInit, AfterViewInit {
     return `${currentDate.getFullYear()}-${this.filterService.parseMonth(currentDate.getMonth() + 1)}-${this.filterService.parseMonth(currentDate.getDate())}`;
   }
 
-  createExpense() {
+  async createExpense() {
     // new expense
     if (this.selectedTabIndex === 0) {
       let expense = this.expenseForm.value;
       this.setFormGroupTouched(this.expenseForm);
       if (this.expenseForm.valid) {
-        if(expense.currency && expense.currency !== 'EUR'){
+        if (expense.currency && expense.currency !== 'EUR') {
           // foreign currency--> alter data
-          expense.amount_foreign = expense.amount; 
-          expense.amount = parseFloat((expense.amount / this.currencyRates[expense.currency]).toFixed(2));
+          let rate = (await this.currencyService.convertCurrency('EUR', expense.currency))[`EUR_${expense.currency}`]
+          if(rate){
+            expense.amount_foreign = expense.amount;
+            expense.amount = parseFloat((expense.amount / rate).toFixed(2));
+          }
         }
 
         if (!this.initialData) {
