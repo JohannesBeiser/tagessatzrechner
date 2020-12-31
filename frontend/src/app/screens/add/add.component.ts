@@ -43,6 +43,7 @@ export class AddComponent implements OnInit, AfterViewInit {
   public filteredOptions$: Observable<string[]>;
   public groups$: Observable<GroupItem[]>;
   public initialData: Expense;
+  public isOnline = navigator.onLine;
 
   ngOnInit(): void {
     this.initialData = this.sliderService.currentExpenseForEdit;
@@ -74,7 +75,7 @@ export class AddComponent implements OnInit, AfterViewInit {
       startWith(''),
       map(value => this._filter(value))
     );
-
+ 
     //TODO : Dirty workaround
     if (this.initialData) {
       setTimeout(() => {
@@ -149,12 +150,26 @@ export class AddComponent implements OnInit, AfterViewInit {
 
   currentDate() {
     const currentDate = new Date();
-
     return `${currentDate.getFullYear()}-${this.filterService.parseMonth(currentDate.getMonth() + 1)}-${this.filterService.parseMonth(currentDate.getDate())}`;
   }
 
+  clearCurrency(){
+    this.valueBefore = this.expenseForm.get('currency').value;
+    this.expenseForm.get('currency').setValue('');
+  }
+
+  private valueBefore: string;
+  blurHandler(){
+    //Ugly: no event to get the right timing to lnow when it blurred AND option was selected --> execute check after callstack emptied
+    queueMicrotask(()=>{
+      if(this.expenseForm.get('currency').value === ''){
+        this.expenseForm.get('currency').setValue( this.valueBefore || 'EUR');
+        this.valueBefore = undefined;
+      }
+    })
+  }
+
   async createExpense() {
-    // new expense
     if (this.selectedTabIndex === 0) {
       let expense = this.expenseForm.value;
       this.setFormGroupTouched(this.expenseForm);
@@ -180,7 +195,6 @@ export class AddComponent implements OnInit, AfterViewInit {
         this.sliderService.hide();
       }
     } else {
-      // Update expense
       this.setFormGroupTouched(this.recurringForm);
       let expense = {
         name: this.recurringForm.value.name_recurring,
