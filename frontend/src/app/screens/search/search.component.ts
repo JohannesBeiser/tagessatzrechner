@@ -152,7 +152,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
             let matches = true;
             normalizedTerms.forEach(singleTerm => {
               if (matches) {
-                matches = expense.name.toLowerCase().includes(singleTerm) || expense.description.toLowerCase().includes(singleTerm) || expense.group.toLowerCase().includes(singleTerm);
+                matches = expense.name.toLowerCase().includes(singleTerm) || expense.description?.toLowerCase().includes(singleTerm) || expense.group.toLowerCase().includes(singleTerm);
                 let expenseDate = new Date(expense.date);
                 let matchesDate = true;
                 let dateSegments = singleTerm.split(".")
