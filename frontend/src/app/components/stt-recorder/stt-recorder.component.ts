@@ -81,7 +81,7 @@ export class SttRecorderComponent implements OnInit {
       if(parsedResult.amount && parsedResult.category && parsedResult.name){
         this.createExpenseFromSttResult(parsedResult);
       }else{
-        alert("Please try again")
+        alert("Please try again, Recognized: " + parsedResult.amount + '€, category: ' + parsedResult.category + ', name: ' + parsedResult.name + ' (transcription was: ' + result.transcription + ')')
       }
     }
   }
@@ -89,7 +89,7 @@ export class SttRecorderComponent implements OnInit {
   
 createExpenseFromSttResult(sttResult: ExpenseSTTResult){
   let expense: Expense = {...{
-    date: `${new Date().getFullYear()}-${new Date().getMonth() +1}-${new Date().getDate()}`,
+    date: `${new Date().getFullYear()}-${('0' + (new Date().getMonth() +1)).slice(-2)}-${('0' + (new Date().getDate())).slice(-2)}`,
     group: this.groupsService.defaultGroup,
   }, ...sttResult};
 
