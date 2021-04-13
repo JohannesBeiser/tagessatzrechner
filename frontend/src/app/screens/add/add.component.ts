@@ -44,17 +44,24 @@ export class AddComponent implements OnInit, AfterViewInit {
   public groups$: Observable<GroupItem[]>;
   public initialData: Expense;
   public isOnline = navigator.onLine;
+public defaultCurrency = 'EUR';
+
 
   ngOnInit(): void {
     this.initialData = this.sliderService.currentExpenseForEdit;
     this.selectedTabIndex = (this.initialData?.lastUpdate) ? 1 : 0;
+
+if (this.isOnline) {
+  this.defaultCurrency = 'USD'
+}
+
 
     this.expenseForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.maxLength(35)]),
       amount: new FormControl('', Validators.required),
       date: new FormControl(this.currentDate(), Validators.required),
       category: new FormControl(this.categoryService.defaultCategory, Validators.required),
-      currency: new FormControl('EUR'),
+      currency: new FormControl(this.defaultCurrency),
       group: new FormControl("General", Validators.required),
       description: new FormControl('', Validators.maxLength(200))
     });
@@ -65,7 +72,7 @@ export class AddComponent implements OnInit, AfterViewInit {
       month_recurring: new FormControl(this.filterService.getCurrentMonthFilter(), Validators.required),
       category_recurring: new FormControl('general', Validators.required),
       group_recurring: new FormControl("General", Validators.required),
-      currency_recurring: new FormControl('EUR'),
+      currency_recurring: new FormControl(this.defaultCurrency),
       description_recurring: new FormControl('', Validators.maxLength(200)),
     });
 
@@ -109,7 +116,7 @@ export class AddComponent implements OnInit, AfterViewInit {
           date: this.currentDate(),
           category: this.categoryService.defaultCategory,
           group: this.groupsService.defaultGroup,
-          currency: 'EUR',
+          currency: this.defaultCurrency,
           description: ''
         })
       }, 100);

@@ -25,7 +25,7 @@
 
           <mat-form-field appearance="standard" class="amount-input">
             <mat-label>Amount (€)</mat-label>
-            <input type="number" matInput formControlName="amount" #focusInputAdd>
+            <input type="number" matInput formControlName="amount" #focusInputAdd autofocus  >
             <mat-error *ngIf="hasError('amount', 'required', 'single')">Amount is required</mat-error>
           </mat-form-field>
 
