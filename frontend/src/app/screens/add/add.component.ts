@@ -176,8 +176,12 @@ if (this.isOnline) {
     })
   }
 
+  private currentlyAdding=false;
+
   async createExpense() {
-    if (this.selectedTabIndex === 0) {
+    console.log('bool flag is: '+ this.currentlyAdding)
+    if (this.selectedTabIndex === 0 && !this.currentlyAdding) {
+      this.currentlyAdding = true;
       let expense = this.expenseForm.value;
       this.setFormGroupTouched(this.expenseForm);
       if (this.expenseForm.valid) {
@@ -192,6 +196,7 @@ if (this.isOnline) {
 
         if (!this.initialData) {
           this.expenseService.addExpense(expense, "expenses");
+    
         } else {
           let key = this.initialData.key;
           if (this.initialData.recurring) {
@@ -201,6 +206,8 @@ if (this.isOnline) {
         }
         this.sliderService.hide();
       }
+      this.currentlyAdding= false;
+      
     } else {
       this.setFormGroupTouched(this.recurringForm);
       let expense = {
@@ -224,6 +231,8 @@ if (this.isOnline) {
         }
         this.sliderService.hide();
       }
+      
     }
+    
   }
 }

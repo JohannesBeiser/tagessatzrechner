@@ -14,6 +14,12 @@
                     <span>{{expense.description}}</span>                    
                 </div>
 
+                <div class="expense-name" *ngIf="expense.name.length>=30">
+                    <div class="title">Name:</div>
+                    <div class="value">{{expense.name}}</div>
+                </div>  
+
+
                 <div class="category">
                     <div class="title"> Category:</div>
                     <div class="value">{{expense.category | titlecase}}</div>
