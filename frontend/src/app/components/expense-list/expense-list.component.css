@@ -56,6 +56,17 @@
 .expense-list .expense-item .item-content .more-info .description {
   padding: 8px 0;
 }
+.expense-list .expense-item .item-content .more-info .category {
+  display: flex;
+  align-items: center;
+}
+.expense-list .expense-item .item-content .more-info .category .title {
+  font-weight: bold;
+}
+.expense-list .expense-item .item-content .more-info .category .value {
+  margin-left: 8px;
+  flex: 1;
+}
 .expense-list .expense-item .item-content .more-info .group {
   display: flex;
   align-items: center;
