@@ -1,0 +1,35 @@
+@import "../../../../variables";
+
+
+
+    section{
+        &:not(:last-child){
+            border-bottom: 1px solid #ddd;
+        }
+        padding: 16px 0;
+
+        .section-container{
+            padding: 0 16px;
+            display: flex;
+            flex-direction: column;
+
+            .backup-upload-imput{
+                input{
+                    display: none;
+                }
+            }
+
+            .groups-header{
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+
+            .qr-code{
+                box-sizing: border-box;
+                width: calc(100% - 32px);
+                align-self: center;
+                padding: 18px
+            }
+        }
+
+    }

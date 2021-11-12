@@ -1,0 +1,35 @@
+@import "../../../../variables";
+
+
+    .defaults-settings-section{
+        mat-form-field{
+            padding: 0 8px;
+        }
+    }
+
+    section{
+        &:not(:last-child){
+            border-bottom: 1px solid #ddd;
+        }
+        padding: 16px 0;
+
+        .section-container{
+            padding: 0 16px;
+            display: flex;
+            flex-direction: column;
+
+           
+            .groups-header{
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+        }
+
+        &.group-settings-section{
+            .groups-header{
+                display: flex;
+                align-items: center;
+            }
+    
+        }
+    }

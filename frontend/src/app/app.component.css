@@ -15,6 +15,34 @@
   right: 0;
   padding: 8px 12px 8px 8px;
 }
+.nav-icons {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  position: absolute;
+  right: 8px;
+}
+.nav-icons i:not(:last-child) {
+  margin-right: 8px;
+}
+.nav-icons div {
+  height: 20px;
+  width: 20px;
+}
+.nav-icons div:not(:last-child) {
+  margin-right: 8px;
+}
+.nav-icons .settings {
+  background-image: url('../assets/images/settings_outlined.png');
+  filter: invert(1);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.settings-back-icon {
+  position: absolute;
+  left: 8px;
+}
 .app-slider {
   position: fixed;
   width: 100%;

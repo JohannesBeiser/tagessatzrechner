@@ -45,6 +45,30 @@ export class AppComponent implements OnInit{
           this.appHeadline = "Settings";
           this.resetTemporary();
           break;
+        case "settings/recurring":
+        this.appHeadline = "Settings";
+        this.resetTemporary();
+        break;
+        case "settings/general":
+        this.appHeadline = "Settings";
+        this.resetTemporary();
+        break;
+        case "settings/groups":
+        this.appHeadline = "Settings";
+        this.resetTemporary();
+        break;
+        case "settings/defaults":
+        this.appHeadline = "Settings";
+        this.resetTemporary();
+        break;
+        case "income":
+        this.appHeadline = "Income";
+        this.resetTemporary();
+        break;
+        case "analysis":
+          this.appHeadline = "Analysis";
+          this.resetTemporary();
+          break;
         default:
           this.appHeadline = "Overview";
           break;
@@ -82,6 +106,10 @@ export class AppComponent implements OnInit{
   resetTemporary(){
     this.filterService.resetFilter();
     // this.router.navigate(['/groups']);
+  }
+
+  navigateBack(){
+    window.history.go(-1);
   }
 
   prepareRoute(outlet: RouterOutlet) {

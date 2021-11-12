@@ -41,6 +41,12 @@ import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { SttRecorderComponent } from './components/stt-recorder/stt-recorder.component';
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { IncomeComponent } from './screens/income/income.component';
+import { AnalysisComponent } from './screens/analysis/analysis.component';
+import { RecurringComponent } from './screens/settings/recurring/recurring.component';
+import { GeneralComponent } from './screens/settings/general/general.component';
+import { DefaultsComponent } from './screens/settings/defaults/defaults.component';
+import { GroupSettingsComponent } from './screens/settings/group-settings/group-settings.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -65,7 +71,13 @@ registerLocaleData(localeDe, 'de');
     RecurringExpenseListComponent,
     RecurringExpenseBottomSheetComponent,
     DurationWeekDayPipe,
-    SttRecorderComponent
+    SttRecorderComponent,
+    IncomeComponent,
+    AnalysisComponent,
+    RecurringComponent,
+    GeneralComponent,
+    DefaultsComponent,
+    GroupSettingsComponent
   ],
   imports: [
     BrowserModule,

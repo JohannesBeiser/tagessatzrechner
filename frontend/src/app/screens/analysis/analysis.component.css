@@ -1,0 +1,7 @@
+:host {
+  display: flex;
+  height: 100%;
+}
+.analysis-component-container {
+  padding: 16px;
+}

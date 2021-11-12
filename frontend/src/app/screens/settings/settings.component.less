@@ -1,101 +1,18 @@
 @import "../../../variables";
 
 .settings-component-container{
+    .submenu-item{
+        padding: 16px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 1px solid #cfcfcf;
+        margin: 0 16px;
 
-    .general-settings-section{
-        .no-recurring-expenses{
-            padding: 8px 0;
-            opacity: 0.7;
-        }
-        .empty-list{
-            padding: 0;
-        }
-    }
-
-    .defaults-settings-section{
-        mat-form-field{
-            padding: 0 8px;
-        }
-    }
-
-    section{
-        &:not(:last-child){
-            border-bottom: 1px solid #ddd;
-        }
-        padding: 16px 0;
-
-        .section-container{
-            padding: 0 16px;
-            display: flex;
-            flex-direction: column;
-
-            .backup-upload-imput{
-                input{
-                    display: none;
-                }
-            }
-
-            .groups-header{
-                font-weight: bold;
-                margin-bottom: 8px;
-            }
-
-            .qr-code{
-                box-sizing: border-box;
-                width: calc(100% - 32px);
-                align-self: center;
-                padding: 18px
-            }
-        }
-
-        &.group-settings-section{
-            .groups-header{
-                display: flex;
-                align-items: center;
-    
-                input{
-                    padding: 6px;
-                    font-size: 16px;
-                    background: #dcdcdc;
-                    border: none;
-                    border-radius: 8px;
-                    flex: 1;
-                    margin-left: 8px;
-                    box-sizing: border-box;
-                    display: inline;
-                    min-width: 10px;
-                }
-    
-                i{        
-                    padding: 8px;
-                }
-            }
-    
-            .group-list{
-                display: flex;
-                flex-direction: column;
-                padding-top: 8px;
-    
-                .group-item{
-                    padding: 6px 12px;
-                    display: flex;
-                    align-items: center;
-                    background: white;
-                    box-shadow: 1px 1px 20px 0px #d2d2d2;
-                    border-radius: 8px;
-                    margin: 4px 0;
-                    align-items: center;
-                    min-width: 100px;
-                    
-                    span{
-                        flex: 1;
-                    }
-                }
-
-                .no-items-yet{
-                    opacity: 0.7;
-                }
-            }
+        i{
+            position: absolute;
+            right: 8px;
         }
     }
 }

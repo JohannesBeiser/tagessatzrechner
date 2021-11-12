@@ -1,0 +1,31 @@
+
+  <section class="defaults-settings-section">
+    <div class="section-container">
+      <div class="groups-header">
+        <span>Default form values</span>
+      </div>
+      <mat-form-field appearance="standard" class="groups-default">
+        <mat-label>Group</mat-label>
+        <select matNativeControl class="group-picker group-input-field" [(ngModel)]="defaultGroupSelected"
+          (change)="defaultGroupChanged()">
+          <option value="General">General</option>
+          <option *ngFor="let group of groups$ | async" [value]="group.groupName">{{group.groupName}}</option>
+        </select>
+      </mat-form-field>
+
+      <mat-form-field appearance="standard" class="groups-default">
+        <mat-label>Category</mat-label>
+        <select matNativeControl class="group-picker" [(ngModel)]="defaultCategorySelected"
+          (change)="defaultCategoryChanged()">
+          <option value="food">Food</option>
+          <option value="accommodation">Accommodation</option>
+          <option value="transport">Transport</option>
+          <option value="leisure">Leisure</option>
+          <option value="multimedia">Multimedia</option>
+          <option value="gear">Gear</option>
+          <option value="health_insurance">Health & Insurance</option>
+          <option value="general">General</option>
+        </select>
+      </mat-form-field>
+    </div>
+  </section>

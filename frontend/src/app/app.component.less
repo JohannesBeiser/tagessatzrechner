@@ -21,6 +21,39 @@
     // margin-right: 12px;
 }
 
+.nav-icons{
+  display: flex;
+  text-align: center;
+  align-items: center;
+  position: absolute;
+  right: 8px;
+
+  i:not(:last-child){
+    margin-right: 8px;
+  }
+
+  div{
+    height: 20px;
+    width: 20px;
+    
+    &:not(:last-child){
+      margin-right: 8px;
+    }
+  }
+  .settings{
+    background-image: url('../assets/images/settings_outlined.png');
+    filter: invert(1); // best create svg's finally!!
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}
+
+.settings-back-icon{
+  position: absolute;
+  left: 8px;
+}
+
 .app-slider {
     position    : fixed;
     width       : 100%;

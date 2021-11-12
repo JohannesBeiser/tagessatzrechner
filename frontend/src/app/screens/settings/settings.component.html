@@ -1,122 +1,23 @@
-<div class="settings-component-container" (click)="collapseNotifier.next()">
+<div class="settings-component-container" >
 
-  <section class="general-settings-section">
-    <div class="section-container">
-      <div class="groups-header">
-        <span>Recurring expenses</span>
-      </div>
-      <div *ngIf="!recurringExists" class="no-recurring-expenses">No recurring expenses yet</div>
-      <div class="p-8" [class.empty-list]="!recurringExists">
-        <app-recurring-expense-list [expenses]="recurringExpenses$ | async" [collapseNotifier]="collapseNotifier"></app-recurring-expense-list>
-      </div>
+  <div class="submenu-item" routerLink="/settings/recurring" routerLinkActive="active">
+    <span>Fixed expenses</span>
+    <i class="material-icons" >chevron_right</i>
+  </div>
 
-    </div>
-  </section>
+  <div class="submenu-item" routerLink="/settings/groups" routerLinkActive="active">
+    <span>Groups</span>
+    <i class="material-icons" >chevron_right</i>
+  </div>
 
+  <div class="submenu-item" routerLink="/settings/defaults" routerLinkActive="active">
+    <span>Default values</span>
+    <i class="material-icons" >chevron_right</i>
+  </div>
 
-  <!-- <div>Categories</div> -->
-  <section class="group-settings-section">
-    <div class="section-container">
-      <div class="groups-header">
-        <span>Groups</span>
-        <input type="text" [(ngModel)]="newGroupInputValue" #addGroupsInput>
-        <i class="material-icons-outlined" (click)="addGroup()">add</i>
-      </div>
-
-      <div class="group-list">
-        <div class="group-item" *ngFor="let group of groups$ | async">
-          <span>{{group.groupName}}</span>
-          <i class="material-icons-outlined" (click)="openBottomSheet($event, group)">more_horiz</i>
-        </div>
-        <span *ngIf="(groups$ | async).length === 0" class="no-items-yet">
-          There are no groups yet
-        </span>
-      </div>
-    </div>
-  </section>
-
-  <section class="defaults-settings-section">
-    <div class="section-container">
-      <div class="groups-header">
-        <span>Default form values</span>
-      </div>
-      <mat-form-field appearance="standard" class="groups-default">
-        <mat-label>Group</mat-label>
-        <select matNativeControl class="group-picker group-input-field" [(ngModel)]="defaultGroupSelected"
-          (change)="defaultGroupChanged()">
-          <option value="General">General</option>
-          <option *ngFor="let group of groups$ | async" [value]="group.groupName">{{group.groupName}}</option>
-        </select>
-      </mat-form-field>
-
-      <mat-form-field appearance="standard" class="groups-default">
-        <mat-label>Category</mat-label>
-        <select matNativeControl class="group-picker" [(ngModel)]="defaultCategorySelected"
-          (change)="defaultCategoryChanged()">
-          <option value="food">Food</option>
-          <option value="accommodation">Accommodation</option>
-          <option value="transport">Transport</option>
-          <option value="leisure">Leisure</option>
-          <option value="multimedia">Multimedia</option>
-          <option value="gear">Gear</option>
-          <option value="health_insurance">Health & Insurance</option>
-          <option value="general">General</option>
-        </select>
-      </mat-form-field>
-    </div>
-  </section>
-
-  <section class="general-settings-section">
-    <div class="section-container">
-      <div class="groups-header">
-        <span>Data management</span>
-      </div>
-      <div class="flexbox p-8" >
-        <i class="material-icons-outlined mr-8 bigger-font">info</i>
-        <p class="smaller-font">This app operates fully locally on your device without any cloud backup. Uninstalling the app will delete all of your data. You can download your data as a file and load it back into the app any time after re-installing the app as long as you own that file.</p>
-      </div>
-      <div class="flexbox align p-8" (click)="downloadBackup()">
-        <i class="material-icons-outlined mr-8">cloud_download</i>
-        <span>Download backup</span>
-      </div>
-      <div class="flexbox align p-8">
-        <i class="material-icons-outlined mr-8">cloud_upload</i>
-        <label class="backup-upload-imput">
-          <span>Load backup</span>
-          <input type="file" id="backupUploader" (change)="onImport($event)"/>
-        </label>
-      </div>
-      <div class="flexbox align p-8" (click)="deleteData()">
-        <i class="material-icons-outlined mr-8">delete</i>
-        <span>Delete all data</span>
-      </div>
-      
-    </div>
-  </section>
-  
-  <section class="general-settings-section">
-    <div class="section-container">
-      <div class="groups-header">
-        <span>General</span>
-      </div>
-      <div class="flexbox align p-8" (click)="reloadApp()">
-        <i class="material-icons-outlined mr-8">refresh</i>
-        <span>Reload Application</span>
-      </div>
-      <div class="flexbox align p-8" (click)="hardReloadApp()">
-        <i class="material-icons-outlined mr-8">update</i>
-        <span>Update Application</span>
-      </div>
-      <div class="share-section flexbox column">
-        <div class="flexbox align p-8" (click)="toggleShare()">
-          <i class="material-icons-outlined mr-8" >share</i>
-          <span>Share</span>
-        </div>
-        <img #qrCode [@slideInOut]="shareShown ? 'in': 'out'" src="../../../assets/images/qr_code.png" alt="QR-Code" class="qr-code">
-      </div>
-    </div>
-  </section>
-  
-  <!-- <div>Monthly</div> -->
+  <div class="submenu-item" routerLink="/settings/general" routerLinkActive="active">
+    <span>General</span>
+    <i class="material-icons" >chevron_right</i>
+  </div>
   
 </div>

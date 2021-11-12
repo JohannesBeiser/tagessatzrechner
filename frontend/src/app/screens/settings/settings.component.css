@@ -1,74 +1,13 @@
-.settings-component-container .general-settings-section .no-recurring-expenses {
-  padding: 8px 0;
-  opacity: 0.7;
-}
-.settings-component-container .general-settings-section .empty-list {
-  padding: 0;
-}
-.settings-component-container .defaults-settings-section mat-form-field {
-  padding: 0 8px;
-}
-.settings-component-container section {
-  padding: 16px 0;
-}
-.settings-component-container section:not(:last-child) {
-  border-bottom: 1px solid #ddd;
-}
-.settings-component-container section .section-container {
-  padding: 0 16px;
-  display: flex;
-  flex-direction: column;
-}
-.settings-component-container section .section-container .backup-upload-imput input {
-  display: none;
-}
-.settings-component-container section .section-container .groups-header {
-  font-weight: bold;
-  margin-bottom: 8px;
-}
-.settings-component-container section .section-container .qr-code {
-  box-sizing: border-box;
-  width: calc(100% - 32px);
-  align-self: center;
-  padding: 18px;
-}
-.settings-component-container section.group-settings-section .groups-header {
+.settings-component-container .submenu-item {
+  padding: 16px;
+  text-align: center;
   display: flex;
   align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #cfcfcf;
+  margin: 0 16px;
 }
-.settings-component-container section.group-settings-section .groups-header input {
-  padding: 6px;
-  font-size: 16px;
-  background: #dcdcdc;
-  border: none;
-  border-radius: 8px;
-  flex: 1;
-  margin-left: 8px;
-  box-sizing: border-box;
-  display: inline;
-  min-width: 10px;
-}
-.settings-component-container section.group-settings-section .groups-header i {
-  padding: 8px;
-}
-.settings-component-container section.group-settings-section .group-list {
-  display: flex;
-  flex-direction: column;
-  padding-top: 8px;
-}
-.settings-component-container section.group-settings-section .group-list .group-item {
-  padding: 6px 12px;
-  display: flex;
-  background: white;
-  box-shadow: 1px 1px 20px 0px #d2d2d2;
-  border-radius: 8px;
-  margin: 4px 0;
-  align-items: center;
-  min-width: 100px;
-}
-.settings-component-container section.group-settings-section .group-list .group-item span {
-  flex: 1;
-}
-.settings-component-container section.group-settings-section .group-list .no-items-yet {
-  opacity: 0.7;
+.settings-component-container .submenu-item i {
+  position: absolute;
+  right: 8px;
 }

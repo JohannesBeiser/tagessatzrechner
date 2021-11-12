@@ -1,0 +1,71 @@
+@import "../../../../variables";
+
+
+    section{
+        &:not(:last-child){
+            border-bottom: 1px solid #ddd;
+        }
+        padding: 16px 0;
+
+        .section-container{
+            padding: 0 16px;
+            display: flex;
+            flex-direction: column;
+
+            .groups-header{
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+
+        }
+
+        &.group-settings-section{
+            .groups-header{
+                display: flex;
+                align-items: center;
+    
+                input{
+                    padding: 6px;
+                    font-size: 16px;
+                    background: #dcdcdc;
+                    border: none;
+                    border-radius: 8px;
+                    flex: 1;
+                    margin-left: 8px;
+                    box-sizing: border-box;
+                    display: inline;
+                    min-width: 10px;
+                }
+    
+                i{        
+                    padding: 8px;
+                }
+            }
+    
+            .group-list{
+                display: flex;
+                flex-direction: column;
+                padding-top: 8px;
+    
+                .group-item{
+                    padding: 6px 12px;
+                    display: flex;
+                    align-items: center;
+                    background: white;
+                    box-shadow: 1px 1px 20px 0px #d2d2d2;
+                    border-radius: 8px;
+                    margin: 4px 0;
+                    align-items: center;
+                    min-width: 100px;
+                    
+                    span{
+                        flex: 1;
+                    }
+                }
+
+                .no-items-yet{
+                    opacity: 0.7;
+                }
+            }
+        }
+    }
