@@ -46,6 +46,12 @@
 .footer-component-container span .settings {
   background-image: url('../../../assets/images/settings_outlined.png');
 }
+.footer-component-container span .analysis {
+  background-image: url('../../../assets/images/analysis_outlined.png');
+}
+.footer-component-container span .income {
+  background-image: url('../../../assets/images/income_outlined.png');
+}
 .footer-component-container span.active .home {
   background-image: url('../../../assets/images/home_filled.png');
 }
@@ -54,4 +60,10 @@
 }
 .footer-component-container span.active .settings {
   background-image: url('../../../assets/images/settings_filled.png');
+}
+.footer-component-container span.active .analysis {
+  background-image: url('../../../assets/images/analysis_filled.png');
+}
+.footer-component-container span.active .income {
+  background-image: url('../../../assets/images/income_filled.png');
 }

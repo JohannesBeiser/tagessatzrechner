@@ -61,6 +61,10 @@ export class AppComponent implements OnInit{
         this.appHeadline = "Settings";
         this.resetTemporary();
         break;
+        case "settings/categories":
+          this.appHeadline = "Settings";
+          this.resetTemporary();
+          break;
         case "income":
         this.appHeadline = "Income";
         this.resetTemporary();

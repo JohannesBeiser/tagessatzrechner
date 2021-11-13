@@ -17,7 +17,7 @@
     <div class="nav-icons">
       <i class="material-icons-outlined" (click)="filterService.show()" *ngIf="!(filterService.filterShown$ | async)">filter_list</i>
       <i class="material-icons-outlined" (click)="sliderService.show('search')" *ngIf="!(filterService.filterShown$ | async)">search</i>
-      <i class="material-icons-outlined" routerLink="/settings" routerLinkActive="active"*ngIf="!(filterService.filterShown$ | async)">settings</i>
+      <div class="settings" routerLink="/settings" routerLinkActive="active" *ngIf="!(filterService.filterShown$ | async)"></div>
     </div>
 
   </div>

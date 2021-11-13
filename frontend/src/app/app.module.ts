@@ -47,6 +47,7 @@ import { RecurringComponent } from './screens/settings/recurring/recurring.compo
 import { GeneralComponent } from './screens/settings/general/general.component';
 import { DefaultsComponent } from './screens/settings/defaults/defaults.component';
 import { GroupSettingsComponent } from './screens/settings/group-settings/group-settings.component';
+import { CategorySettingsComponent } from './screens/settings/category-settings/category-settings.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -77,7 +78,8 @@ registerLocaleData(localeDe, 'de');
     RecurringComponent,
     GeneralComponent,
     DefaultsComponent,
-    GroupSettingsComponent
+    GroupSettingsComponent,
+    CategorySettingsComponent
   ],
   imports: [
     BrowserModule,
