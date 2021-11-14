@@ -48,6 +48,8 @@ import { GeneralComponent } from './screens/settings/general/general.component';
 import { DefaultsComponent } from './screens/settings/defaults/defaults.component';
 import { GroupSettingsComponent } from './screens/settings/group-settings/group-settings.component';
 import { CategorySettingsComponent } from './screens/settings/category-settings/category-settings.component';
+import { AddCategoryDialogComponent } from './screens/settings/category-settings/add-category-dialog/add-category-dialog.component';
+import { CategorySettingsBottomSheetComponent } from './screens/settings/category-settings/category-settings-bottom-sheet/category-settings-bottom-sheet.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -79,7 +81,9 @@ registerLocaleData(localeDe, 'de');
     GeneralComponent,
     DefaultsComponent,
     GroupSettingsComponent,
-    CategorySettingsComponent
+    CategorySettingsComponent,
+    AddCategoryDialogComponent,
+    CategorySettingsBottomSheetComponent
   ],
   imports: [
     BrowserModule,

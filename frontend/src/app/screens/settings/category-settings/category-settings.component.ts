@@ -1,4 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { AddCategoryDialogComponent } from './add-category-dialog/add-category-dialog.component';
+import { Observable } from 'rxjs';
+import { Category, CategoryService } from 'src/app/services/category/category.service';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { CategorySettingsBottomSheetComponent } from './category-settings-bottom-sheet/category-settings-bottom-sheet.component';
 
 @Component({
   selector: 'app-category-settings',
@@ -7,9 +13,30 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CategorySettingsComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public dialog: MatDialog,
+    public categoryService: CategoryService,
+    private bottomSheet: MatBottomSheet,
+    ) { }
+
+  categories$: Observable<Category[]>;
 
   ngOnInit(): void {
+    this.categories$ = this.categoryService.getCategoriesNew();
+  }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(AddCategoryDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  openBottomSheet(e: MouseEvent, category: any): void {
+    document.body.style.backgroundColor = "#4f5053";
+    e.stopPropagation();
+    this.bottomSheet.open(CategorySettingsBottomSheetComponent, { data: category });
   }
 
 }

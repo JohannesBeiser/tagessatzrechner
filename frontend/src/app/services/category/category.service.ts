@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { IndexedDBConnectionService } from '../indexed-dbconnection.service';
+import { ReplaySubject, BehaviorSubject, Observable } from 'rxjs';
+import { GroupItem } from '../groups/groups.service';
 
 export interface CategoryColor{
   food: string;
@@ -11,6 +14,11 @@ export interface CategoryColor{
   general: string;
 }
 
+export interface Category{
+  name: string;
+  color: string;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +26,15 @@ export interface CategoryColor{
 export class CategoryService {
 
   public defaultCategory: string;
-  constructor() { 
-    this.defaultCategory = localStorage.getItem("defaultCategory") || "food"
+  private db: any;
+  private connection$: ReplaySubject<boolean>;
+  private categories$: BehaviorSubject<Category[]>;
+
+  constructor( private indexedDBService: IndexedDBConnectionService) { 
+    this.connection$ = new ReplaySubject(1);
+    this.createCategoryDatabase();
+    this.categories$ = new BehaviorSubject<Category[]>([]);
+    this.defaultCategory = localStorage.getItem("defaultCategory") || "food";
   }
 
   public readonly categoryColors: CategoryColor = {
@@ -38,6 +53,7 @@ export class CategoryService {
     this.defaultCategory = category;
   }
 
+
   public getCategories(): string[]{
     return [
       "food",
@@ -50,6 +66,106 @@ export class CategoryService {
       "general"
     ]
   }
+
+
+
+  public addCategory(category: Category){
+    //alter color to make it HEX
+    category.color = '#' + category.color;
+    let tx = this.db.transaction(['categories'], 'readwrite');
+    let store = tx.objectStore('categories');
+    store.add(category);
+    tx.oncomplete = () => {
+      this.refreshCategories();
+    }
+    tx.onerror = (event) => {
+      alert('error storing expense ' + event.target.errorCode);
+    }
+  };
+
+  public getCategoriesNew(): Observable<Category[]> {
+    this.connection$.subscribe(()=>this.refreshCategories());
+    return this.categories$.asObservable();
+  }
+
+  // optimized for overlays which don't own a route to not request double amount
+  public getGroupsWithoutUpdate(){
+    return this.categories$.asObservable();
+  }
+
+  clearData(){
+    let transaction = this.db.transaction("categories", "readwrite");
+    let objectStore = transaction.objectStore("categories");
+    objectStore.clear();
+  }
+
+
+  public deleteCategory(key: number) {
+    let transaction = this.db.transaction("categories", "readwrite");
+    let objectStore = transaction.objectStore("categories");
+    let req = objectStore.delete(key);
+    req.onsuccess = () => {
+      this.refreshCategories();
+    }
+    //TODO: default ablegen per key nicht name und dann hier nach key anfrage
+    // if(this.defaultCategory == categoryName){
+    //   this.setDefaultCategory("General");
+    // }
+  }
+
+
+  /**
+   * Makes the Observable emit all of the new values from the DB
+   */
+  private refreshCategories() {
+    let transaction = this.db.transaction(["categories"]);
+    let object_store = transaction.objectStore("categories");
+    let request = object_store.openCursor();
+    let result: Category[] = []
+
+    request.onsuccess = (event) => {
+      let cursor = event.target.result;
+      if (cursor) {
+        let key = cursor.primaryKey;
+        let value = cursor.value;
+        result.push({ ...{ key }, ...value })
+        cursor.continue();
+      }
+      else {
+        this.categories$.next(result)
+      }
+    };
+  }
+
+  private createCategoryDatabase() {
+    let dbReq = this.indexedDBService.getConnection();
+
+    dbReq.onupgradeneeded = (event) => {
+      let db = (event.target as any).result;
+      this.indexedDBService.upgradeDatabase(db);
+    }
+
+    dbReq.onsuccess = (event) => {
+      this.db = (event.target as any).result;
+      this.connection$.next(true);
+    }
+
+    dbReq.onerror = function (event) {
+      alert('error opening database ' + (event.target as any).errorCode);
+    }
+  }
+
+  // public seedGroups(){
+  //   for (const group of groups) {
+  //     this.addGroup(group);
+  //   }
+  // }
+
+
+
+
+
+
 
 
 }
