@@ -27,7 +27,7 @@ export interface Category{
 })
 export class CategoryService {
 
-  public defaultCategory: string;
+  public defaultCategory: number;
   private db: any;
   private connection$: ReplaySubject<boolean>;
   private categories$: BehaviorSubject<Category[]>;
@@ -40,44 +40,19 @@ export class CategoryService {
     this.categories$.subscribe(categories=>{
       this.categories= categories;
     })
-    this.defaultCategory = localStorage.getItem("defaultCategory") || "food";
+    this.defaultCategory = parseInt(localStorage.getItem("defaultCategory"));
     this.connection$.subscribe(()=>this.refreshCategories());
   }
 
-  public readonly categoryColors: CategoryColor = {
-    food: "#749056",//"rgb(110, 150, 72)",
-    accommodation: "#5979a9",//"rgb(84, 94, 117)",
-    transport: "rgb(192, 87, 70)",
-    multimedia: "rgb(150, 123, 92)",//"rgb(189, 155, 117)",
-    leisure: "rgb(202, 179, 99)",
-    gear: "rgb(65, 97, 68)",
-    health_insurance: "#afafaf",
-    general: "rgb(82, 82, 82)",
-  }
 
-  public setDefaultCategory(category:string){
-    localStorage.setItem("defaultCategory", category)
+  public setDefaultCategory(category:number){
+    localStorage.setItem("defaultCategory", category.toString())
     this.defaultCategory = category;
   }
 
   getCategoryFromId(id: number): Category{
     return this.categories.find(el=> el.id == id) || {name: 'unassigned', color: '#000000', id: 0};
   }
-
-
-  public getCategories(): string[]{
-    return [
-      "food",
-      "transport",
-      "accommodation",
-      "multimedia",
-      "leisure",
-      "gear",
-      "health_insurance",
-      "general"
-    ]
-  }
-
 
   public addCategoryFromBackup(category: Category){
     let tx = this.db.transaction(['categories'], 'readwrite');

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { GroupsService, GroupItem } from 'src/app/services/groups/groups.service';
-import { CategoryService } from 'src/app/services/category/category.service';
+import { CategoryService, Category } from 'src/app/services/category/category.service';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { el } from 'date-fns/locale';
 
 @Component({
   selector: 'app-defaults',
@@ -16,17 +18,19 @@ export class DefaultsComponent implements OnInit {
   ) { }
 
   public groups$: Observable<GroupItem[]>;
+  public categories$: Observable<Category[]>;
   public defaultGroupSelected: string;
-  public defaultCategorySelected: string;
+  public defaultCategorySelected: number;
 
   ngOnInit(): void {
     this.groups$ = this.groupsService.getGroups();
+    this.categories$ = this.categoryService.getCategoriesNew().pipe(map(categories=> categories.filter(category=> category.id !== 0)));
 
         //TODO : Dirty workaround 
     setTimeout(() => {
       this.defaultGroupSelected = this.groupsService.defaultGroup;
+      this.defaultCategorySelected = this.categoryService.defaultCategory;
     }, 100);
-    this.defaultCategorySelected = this.categoryService.defaultCategory;
   }
 
   

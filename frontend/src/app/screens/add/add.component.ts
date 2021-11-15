@@ -8,7 +8,7 @@ import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take, map, startWith } from 'rxjs/operators';
 import { GroupsService, GroupItem } from 'src/app/services/groups/groups.service';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { CategoryService } from 'src/app/services/category/category.service';
+import { CategoryService, Category } from 'src/app/services/category/category.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { FilterService } from 'src/app/services/filter/filter.service';
 
@@ -42,19 +42,15 @@ export class AddComponent implements OnInit, AfterViewInit {
   public options: string[];
   public filteredOptions$: Observable<string[]>;
   public groups$: Observable<GroupItem[]>;
+  public categories$: Observable<Category[]>;
   public initialData: Expense;
   public isOnline = navigator.onLine;
-public defaultCurrency = 'EUR';
+  public defaultCurrency = 'EUR';
 
 
   ngOnInit(): void {
     this.initialData = this.sliderService.currentExpenseForEdit;
     this.selectedTabIndex = (this.initialData?.lastUpdate) ? 1 : 0;
-
-if (this.isOnline) {
-  this.defaultCurrency = 'USD'
-}
-
 
     this.expenseForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.maxLength(35)]),
@@ -122,6 +118,7 @@ if (this.isOnline) {
       }, 100);
     }
     this.groups$ = this.groupsService.getGroupsWithoutUpdate();
+    this.categories$ = this.categoryService.getCategoriesNew().pipe(map(categories=>categories.filter(category=> category.id !== 0)));
   }
 
   ngAfterViewInit() {
@@ -194,9 +191,9 @@ if (this.isOnline) {
           }
         }
 
+        expense.category = parseInt(expense.category);
         if (!this.initialData) {
           this.expenseService.addExpense(expense, "expenses");
-    
         } else {
           let key = this.initialData.key;
           if (this.initialData.recurring) {

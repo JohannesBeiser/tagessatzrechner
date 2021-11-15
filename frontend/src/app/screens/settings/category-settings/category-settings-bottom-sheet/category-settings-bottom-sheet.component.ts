@@ -23,7 +23,7 @@ export class CategorySettingsBottomSheetComponent implements OnInit {
   }
 
   deleteCategory() {
-    if (confirm(`Are you sure you want to delete "${this.category.name}"? TODO: What happens when u delete`)) {
+    if (confirm(`Are you sure you want to delete "${this.category.name}"? If any expenses have this category assigned, they from now on will convert to the category "unassigned". You can change it again any time.`)) {
       this.categoryService.deleteCategory(this.category.key);
       this.dismiss();
     }
