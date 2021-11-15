@@ -26,11 +26,10 @@
       </div>
     </div>
 
-    <div class="categories-total" *ngIf="!chartOpened">
+    <div class="categories-total" *ngIf="!chartOpened && totalCategories">
       <div class="category-item" *ngFor="let total of totalCategories; let i= index" (click)="toggleCategory(i,total)" [class.category-limited]="activeCategory !== null" [class.selected]="activeCategory == i">
-        <div class="color-badge" [style.background-color]="categoryService.categoryColors[total.category]"></div>
-        <span class="category" *ngIf="total.category !== 'health_insurance'">{{total.category}} </span>
-        <span class="category" *ngIf="total.category === 'health_insurance'">Health & Insurance </span>
+        <div class="color-badge" [style.background-color]="total.category.color"></div>
+        <span class="category">{{total.category.name}} </span>
         <span class="amount"> {{total.amount | prettyCurrency}}</span>
       </div>
 

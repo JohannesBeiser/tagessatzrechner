@@ -17,6 +17,8 @@ export interface CategoryColor{
 export interface Category{
   name: string;
   color: string;
+  id: number;
+  key?: number;
 }
 
 
@@ -29,12 +31,17 @@ export class CategoryService {
   private db: any;
   private connection$: ReplaySubject<boolean>;
   private categories$: BehaviorSubject<Category[]>;
+  private categories: Category[];
 
   constructor( private indexedDBService: IndexedDBConnectionService) { 
     this.connection$ = new ReplaySubject(1);
     this.createCategoryDatabase();
     this.categories$ = new BehaviorSubject<Category[]>([]);
+    this.categories$.subscribe(categories=>{
+      this.categories= categories;
+    })
     this.defaultCategory = localStorage.getItem("defaultCategory") || "food";
+    this.connection$.subscribe(()=>this.refreshCategories());
   }
 
   public readonly categoryColors: CategoryColor = {
@@ -53,6 +60,10 @@ export class CategoryService {
     this.defaultCategory = category;
   }
 
+  getCategoryFromId(id: number): Category{
+    return this.categories.find(el=> el.id == id) || {name: 'unassigned', color: '#000000', id: 0};
+  }
+
 
   public getCategories(): string[]{
     return [
@@ -68,10 +79,22 @@ export class CategoryService {
   }
 
 
+  public addCategoryFromBackup(category: Category){
+    let tx = this.db.transaction(['categories'], 'readwrite');
+    let store = tx.objectStore('categories');
+    store.add(category);
+    tx.oncomplete = () => {
+      this.refreshCategories();
+    }
+    tx.onerror = (event) => {
+      alert('error storing expense ' + event.target.errorCode);
+    }
+  }
 
   public addCategory(category: Category){
     //alter color to make it HEX
     category.color = '#' + category.color;
+    category.id = Date.now(); // Quick way to generate a unique ID. Not possible to mess anything up ina  use-case like this with 1 user only and local data 
     let tx = this.db.transaction(['categories'], 'readwrite');
     let store = tx.objectStore('categories');
     store.add(category);
@@ -84,7 +107,6 @@ export class CategoryService {
   };
 
   public getCategoriesNew(): Observable<Category[]> {
-    this.connection$.subscribe(()=>this.refreshCategories());
     return this.categories$.asObservable();
   }
 
@@ -132,6 +154,7 @@ export class CategoryService {
         cursor.continue();
       }
       else {
+        result.push({name: 'unassigned', color: '#000000', id: 0}); // add default category 'unassigned'
         this.categories$.next(result)
       }
     };

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Expense, ExpenseService } from 'src/app/services/expenses/expense.service';
-import { CategoryService } from 'src/app/services/category/category.service';
+import { CategoryService, Category } from 'src/app/services/category/category.service';
 import { SliderService } from 'src/app/services/slider/slider.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ExpenseBottomSheetComponent } from './expense-bottom-sheet/expense-bottom-sheet.component';
@@ -41,7 +41,8 @@ export class ExpenseListComponent implements OnInit {
 
   @Input() public expenses: Expense[];
   @Input() public collapseNotifier: Observable<void>;
-    public refresh: boolean = true;
+  public refresh: boolean = true;
+
 
   ngOnInit(): void {
     merge(this.expenseService.expenseDeletedNotifier,this.collapseNotifier).subscribe(()=>{
@@ -53,7 +54,8 @@ export class ExpenseListComponent implements OnInit {
       setTimeout(() => {
         this.refresh=true;
       }, 0);
-    })
+    });
+
   }
 
   public helper = {}

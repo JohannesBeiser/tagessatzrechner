@@ -3,7 +3,6 @@ import { BehaviorSubject, Subject, Observable } from 'rxjs';
 import { AudioService, ExpenseSTTResult } from 'src/app/services/audio/audio.service';
 import { takeUntil, bufferTime, map } from 'rxjs/operators';
 import { SliderService } from 'src/app/services/slider/slider.service';
-import { stringify } from 'querystring';
 import { ExpenseService, Expense } from 'src/app/services/expenses/expense.service';
 import { GroupsService } from 'src/app/services/groups/groups.service';
 
@@ -79,7 +78,8 @@ export class SttRecorderComponent implements OnInit {
       let result = await this.audioService.getTextFromAudio(this.data);
       let parsedResult= this.audioService.parseSttResult(result.transcription);
       if(parsedResult.amount && parsedResult.category && parsedResult.name){
-        this.createExpenseFromSttResult(parsedResult);
+        alert("feature currently disabled");
+        // this.createExpenseFromSttResult(parsedResult);
       }else{
         alert("Please try again, Recognized: " + parsedResult.amount + '€, category: ' + parsedResult.category + ', name: ' + parsedResult.name + ' (transcription was: ' + result.transcription + ')')
       }
@@ -87,14 +87,14 @@ export class SttRecorderComponent implements OnInit {
   }
 
   
-createExpenseFromSttResult(sttResult: ExpenseSTTResult){
-  let expense: Expense = {...{
-    date: `${new Date().getFullYear()}-${('0' + (new Date().getMonth() +1)).slice(-2)}-${('0' + (new Date().getDate())).slice(-2)}`,
-    group: this.groupsService.defaultGroup,
-  }, ...sttResult};
+// createExpenseFromSttResult(sttResult: ExpenseSTTResult){
+//   let expense: Expense = {...{
+//     date: `${new Date().getFullYear()}-${('0' + (new Date().getMonth() +1)).slice(-2)}-${('0' + (new Date().getDate())).slice(-2)}`,
+//     group: this.groupsService.defaultGroup,
+//   }, ...sttResult};
 
-  this.expenseService.addExpense(expense, "expenses");
-}
+//   this.expenseService.addExpense(expense, "expenses");
+// }
 
 audioContext: AudioContext;
 gumStream: MediaStream;

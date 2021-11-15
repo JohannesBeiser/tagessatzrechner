@@ -5,6 +5,7 @@ import { Expense, ExpenseService } from 'src/app/services/expenses/expense.servi
 import { GroupItem, GroupsService } from 'src/app/services/groups/groups.service';
 import { DatePipe } from '@angular/common';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { CategoryService, Category } from 'src/app/services/category/category.service';
 
 @Component({
   selector: 'app-general',
@@ -38,6 +39,7 @@ export class GeneralComponent implements OnInit {
     private expenseService: ExpenseService,
     private datePipe: DatePipe,
     private groupsService: GroupsService,
+    private categoryService: CategoryService
   ) { }
 
 
@@ -64,10 +66,10 @@ export class GeneralComponent implements OnInit {
    * Downloads all of the data (expenses, recurringExpenses, groups) as a snapshot in a .json file
    */
   public downloadBackup() {
-    combineLatest(this.expenseService.getExpenses("expenses"), this.expenseService.getExpenses("recurringExpenses"), this.groupsService.getGroups())
+    combineLatest(this.expenseService.getExpenses("expenses"), this.expenseService.getExpenses("recurringExpenses"), this.groupsService.getGroups(), this.categoryService.getCategoriesNew())
       .pipe(take(1))
-      .subscribe(([expenses, recurringExpenses, groups]) => {
-        let data = { expenses, recurringExpenses, groups };
+      .subscribe(([expenses, recurringExpenses, groups, categories]) => {
+        let data = { expenses, recurringExpenses, groups, categories};
         let fileName = `Expense_backup_${this.datePipe.transform(new Date(), 'MMM y').split(' ').join('_')}`
         this.downloadObjectAsJson(data, fileName)
       })
@@ -95,7 +97,7 @@ export class GeneralComponent implements OnInit {
    * loads all of the backup into the IndexedDB
    * @param json data containing expenses, recurringExpenses, groups
    */
-  loadDataIntoApp(json: { expenses: Expense[], recurringExpenses: Expense[], groups: GroupItem[] }) {
+  loadDataIntoApp(json: { expenses: Expense[], recurringExpenses: Expense[], groups: GroupItem[], categories: Category[]}) {
     // add normal expenses
 
     if (confirm("Please confirm you want to load this backup into your app")) {
@@ -117,6 +119,12 @@ export class GeneralComponent implements OnInit {
         this.groupsService.addGroup(group.groupName);
       });
 
+      // add categories
+      json.categories.forEach(category => {
+        delete category['key'];
+        this.categoryService.addCategoryFromBackup(category);
+      });
+
       alert("Data loaded successfully")
     }
 
@@ -128,6 +136,7 @@ export class GeneralComponent implements OnInit {
         this.expenseService.clearData("expenses");
         this.expenseService.clearData("recurringExpenses")
         this.groupsService.clearData();
+        this.categoryService.clearData();
       }
     }
   }

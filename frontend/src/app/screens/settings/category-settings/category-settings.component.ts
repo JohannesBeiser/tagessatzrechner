@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Category, CategoryService } from 'src/app/services/category/category.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { CategorySettingsBottomSheetComponent } from './category-settings-bottom-sheet/category-settings-bottom-sheet.component';
+import { filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-category-settings',
@@ -22,7 +23,8 @@ export class CategorySettingsComponent implements OnInit {
   categories$: Observable<Category[]>;
 
   ngOnInit(): void {
-    this.categories$ = this.categoryService.getCategoriesNew();
+    // filtering 0 because fallback 'unassigned' shouldn't be displayed in list
+    this.categories$ = this.categoryService.getCategoriesNew().pipe(map(el=> el.filter(el=>el.id !== 0)));
   }
 
   openDialog() {

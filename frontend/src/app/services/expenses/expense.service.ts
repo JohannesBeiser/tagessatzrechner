@@ -1,17 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Subject, Observable, BehaviorSubject, ReplaySubject } from 'rxjs';
+import { Subject, Observable, ReplaySubject } from 'rxjs';
 import { IndexedDBConnectionService } from '../indexed-dbconnection.service';
 import { expenses } from "./Expenses";
-import { GroupsService } from '../groups/groups.service';
-import { groups } from '../groups/Groups';
-import { isEqual, addMonths, differenceInMonths, getMonth } from 'date-fns';
+import { addMonths, differenceInMonths, getMonth } from 'date-fns';
 import { take } from 'rxjs/operators';
+import { Category } from '../category/category.service';
 
 export interface Expense {
   name: string;
   amount: number;
   amount_foreign?: number;
-  category: string;
+  category: number;
   group: string;
   date: string;
   description?: string;
