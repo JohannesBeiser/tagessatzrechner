@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GroupsService, GroupItem } from 'src/app/services/groups/groups.service';
+import { GroupsService, Group } from 'src/app/services/groups/groups.service';
 import { CategoryService, Category } from 'src/app/services/category/category.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -17,9 +17,9 @@ export class DefaultsComponent implements OnInit {
     private categoryService: CategoryService,
   ) { }
 
-  public groups$: Observable<GroupItem[]>;
+  public groups$: Observable<Group[]>;
   public categories$: Observable<Category[]>;
-  public defaultGroupSelected: string;
+  public defaultGroupSelected: number;
   public defaultCategorySelected: number;
 
   ngOnInit(): void {

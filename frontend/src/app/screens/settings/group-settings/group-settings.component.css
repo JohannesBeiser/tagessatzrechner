@@ -12,6 +12,12 @@ section .section-container {
 section .section-container .groups-header {
   font-weight: bold;
   margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #cfcfcf;
+}
+section .section-container .groups-header .title {
+  flex: 1;
 }
 section.group-settings-section .groups-header {
   display: flex;

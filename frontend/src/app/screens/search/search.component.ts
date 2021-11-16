@@ -5,6 +5,7 @@ import { debounceTime, distinctUntilChanged, filter, map, switchMap, share, tap 
 import { ExpenseService, Expense } from 'src/app/services/expenses/expense.service';
 import { FilterService } from 'src/app/services/filter/filter.service';
 import { HttpClient } from '@angular/common/http';
+import { GroupsService } from 'src/app/services/groups/groups.service';
 
 @Component({
   selector: 'app-search',
@@ -33,6 +34,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
     public sliderService: SliderService,
     private expenseService: ExpenseService,
     private filterService: FilterService,
+    private groupService: GroupsService
   ) { }
 
   ngOnInit(): void {
@@ -152,7 +154,10 @@ export class SearchComponent implements OnInit, AfterViewInit {
             let matches = true;
             normalizedTerms.forEach(singleTerm => {
               if (matches) {
-                matches = expense.name.toLowerCase().includes(singleTerm) || expense.description?.toLowerCase().includes(singleTerm) || expense.group.toLowerCase().includes(singleTerm);
+                matches = expense.name.toLowerCase().includes(singleTerm) 
+                || expense.description?.toLowerCase().includes(singleTerm) 
+                || this.groupService.getGroupById(expense.group).name.toLowerCase().includes(singleTerm);
+
                 let expenseDate = new Date(expense.date);
                 let matchesDate = true;
                 let dateSegments = singleTerm.split(".")

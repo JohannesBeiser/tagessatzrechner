@@ -2,7 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { combineLatest } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Expense, ExpenseService } from 'src/app/services/expenses/expense.service';
-import { GroupItem, GroupsService } from 'src/app/services/groups/groups.service';
+import { Group, GroupsService } from 'src/app/services/groups/groups.service';
 import { DatePipe } from '@angular/common';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { CategoryService, Category } from 'src/app/services/category/category.service';
@@ -97,7 +97,7 @@ export class GeneralComponent implements OnInit {
    * loads all of the backup into the IndexedDB
    * @param json data containing expenses, recurringExpenses, groups
    */
-  loadDataIntoApp(json: { expenses: Expense[], recurringExpenses: Expense[], groups: GroupItem[], categories: Category[]}) {
+  loadDataIntoApp(json: { expenses: Expense[], recurringExpenses: Expense[], groups: Group[], categories: Category[]}) {
     // add normal expenses
 
     if (confirm("Please confirm you want to load this backup into your app")) {
@@ -116,7 +116,9 @@ export class GeneralComponent implements OnInit {
 
       // add groups
       json.groups.forEach(group => {
-        this.groupsService.addGroup(group.groupName);
+
+        // TODO: add real group instance
+        // this.groupsService.addGroup(group.name);
       });
 
       // add categories

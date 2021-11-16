@@ -15,7 +15,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MatPseudoCheckbox } from '@angular/material/core';
 import { GroupsComponent } from './screens/groups/groups.component';
 import { SearchComponent } from './screens/search/search.component';
 import {MatChipsModule} from '@angular/material/chips';
@@ -50,6 +50,8 @@ import { GroupSettingsComponent } from './screens/settings/group-settings/group-
 import { CategorySettingsComponent } from './screens/settings/category-settings/category-settings.component';
 import { AddCategoryDialogComponent } from './screens/settings/category-settings/add-category-dialog/add-category-dialog.component';
 import { CategorySettingsBottomSheetComponent } from './screens/settings/category-settings/category-settings-bottom-sheet/category-settings-bottom-sheet.component';
+import { AddGroupDialogComponent } from './screens/settings/group-settings/add-group-dialog/add-group-dialog.component';
+import {MatCheckboxModule} from '@angular/material/checkbox'
 
 registerLocaleData(localeDe, 'de');
 
@@ -83,7 +85,8 @@ registerLocaleData(localeDe, 'de');
     GroupSettingsComponent,
     CategorySettingsComponent,
     AddCategoryDialogComponent,
-    CategorySettingsBottomSheetComponent
+    CategorySettingsBottomSheetComponent,
+    AddGroupDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -93,6 +96,7 @@ registerLocaleData(localeDe, 'de');
     MatInputModule,
     MatSelectModule,
     MatChipsModule,
+    MatCheckboxModule,
     MatSlideToggleModule,
     MatDatepickerModule,
     MatTabsModule,

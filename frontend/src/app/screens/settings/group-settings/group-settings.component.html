@@ -2,14 +2,13 @@
   <section class="group-settings-section">
     <div class="section-container">
       <div class="groups-header">
-        <span>Groups</span>
-        <input type="text" [(ngModel)]="newGroupInputValue" #addGroupsInput>
-        <i class="material-icons-outlined" (click)="addGroup()">add</i>
+        <span class="title">Groups</span>
+        <i class="material-icons-outlined" (click)="openDialog()">add</i>
       </div>
 
       <div class="group-list">
         <div class="group-item" *ngFor="let group of groups$ | async">
-          <span>{{group.groupName}}</span>
+          <span>{{group.name}}</span>
           <i class="material-icons-outlined" (click)="openBottomSheet($event, group)">more_horiz</i>
         </div>
         <span *ngIf="(groups$ | async).length === 0" class="no-items-yet">

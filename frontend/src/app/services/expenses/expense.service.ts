@@ -11,7 +11,7 @@ export interface Expense {
   amount: number;
   amount_foreign?: number;
   category: number;
-  group: string;
+  group: number; // id of the group
   date: string;
   description?: string;
   currency?: string;

@@ -6,7 +6,7 @@ import { CurrencyService } from 'src/app/services/currency/currency.service';
 
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take, map, startWith } from 'rxjs/operators';
-import { GroupsService, GroupItem } from 'src/app/services/groups/groups.service';
+import { GroupsService, Group } from 'src/app/services/groups/groups.service';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { CategoryService, Category } from 'src/app/services/category/category.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
@@ -41,7 +41,7 @@ export class AddComponent implements OnInit, AfterViewInit {
   public currencyRates;
   public options: string[];
   public filteredOptions$: Observable<string[]>;
-  public groups$: Observable<GroupItem[]>;
+  public groups$: Observable<Group[]>;
   public categories$: Observable<Category[]>;
   public initialData: Expense;
   public isOnline = navigator.onLine;

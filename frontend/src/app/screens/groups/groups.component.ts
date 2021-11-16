@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SliderService } from 'src/app/services/slider/slider.service';
-import { GroupsService, GroupItem, GroupTotal } from 'src/app/services/groups/groups.service';
+import { GroupsService, Group, GroupTotal } from 'src/app/services/groups/groups.service';
 import { Observable, combineLatest, Subscription } from 'rxjs';
 import { ExpenseService, Expense } from 'src/app/services/expenses/expense.service';
 import { FilterService } from 'src/app/services/filter/filter.service';
@@ -46,7 +46,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     private router: Router
   ) { }
 
-  public groups$: Observable<GroupItem[]>
+  public groups$: Observable<Group[]>
   public expenses$: Observable<Expense[]>;
   private subscription: Subscription;
   public groupsTotals: GroupTotalCollections[];
@@ -81,11 +81,11 @@ export class GroupsComponent implements OnInit, OnDestroy {
   /**
    * Shows a expense list just like on home for this group. Opens a slighly modified "home" site with a "x" button to reset the site to its former state
    */
-  showDetailList(groupName: string){
+  showDetailList(groupId: number){
     this.filterService.setFilter(
       {
         temporaryFilter: true,
-        groups: [groupName]
+        groups: [this.groupsService.getGroupById(groupId)]
       }
     )
     this.router.navigate(['/home']);
@@ -97,25 +97,25 @@ export class GroupsComponent implements OnInit, OnDestroy {
     }
   }
 
-  calculateGroupsTotals(expenses: Expense[], groups_origin: GroupItem[]): GroupTotalCollections[] {
+  calculateGroupsTotals(expenses: Expense[], groups_origin: Group[]): GroupTotalCollections[] {
     let sorterHelper = {};
     let groups = [...groups_origin].reverse();
     // groups.push({ key: null, groupName: "General" });
     groups.forEach((el) => {
-      sorterHelper[el.groupName] = {};
-      sorterHelper[el.groupName].amount = 0;
-      sorterHelper[el.groupName].expenses = [];
+      sorterHelper[el.name] = {};
+      sorterHelper[el.name].amount = 0;
+      sorterHelper[el.name].expenses = [];
     })
 
     expenses.forEach(expense => {
       let expenseGroup = expense.group;
       //Skip expenses who have a group that has been deleted
-      if (expenseGroup !=="General") {
+      if (expenseGroup !== 0) { // 0 being general
         if (sorterHelper[expenseGroup]) {
           sorterHelper[expenseGroup].amount += expense.amount;
           sorterHelper[expenseGroup].expenses.push(expense)
         } else {
-          groups.push({ key: null, groupName: expenseGroup });
+          groups.push({ key: null, name: this.groupsService.getGroupById(expenseGroup).name });
           sorterHelper[expenseGroup] = {}
           sorterHelper[expenseGroup].amount = expense.amount;
           sorterHelper[expenseGroup].expenses = [expense];
@@ -125,9 +125,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
     })
 
     let result: GroupTotal[] = groups.map<GroupTotal>((group) => {
-      let amountForGroup: number = sorterHelper[group.groupName].amount;
-      let expenses: Expense[] = sorterHelper[group.groupName].expenses;
-      let deleted: boolean = sorterHelper[group.groupName].deleted;
+      let amountForGroup: number = sorterHelper[group.name].amount;
+      let expenses: Expense[] = sorterHelper[group.name].expenses;
+      let deleted: boolean = sorterHelper[group.name].deleted;
 
       let result: GroupTotal;
 
@@ -150,7 +150,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
     let mapped = result.reduce((acc, cur) => {
         if (!cur.deleted) {
-          if (cur.groupName !== "General") {
+          if (cur.name !== "General") {
             let next = acc;
             next[0].groupTotal.push(cur)
             return next

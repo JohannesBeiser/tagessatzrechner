@@ -1,15 +1,22 @@
 import { Injectable } from '@angular/core';
-import { Subject, ReplaySubject, Observable, BehaviorSubject } from 'rxjs';
+import {  ReplaySubject, Observable, BehaviorSubject } from 'rxjs';
 import { IndexedDBConnectionService } from '../indexed-dbconnection.service';
-import { groups } from './Groups';
-import { ExpenseService } from '../expenses/expense.service';
 
-export interface GroupItem{
-  key: number;
-  groupName: string;
+export interface Group{
+  key?: number;
+  name: string;
+  id?: number;
+  subgroups?: Subgroup[];
+  active?: boolean;
 }
 
-export interface GroupTotal extends GroupItem {
+export interface Subgroup{
+  key?: number;
+  name: string;
+  id?: number;
+}
+
+export interface GroupTotal extends Group {
   amount: number;
   firstExpenseDate?: string;
   lastExpenseDate?: string;
@@ -23,23 +30,33 @@ export interface GroupTotal extends GroupItem {
 export class GroupsService {
 
   private db: any;
-  private groups$: BehaviorSubject<GroupItem[]>;
+  private groups$: BehaviorSubject<Group[]>;
+  private groups: Group[];
   private connection$: ReplaySubject<boolean>;
-  public defaultGroup: string;
+  public defaultGroup: number; // id of the group
 
   constructor(
     private indexedDBService: IndexedDBConnectionService
   ) {
     this.connection$ = new ReplaySubject(1);
     this.createGroupDatabase();
-    this.groups$ = new BehaviorSubject<GroupItem[]>([]);
-    this.defaultGroup = localStorage.getItem("defaultGroup") || "General"
+    this.groups$ = new BehaviorSubject<Group[]>([]);
+    this.groups$.subscribe(groups=>{
+      this.groups= groups;
+    })
+    this.defaultGroup = parseInt(localStorage.getItem("defaultGroup") || "General");
   }
 
-  public addGroup(group: string) {
+  getGroupById(id: number){
+    return this.groups.find(el=> el.id == id);
+  }
+
+  public addGroup(group: Group) {
+    group.id = Date.now();
+    group.active = true;
     let tx = this.db.transaction(['groups'], 'readwrite');
     let store = tx.objectStore('groups');
-    store.add({groupName: group});
+    store.add(group);
     tx.oncomplete = () => {
       this.refreshGroups();
     }
@@ -48,7 +65,7 @@ export class GroupsService {
     }
   };
 
-  public getGroups(): Observable<GroupItem[]> {
+  public getGroups(): Observable<Group[]> {
     this.connection$.subscribe(()=>this.refreshGroups());
     return this.groups$.asObservable();
   }
@@ -65,22 +82,22 @@ export class GroupsService {
   }
 
 
-  public deleteGroup(key: number, groupName: string) {
+  public deleteGroup(key: number, group: Group) {
     let transaction = this.db.transaction("groups", "readwrite");
     let objectStore = transaction.objectStore("groups");
     let req = objectStore.delete(key);
     req.onsuccess = () => {
       this.refreshGroups();
     }
-    if(this.defaultGroup == groupName){
-      this.setDefaultGroup("General");
+    if(this.defaultGroup == group.id){
+      this.setDefaultGroup(0); // 0 being general group
     }
   }
 
 
-  public setDefaultGroup(group:string){
-    localStorage.setItem("defaultGroup", group)
-    this.defaultGroup= group;
+  public setDefaultGroup(id: number){
+    localStorage.setItem("defaultGroup", id.toString())
+    this.defaultGroup= id;
   }
 
   /**
@@ -90,7 +107,7 @@ export class GroupsService {
     let transaction = this.db.transaction(["groups"]);
     let object_store = transaction.objectStore("groups");
     let request = object_store.openCursor();
-    let result: GroupItem[] = []
+    let result: Group[] = []
 
     request.onsuccess = (event) => {
       let cursor = event.target.result;
@@ -101,6 +118,7 @@ export class GroupsService {
         cursor.continue();
       }
       else {
+        result.push({name: "General", id: 0, subgroups: []})
         this.groups$.next(result)
       }
     };
@@ -124,10 +142,10 @@ export class GroupsService {
     }
   }
 
-  public seedGroups(){
-    for (const group of groups) {
-      this.addGroup(group);
-    }
-  }
+  // public seedGroups(){
+  //   for (const group of groups) {
+  //     this.addGroup(group);
+  //   }
+  // }
 
 }

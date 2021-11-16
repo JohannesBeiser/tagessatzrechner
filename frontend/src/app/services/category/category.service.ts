@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IndexedDBConnectionService } from '../indexed-dbconnection.service';
 import { ReplaySubject, BehaviorSubject, Observable } from 'rxjs';
-import { GroupItem } from '../groups/groups.service';
+import { Group } from '../groups/groups.service';
 
 export interface CategoryColor{
   food: string;

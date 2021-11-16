@@ -156,7 +156,7 @@ export class HomeComponent implements OnInit {
             if (filter.groups) {
               filter.groups.forEach(groupFilter => {
                 if (!matches) {
-                  matches = expense.group.toLowerCase() == groupFilter.toLowerCase()
+                  matches = expense.group == groupFilter.id;
                 }
               });
             } else {
@@ -318,7 +318,7 @@ export class HomeComponent implements OnInit {
       //OR-comparison, true if one of the filters is true
       filter.groups.forEach(groupFilter => {
         if (!matchesInternal) {
-          matchesInternal = expense.group.toLowerCase() == groupFilter.toLowerCase()
+          matchesInternal = expense.group == groupFilter.id;
         }
       })
       matches = matchesInternal;

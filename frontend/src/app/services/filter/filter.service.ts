@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { addMonths, subMonths } from 'date-fns';
 import { Expense } from '../expenses/expense.service';
+import { Group } from '../groups/groups.service';
 
 export interface MonthYear {
   /**
@@ -12,7 +13,7 @@ export interface MonthYear {
 }
 
 export interface ExpenseFilter {
-  groups?: string[];
+  groups?: Group[];
   date?: MonthYear;
   last30Active?: boolean;
   temporaryFilter?: boolean;

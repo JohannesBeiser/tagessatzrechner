@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { GroupsService, GroupItem } from 'src/app/services/groups/groups.service';
+import { GroupsService, Group } from 'src/app/services/groups/groups.service';
 import { FilterService, ExpenseFilter } from 'src/app/services/filter/filter.service';
 import {  skip, filter, } from 'rxjs/operators';
 import { combineLatest, Observable } from 'rxjs';
@@ -14,11 +14,11 @@ export class FilterComponent implements OnInit {
   @ViewChild("monthPickerInput") public monthPickerInputElement: ElementRef;
   @ViewChild("groupPickerInput") public groupPickerInputElement: ElementRef;
 
-  public groups$: Observable<GroupItem[]>;
+  public groups$: Observable<Group[]>;
 
   //Filters
   public dateSelected: string;
-  public groupsSelected: string[];
+  public groupsSelected: Group[];
   public allDatesSelected: boolean;
   public allGroupsSelected: boolean;
 
@@ -28,7 +28,7 @@ export class FilterComponent implements OnInit {
 
 
   constructor(
-    private groupService: GroupsService,
+    public groupService: GroupsService,
     private filterService: FilterService
   ) { }
 
@@ -74,10 +74,14 @@ export class FilterComponent implements OnInit {
     this.groupsSelected.splice(index,1);
   }
 
+  getGroupById(id: number){
+    return this.groupService.getGroupById(id);
+  }
+
   groupChanged(e: any) {
     this.allGroupsSelected = !e.checked;
     if(e.checked){
-        this.groupsSelected= ["General"]; // if newly switched on just one with default general
+        this.groupsSelected= [this.groupService.getGroupById(0)]; // if newly switched on just one with default general
     }
   }
 

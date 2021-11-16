@@ -1,0 +1,38 @@
+.add-category-dialog-container .header {
+  display: flex;
+  align-items: center;
+}
+.add-category-dialog-container .header h3 {
+  flex: 1;
+}
+.add-category-dialog-container .submit-form {
+  background: #60954a;
+  font-weight: bold;
+  color: white;
+  width: initial;
+  padding: 8px 12px;
+}
+.add-category-dialog-container .is-active-section {
+  margin-top: 12px;
+}
+.add-category-dialog-container .is-active-section p {
+  font-size: 0.8em;
+  opacity: 0.8;
+}
+.add-category-dialog-container .is-active-section p i {
+  font-size: 1em;
+}
+.add-category-dialog-container .subgroups-section {
+  border-bottom: 1px solid #cfcfcf;
+  margin: 12px 0;
+}
+.add-category-dialog-container .subgroups-section .header {
+  display: flex;
+  align-items: center;
+}
+.add-category-dialog-container .subgroups-section .header input {
+  flex: 1;
+}
+.add-category-dialog-container .submit-form {
+  margin-top: 12px;
+}

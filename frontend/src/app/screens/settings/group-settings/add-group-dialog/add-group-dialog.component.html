@@ -1,0 +1,36 @@
+<div class="add-category-dialog-container">
+    <div class="header">
+      <h3 mat-dialog-title>{{groupToEdit? 'Edit Group' : 'Add a new Group'}}</h3>
+      <i  class="material-icons" (click)="closeDialog()">close</i>                    
+    </div>
+      
+      <form class="expense-form" [formGroup]="groupForm" autocomplete="off" (submit)="submit()"
+        #formDirective="ngForm">
+      
+        <mat-form-field appearance="standard" class="w-100">
+          <mat-label>Group name</mat-label>
+          <input type="text" matInput formControlName="name">
+          <mat-error *ngIf="hasError('name', 'required')">Name is required</mat-error>
+          <mat-error *ngIf="hasError('name', 'maxlength')">Max. 35 characters allowed</mat-error>
+        </mat-form-field>
+        <input type="submit" style="display: none;">
+      </form>
+
+      <section class="is-active-section">
+          <mat-checkbox [(ngModel)]="isActive">Active group</mat-checkbox>       
+          <p>
+            <i  class="material-icons" >info</i>                    
+            If a group is active it will be selectable from dropdowns, otherwise it will keep existing in data but not be selectable in dropdowns</p>
+      </section>
+
+      <section class="subgroups-section">
+          <div class="header">
+              <div class="title">Subgroups</div>
+              <input type="text" [(ngModel)]="subgroupInput" #subgroupInputControl>
+              <i  class="material-icons">add</i>                    
+          </div>
+          <div class="content"></div>
+      </section>
+      
+      <div class="submit-form" (click)="submit()"  mat-dialog-close>{{groupToEdit? 'Save' : 'Add'}}</div>
+  </div>
