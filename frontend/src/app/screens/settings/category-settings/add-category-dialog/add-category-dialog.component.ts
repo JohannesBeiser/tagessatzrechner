@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
-import { CategoryService } from 'src/app/services/category/category.service';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { CategoryService, Category } from 'src/app/services/category/category.service';
 
 @Component({
   selector: 'app-add-category-dialog',
@@ -11,6 +11,7 @@ import { CategoryService } from 'src/app/services/category/category.service';
 export class AddCategoryDialogComponent implements OnInit {
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public categoryToEdit: Category,
     private categoryService: CategoryService,
     private dialogRef: MatDialogRef<AddCategoryDialogComponent>
   ) { }
@@ -18,10 +19,9 @@ export class AddCategoryDialogComponent implements OnInit {
   public categoryForm: FormGroup;
 
   ngOnInit(): void {
-
     this.categoryForm = new FormGroup({
-      name: new FormControl('', [Validators.required, Validators.maxLength(35)]),
-      color: new FormControl('', [Validators.required, Validators.maxLength(6), Validators.minLength(6)]),
+      name: new FormControl(this.categoryToEdit?.name || '', [Validators.required, Validators.maxLength(35)]),
+      color: new FormControl(this.categoryToEdit?.color || '', [Validators.required, Validators.maxLength(7), Validators.minLength(7)]),
     });
   }
 
@@ -29,11 +29,16 @@ export class AddCategoryDialogComponent implements OnInit {
     return this.categoryForm.controls[controlName].hasError(errorName);
   }
 
-  async createCategory() {
+  async submit() {
     let category = this.categoryForm.value;
     this.setFormGroupTouched(this.categoryForm);
     if (this.categoryForm.valid) {
-      this.categoryService.addCategory(category);
+      if(this.categoryToEdit){
+        this.categoryService.editCategory({...category, id: this.categoryToEdit.id}, this.categoryToEdit.key)
+      }else{
+        this.categoryService.addCategory(category);
+      }
+
       this.closeDialog();
     }
   }

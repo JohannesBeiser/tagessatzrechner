@@ -68,7 +68,6 @@ export class CategoryService {
 
   public addCategory(category: Category){
     //alter color to make it HEX
-    category.color = '#' + category.color;
     category.id = Date.now(); // Quick way to generate a unique ID. Not possible to mess anything up ina  use-case like this with 1 user only and local data 
     let tx = this.db.transaction(['categories'], 'readwrite');
     let store = tx.objectStore('categories');
@@ -80,6 +79,16 @@ export class CategoryService {
       alert('error storing expense ' + event.target.errorCode);
     }
   };
+
+  public editCategory(category: Category, key: number){
+    let transaction = this.db.transaction('categories', "readwrite");
+    let objectStore = transaction.objectStore('categories');
+    let req = objectStore.put(category, key);
+    req.onsuccess = () => {
+      this.refreshCategories();
+    }
+    
+  }
 
   public getCategoriesNew(): Observable<Category[]> {
     return this.categories$.asObservable();

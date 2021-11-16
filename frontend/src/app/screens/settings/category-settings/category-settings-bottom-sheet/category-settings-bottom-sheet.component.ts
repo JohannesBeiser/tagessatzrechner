@@ -1,7 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
-import { GroupsService } from 'src/app/services/groups/groups.service';
 import { CategoryService } from 'src/app/services/category/category.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AddCategoryDialogComponent } from '../add-category-dialog/add-category-dialog.component';
 
 @Component({
   selector: 'app-category-settings-bottom-sheet',
@@ -14,6 +15,8 @@ export class CategorySettingsBottomSheetComponent implements OnInit {
     @Inject(MAT_BOTTOM_SHEET_DATA) public category: any,
     private bottomSheetRef: MatBottomSheetRef<CategorySettingsBottomSheetComponent>,
     private categoryService: CategoryService,
+    public dialog: MatDialog,
+
   ) { }
 
   ngOnInit(): void {
@@ -31,6 +34,12 @@ export class CategorySettingsBottomSheetComponent implements OnInit {
 
   editCategory(){
     //open dialog with preexisting data
+    const dialogRef = this.dialog.open(AddCategoryDialogComponent, { data: this.category }); // add initial data here
+    this.bottomSheetRef.dismiss();
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
     
   }
 

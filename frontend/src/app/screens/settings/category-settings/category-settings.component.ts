@@ -28,7 +28,7 @@ export class CategorySettingsComponent implements OnInit {
   }
 
   openDialog() {
-    const dialogRef = this.dialog.open(AddCategoryDialogComponent);
+    const dialogRef = this.dialog.open(AddCategoryDialogComponent); // add initial data here
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);

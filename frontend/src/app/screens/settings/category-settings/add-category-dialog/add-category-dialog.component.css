@@ -1,0 +1,14 @@
+.add-category-dialog-container .header {
+  display: flex;
+  align-items: center;
+}
+.add-category-dialog-container .header h3 {
+  flex: 1;
+}
+.add-category-dialog-container .submit-form {
+  background: #60954a;
+  font-weight: bold;
+  color: white;
+  width: initial;
+  padding: 8px 12px;
+}

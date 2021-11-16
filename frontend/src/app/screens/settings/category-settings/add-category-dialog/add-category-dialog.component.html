@@ -1,7 +1,10 @@
 <div class="add-category-dialog-container">
-    <h3 mat-dialog-title>Add a new Category</h3>
+  <div class="header">
+    <h3 mat-dialog-title>{{categoryToEdit? 'Edit Category' : 'Add a new Category'}}</h3>
+    <i  class="material-icons" (click)="closeDialog()">close</i>                    
+  </div>
     
-    <form class="expense-form" [formGroup]="categoryForm" autocomplete="off" (submit)="createCategory()"
+    <form class="expense-form" [formGroup]="categoryForm" autocomplete="off" (submit)="submit()"
       #formDirective="ngForm">
     
       <mat-form-field appearance="standard" class="w-100">
@@ -22,5 +25,5 @@
       <input type="submit" style="display: none;">
     </form>
     
-    <div class="submit-form" (click)="createCategory()"  mat-dialog-close>Add</div>
+    <div class="submit-form" (click)="submit()"  mat-dialog-close>{{categoryToEdit? 'Save' : 'Add'}}</div>
 </div>

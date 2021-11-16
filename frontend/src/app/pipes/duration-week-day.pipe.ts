@@ -12,10 +12,6 @@ export class DurationWeekDayPipe implements PipeTransform {
     let weeks = parseInt(((value - years*365 - months*30.4167)/7).toString().split(".")[0]);
     let days = parseInt((value - weeks*7 - months*30.4167 - years*365).toFixed(0));
     
-    // if(value >400){
-    //   debugger;
-    // }
-
     if(years>0){
       result.push(`${years} ${this.pluralizeYear(years)}`)
     }
