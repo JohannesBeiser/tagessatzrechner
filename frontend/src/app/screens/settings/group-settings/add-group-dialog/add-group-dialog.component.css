@@ -27,14 +27,13 @@
   padding-top: 12px;
   margin: 12px 0;
 }
-.add-category-dialog-container .subgroups-section .title {
-  font-weight: bold;
-}
 .add-category-dialog-container .subgroups-section .header {
   display: flex;
   align-items: center;
+  margin-bottom: 8px;
 }
-.add-category-dialog-container .subgroups-section .header input {
+.add-category-dialog-container .subgroups-section .header .title {
+  font-weight: bold;
   flex: 1;
 }
 .add-category-dialog-container .subgroups-section .content .no-items {
@@ -49,6 +48,9 @@
   border-radius: 8px;
   margin: 4px 0;
   align-items: center;
+}
+.add-category-dialog-container .subgroups-section .content .subgroup-item .name {
+  flex: 1;
 }
 .add-category-dialog-container .submit-form {
   margin-top: 32px;

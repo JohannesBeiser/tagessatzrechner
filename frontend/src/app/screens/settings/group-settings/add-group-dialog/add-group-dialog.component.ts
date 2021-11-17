@@ -1,9 +1,10 @@
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Category } from 'src/app/services/category/category.service';
 import { Group, GroupsService, Subgroup } from 'src/app/services/groups/groups.service';
 import { AddCategoryDialogComponent } from '../../category-settings/add-category-dialog/add-category-dialog.component';
+import { EditSubgroupDialogComponent } from './edit-subgroup-dialog/edit-subgroup-dialog.component';
 
 @Component({
   selector: 'app-add-group-dialog',
@@ -21,8 +22,11 @@ export class AddGroupDialogComponent implements OnInit {
   constructor(    
     @Inject(MAT_DIALOG_DATA) public groupToEdit: Group,
     private dialogRef: MatDialogRef<AddCategoryDialogComponent>,
-    private groupService: GroupsService
-  ) { }
+    private groupService: GroupsService,
+    public dialog: MatDialog,
+  ) {
+    this.subgroups= []
+   }
 
   ngOnInit(): void {
     if(this.groupToEdit  && this.groupToEdit.active == false){
@@ -42,12 +46,17 @@ export class AddGroupDialogComponent implements OnInit {
   }
 
   addSubgroup(){
-    if(this.subgroupInputValue == ""){
-      this.subgroupInputControl?.nativeElement.focus();
-    }else{
-      this.subgroups.push({name: this.subgroupInputValue, id: Date.now()});
-      this.subgroupInputValue = "";
-    }
+    const dialogRef = this.dialog.open(EditSubgroupDialogComponent); // add initial data here
+
+    dialogRef.afterClosed().subscribe((result: Subgroup) => {
+      this.subgroups.push(result);
+    });
+    // if(this.subgroupInputValue == ""){
+    //   this.subgroupInputControl?.nativeElement.focus();
+    // }else{
+    //   this.subgroups.push({name: this.subgroupInputValue, id: Date.now()});
+    //   this.subgroupInputValue = "";
+    // }
   }
 
   async submit() {
@@ -68,12 +77,23 @@ export class AddGroupDialogComponent implements OnInit {
           subgroups: this.subgroups,
           id: Date.now()
         }
-        debugger;
         this.groupService.addGroup(group);
       }
 
       this.closeDialog();
     }
+  }
+
+  editSubgroupName(subgroup: Subgroup){
+    const dialogRef = this.dialog.open(EditSubgroupDialogComponent, {data: subgroup}); // add initial data here
+
+    dialogRef.afterClosed().subscribe((result: Subgroup) => {
+      this.subgroups.find(el=>el.id == result?.id).name = result?.name;
+    });
+  }
+
+  deleteSubgroup(subgroup: Subgroup){
+    this.subgroups = this.subgroups.filter(el=> el.id !== subgroup.id);
   }
 
   private setFormGroupTouched(formGroup: FormGroup) {
@@ -85,6 +105,7 @@ export class AddGroupDialogComponent implements OnInit {
 
   closeDialog() {
     this.dialogRef.close();
+    this.subgroups = []
   }
 
 }

@@ -24,17 +24,18 @@
       </section>
 
       <section class="subgroups-section">
-        <div class="title">Subgroups</div>
-          <div class="header">
-              <mat-form-field appearance="standard" class="w-100">
-                <mat-label>Subgroup name</mat-label>
-                <input type="text" matInput  [(ngModel)]="subgroupInputValue">
-              </mat-form-field>
+        <div class="header">
+            <div class="title">Subgroups</div>
               <i class="material-icons" (click)="addSubgroup()">add</i>                    
           </div>
           <div class="content">
             <div class="no-items" *ngIf="subgroups.length == 0">No subgroups exist yet</div>
-              <div class="subgroup-item" *ngFor="let subgroup of subgroups">{{subgroup.name}}</div>
+              <div class="subgroup-item" *ngFor="let subgroup of subgroups">
+                <span class="name">{{subgroup.name}}</span>
+                <i class="material-icons" (click)="editSubgroupName(subgroup)">edit</i>  
+                <i class="material-icons" (click)="deleteSubgroup(subgroup)">delete</i>                
+              
+              </div>
           </div>
       </section>
       

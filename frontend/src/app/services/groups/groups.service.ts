@@ -11,9 +11,8 @@ export interface Group{
 }
 
 export interface Subgroup{
-  key?: number;
-  name: string;
   id?: number;
+  name: string;
 }
 
 export interface GroupTotal extends Group {

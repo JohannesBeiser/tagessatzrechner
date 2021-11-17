@@ -51,7 +51,8 @@ import { CategorySettingsComponent } from './screens/settings/category-settings/
 import { AddCategoryDialogComponent } from './screens/settings/category-settings/add-category-dialog/add-category-dialog.component';
 import { CategorySettingsBottomSheetComponent } from './screens/settings/category-settings/category-settings-bottom-sheet/category-settings-bottom-sheet.component';
 import { AddGroupDialogComponent } from './screens/settings/group-settings/add-group-dialog/add-group-dialog.component';
-import {MatCheckboxModule} from '@angular/material/checkbox'
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import { EditSubgroupDialogComponent } from './screens/settings/group-settings/add-group-dialog/edit-subgroup-dialog/edit-subgroup-dialog.component'
 
 registerLocaleData(localeDe, 'de');
 
@@ -86,7 +87,8 @@ registerLocaleData(localeDe, 'de');
     CategorySettingsComponent,
     AddCategoryDialogComponent,
     CategorySettingsBottomSheetComponent,
-    AddGroupDialogComponent
+    AddGroupDialogComponent,
+    EditSubgroupDialogComponent
   ],
   imports: [
     BrowserModule,
