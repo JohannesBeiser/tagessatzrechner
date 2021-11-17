@@ -44,7 +44,7 @@ export class GroupSettingsComponent implements OnInit {
     });
   }
 
-  openBottomSheet(e: MouseEvent, group: any): void {
+  openBottomSheet(e: MouseEvent, group: Group): void {
     document.body.style.backgroundColor = "#4f5053";
     e.stopPropagation();
     this.bottomSheet.open(SettingsBottomSheetComponent, { data: group });

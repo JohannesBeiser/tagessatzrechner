@@ -40,6 +40,9 @@ app-root {
 .mat-slide-toggle-content {
   font-family: "Roboto-Light" !important;
 }
+mat-dialog-container {
+  background: #eeeeee !important;
+}
 .image-icon {
   height: 20px;
   width: 20px;

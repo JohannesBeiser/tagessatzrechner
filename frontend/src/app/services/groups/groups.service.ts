@@ -52,8 +52,6 @@ export class GroupsService {
   }
 
   public addGroup(group: Group) {
-    group.id = Date.now();
-    group.active = true;
     let tx = this.db.transaction(['groups'], 'readwrite');
     let store = tx.objectStore('groups');
     store.add(group);
@@ -64,6 +62,16 @@ export class GroupsService {
       alert('error storing expense ' + event.target.errorCode);
     }
   };
+
+  public updateGroup(key: number, group: Group){
+      let transaction = this.db.transaction('groups', "readwrite");
+      let objectStore = transaction.objectStore('groups');
+      let req = objectStore.put(group, key);
+      req.onsuccess = () => {
+        this.refreshGroups();
+      }
+      
+  }
 
   public getGroups(): Observable<Group[]> {
     this.connection$.subscribe(()=>this.refreshGroups());

@@ -6,7 +6,7 @@
   flex: 1;
 }
 .add-category-dialog-container .submit-form {
-  background: #60954a;
+  background: #444;
   font-weight: bold;
   color: white;
   width: initial;
@@ -23,8 +23,12 @@
   font-size: 1em;
 }
 .add-category-dialog-container .subgroups-section {
-  border-bottom: 1px solid #cfcfcf;
+  border-top: 1px solid #b3b3b3;
+  padding-top: 12px;
   margin: 12px 0;
+}
+.add-category-dialog-container .subgroups-section .title {
+  font-weight: bold;
 }
 .add-category-dialog-container .subgroups-section .header {
   display: flex;
@@ -33,6 +37,19 @@
 .add-category-dialog-container .subgroups-section .header input {
   flex: 1;
 }
+.add-category-dialog-container .subgroups-section .content .no-items {
+  opacity: 0.7;
+}
+.add-category-dialog-container .subgroups-section .content .subgroup-item {
+  margin-bottom: 8px;
+  padding: 6px 12px;
+  display: flex;
+  background: white;
+  box-shadow: 1px 1px 20px 0px #d2d2d2;
+  border-radius: 8px;
+  margin: 4px 0;
+  align-items: center;
+}
 .add-category-dialog-container .submit-form {
-  margin-top: 12px;
+  margin-top: 32px;
 }
