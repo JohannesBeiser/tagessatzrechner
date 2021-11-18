@@ -7,9 +7,20 @@
       </div>
 
       <div class="group-list">
-        <div class="group-item" *ngFor="let group of groups$ | async">
-          <span>{{group.name}}</span>
+        <div class="group-item" *ngFor="let group of groups$ | async; let i = index" (click)="expand( i)">
+          <span class="title">{{group.name}}<div class="active-indicator" [style.background-color]="group.active? '#538f32' : '#af382f'"></div></span>
           <i class="material-icons-outlined" (click)="openBottomSheet($event, group)">more_horiz</i>
+          <div class="detail-area" [@slideInOut]="helpMenuOpenForIndex(i)">
+            <div class="subgroups">
+              <div class="subgroup-section-title">Subgroups:</div>
+              <div class="subgroup-list">
+                <div class="subgroup-list-item" *ngFor="let subgroup of group.subgroups; let i = index"> {{subgroup.name}}{{group.subgroups.length > i+1 ? ',': ''}}</div>
+                <span *ngIf="group.subgroups.length === 0" class="no-items-yet">
+                  There are no subgroups 
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
         <span *ngIf="(groups$ | async).length === 0" class="no-items-yet">
           There are no groups yet

@@ -93,7 +93,9 @@ export class AddGroupDialogComponent implements OnInit {
   }
 
   deleteSubgroup(subgroup: Subgroup){
-    this.subgroups = this.subgroups.filter(el=> el.id !== subgroup.id);
+    if(confirm(`Do you really want to delete '${subgroup.name}' premanently? `)){
+      this.subgroups = this.subgroups.filter(el=> el.id !== subgroup.id);
+    }
   }
 
   private setFormGroupTouched(formGroup: FormGroup) {
