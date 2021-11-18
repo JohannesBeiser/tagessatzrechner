@@ -16,7 +16,7 @@
               <div class="subgroup-list">
                 <div class="subgroup-list-item" *ngFor="let subgroup of group.subgroups; let i = index"> {{subgroup.name}}{{group.subgroups.length > i+1 ? ',': ''}}</div>
                 <span *ngIf="group.subgroups.length === 0" class="no-items-yet">
-                  There are no subgroups 
+                  None 
                 </span>
               </div>
             </div>

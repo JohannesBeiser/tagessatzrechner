@@ -102,9 +102,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
     let groups = [...groups_origin].reverse();
     // groups.push({ key: null, groupName: "General" });
     groups.forEach((el) => {
-      sorterHelper[el.name] = {};
-      sorterHelper[el.name].amount = 0;
-      sorterHelper[el.name].expenses = [];
+      sorterHelper[el.id] = {};
+      sorterHelper[el.id].amount = 0;
+      sorterHelper[el.id].expenses = [];
     })
 
     expenses.forEach(expense => {
@@ -115,7 +115,8 @@ export class GroupsComponent implements OnInit, OnDestroy {
           sorterHelper[expenseGroup].amount += expense.amount;
           sorterHelper[expenseGroup].expenses.push(expense)
         } else {
-          groups.push({ key: null, name: this.groupsService.getGroupById(expenseGroup).name });
+          // let a = this.groupsService.getGroupById(expenseGroup);
+          // groups.push({ key: null, name: this.groupsService.getGroupById(expenseGroup).name });
           sorterHelper[expenseGroup] = {}
           sorterHelper[expenseGroup].amount = expense.amount;
           sorterHelper[expenseGroup].expenses = [expense];
@@ -124,10 +125,11 @@ export class GroupsComponent implements OnInit, OnDestroy {
       }
     })
 
+
     let result: GroupTotal[] = groups.map<GroupTotal>((group) => {
-      let amountForGroup: number = sorterHelper[group.name].amount;
-      let expenses: Expense[] = sorterHelper[group.name].expenses;
-      let deleted: boolean = sorterHelper[group.name].deleted;
+      let amountForGroup: number = sorterHelper[group.id].amount;
+      let expenses: Expense[] = sorterHelper[group.id].expenses;
+      let deleted: boolean = sorterHelper[group.id].deleted;
 
       let result: GroupTotal;
 

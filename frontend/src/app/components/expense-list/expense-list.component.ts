@@ -7,6 +7,7 @@ import { ExpenseBottomSheetComponent } from './expense-bottom-sheet/expense-bott
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Observable, merge } from 'rxjs';
 import { FilterService } from 'src/app/services/filter/filter.service';
+import { GroupsService } from 'src/app/services/groups/groups.service';
 
 @Component({
   selector: 'app-expense-list',
@@ -34,6 +35,7 @@ export class ExpenseListComponent implements OnInit {
   constructor(
     public expenseService: ExpenseService,
     public categoryService: CategoryService,
+    public groupService: GroupsService,
     public filterService: FilterService,
     public sliderService: SliderService,
     private bottomSheet: MatBottomSheet

@@ -118,7 +118,8 @@ export class GeneralComponent implements OnInit {
       json.groups.forEach(group => {
 
         // TODO: add real group instance
-        // this.groupsService.addGroup(group.name);
+        delete group.key;
+        this.groupsService.addGroup(group);
       });
 
       // add categories

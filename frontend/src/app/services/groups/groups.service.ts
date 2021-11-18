@@ -47,7 +47,18 @@ export class GroupsService {
   }
 
   getGroupById(id: number){
-    return this.groups.find(el=> el.id == id);
+    let match = this.groups.find(el=> el.id == id);
+    // If ID doesnt belong to a group --> must belong to subgroup
+    if(!match){
+      this.groups.forEach(group=>{
+        group.subgroups.forEach(subgroup=>{
+          if(id == subgroup.id){
+            match = subgroup;
+          }
+        })
+      })
+    }
+    return match;
   }
 
   public addGroup(group: Group) {

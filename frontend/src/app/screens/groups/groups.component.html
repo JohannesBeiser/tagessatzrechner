@@ -5,7 +5,7 @@
       <div *ngFor="let group of totals.groupTotal; let i = index" class="group-list-item" (click)="toggleHelpMenu(i,j)">
         <div class="group-item-general">
           <div class="info-section">
-            <div class="group-name">{{group.groupName}}</div>
+            <div class="group-name">{{group.name}}</div>
             <div class="group-dates" *ngIf="group.amount > 0">
               <span>{{ {firstExpenseDate:group.firstExpenseDate, lastExpenseDate: group.lastExpenseDate} | dateDuration }}</span>
             </div>
@@ -24,7 +24,7 @@
             <span class="regular-font mr-8">Cost:</span>
             <span>{{group.amount/ group.duration | number:'1.0-0':'de-DE'}}€ per day</span>
           </div>
-          <div class="show-list-wrapper" (click)="showDetailList(group.groupName)">
+          <div class="show-list-wrapper" (click)="showDetailList(group.name)">
             <span class="regular-font mr-8" >Show List</span>
             <!-- <i class="material-icons-outlined" (click)="showDetailList(group.groupName)">read_more</i> -->
           </div>
