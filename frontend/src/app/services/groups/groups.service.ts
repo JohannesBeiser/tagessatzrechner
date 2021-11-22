@@ -21,6 +21,7 @@ export interface GroupTotal extends Group {
   lastExpenseDate?: string;
   deleted?: boolean;
   duration?: number;
+
 }
 
 @Injectable({
@@ -46,7 +47,11 @@ export class GroupsService {
     this.defaultGroup = parseInt(localStorage.getItem("defaultGroup") || "General");
   }
 
-  getGroupById(id: number){
+  getGroupById(id: number): Group{
+    if(id === 0){
+      return  {name: "General", id: 0}
+    }
+
     let match = this.groups.find(el=> el.id == id);
     // If ID doesnt belong to a group --> must belong to subgroup
     if(!match){
@@ -136,7 +141,6 @@ export class GroupsService {
         cursor.continue();
       }
       else {
-        result.push({name: "General", id: 0, subgroups: []})
         this.groups$.next(result)
       }
     };

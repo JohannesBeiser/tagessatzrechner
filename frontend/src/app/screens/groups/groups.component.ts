@@ -85,7 +85,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.filterService.setFilter(
       {
         temporaryFilter: true,
-        groups: [this.groupsService.getGroupById(groupId)]
+        groups: [groupId]
       }
     )
     this.router.navigate(['/home']);
@@ -105,6 +105,13 @@ export class GroupsComponent implements OnInit, OnDestroy {
       sorterHelper[el.id] = {};
       sorterHelper[el.id].amount = 0;
       sorterHelper[el.id].expenses = [];
+      sorterHelper[el.id].subgroups = {}
+
+      el.subgroups.forEach(subgroup=>{
+        sorterHelper[el.id].subgroups[subgroup.id] = {};
+        sorterHelper[el.id].subgroups[subgroup.id].amount = 0;
+        sorterHelper[el.id].subgroups[subgroup.id].expenses = [];
+      })
     })
 
     expenses.forEach(expense => {
@@ -117,10 +124,16 @@ export class GroupsComponent implements OnInit, OnDestroy {
         } else {
           // let a = this.groupsService.getGroupById(expenseGroup);
           // groups.push({ key: null, name: this.groupsService.getGroupById(expenseGroup).name });
-          sorterHelper[expenseGroup] = {}
-          sorterHelper[expenseGroup].amount = expense.amount;
-          sorterHelper[expenseGroup].expenses = [expense];
-          sorterHelper[expenseGroup].deleted = true;
+          
+          //sort expense into subgroup 
+          groups.forEach(group=>{
+            if(sorterHelper[group.id].subgroups[expenseGroup]){
+              sorterHelper[group.id].amount += expense.amount; // add to parents total
+              sorterHelper[group.id].expenses.push(expense)// add to parents expense list
+              sorterHelper[group.id].subgroups[expenseGroup].amount += expense.amount; 
+              sorterHelper[group.id].subgroups[expenseGroup].expenses.push(expense);
+            }
+          })
         }
       }
     })
@@ -129,7 +142,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     let result: GroupTotal[] = groups.map<GroupTotal>((group) => {
       let amountForGroup: number = sorterHelper[group.id].amount;
       let expenses: Expense[] = sorterHelper[group.id].expenses;
-      let deleted: boolean = sorterHelper[group.id].deleted;
+      let isInactive: boolean = !sorterHelper[group.id].active;
 
       let result: GroupTotal;
 
@@ -138,20 +151,38 @@ export class GroupsComponent implements OnInit, OnDestroy {
         let first = expensesSorted[expensesSorted.length - 1].date;
         let last = expensesSorted[0].date;
         let durationInDays = differenceInDays(new Date(last), new Date(first)) + 1;
-        result = { ...group, ...{ amount: amountForGroup, firstExpenseDate: first, lastExpenseDate: last, duration: durationInDays } }
+
+        // let mappedSubgroups= subgroups.
+      let subgroupsArray = Object.entries(sorterHelper[group.id].subgroups).map((el: any)=>{
+        return {id: parseInt(el[0]), amount: el[1].amount, expenses: el[1].expenses}
+      })
+      let subgroupTotals = [];
+
+      if(subgroupsArray.length>0){
+        subgroupTotals = subgroupsArray.map(subgroup=>{
+          if(subgroup.expenses.length >0){
+            let subgroupExpensesSorted = subgroup.expenses.sort((a, b) => this.filterService.dateSorter(a.date, b.date));
+            let subgroupFirst = subgroupExpensesSorted[subgroupExpensesSorted.length - 1].date;
+            let subgroupLast = subgroupExpensesSorted[0].date;
+            let subgroupDurationInDays = differenceInDays(new Date(subgroupLast), new Date(subgroupFirst)) + 1;
+            return {...subgroup,  firstExpenseDate: subgroupFirst, lastExpenseDate: subgroupLast, duration: subgroupDurationInDays}
+          }else{
+            return {...subgroup,  firstExpenseDate: null, lastExpenseDate: null, duration: null}
+          }
+         
+        });
+      }   
+        result = { ...group, ...{ amount: amountForGroup, firstExpenseDate: first, lastExpenseDate: last, duration: durationInDays, subgroupTotals: subgroupTotals } }
       } else {
         result = { ...group, ...{ amount: amountForGroup } }
       }
 
-      if (deleted) {
-        result = { ...result, ...{ deleted: deleted } }
-      }
-
       return result
     });
+    
 
     let mapped = result.reduce((acc, cur) => {
-        if (!cur.deleted) {
+        if (cur.active) {
           if (cur.name !== "General") {
             let next = acc;
             next[0].groupTotal.push(cur)

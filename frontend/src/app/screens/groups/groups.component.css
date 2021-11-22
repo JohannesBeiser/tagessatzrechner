@@ -64,3 +64,24 @@
   text-align: center;
   background: #ddd;
 }
+.groups-component-container .group-list .group-list-item .more-info .subgroups-title {
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+.groups-component-container .group-list .group-list-item .more-info .subgroups .subgroup {
+  background: #d7d7d7;
+  padding: 8px;
+  margin-bottom: 12px;
+}
+.groups-component-container .group-list .group-list-item .more-info .subgroups .subgroup .wrapper {
+  display: flex;
+  align-items: center;
+}
+.groups-component-container .group-list .group-list-item .more-info .subgroups .subgroup .wrapper .name {
+  font-weight: bold;
+  flex: 1;
+}
+.groups-component-container .group-list .group-list-item .more-info .subgroups .subgroup .date {
+  opacity: 0.8;
+  font-size: 0.8em;
+}

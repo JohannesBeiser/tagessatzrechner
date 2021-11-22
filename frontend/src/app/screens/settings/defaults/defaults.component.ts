@@ -17,13 +17,23 @@ export class DefaultsComponent implements OnInit {
     private categoryService: CategoryService,
   ) { }
 
-  public groups$: Observable<Group[]>;
+  public groupsWithSubgroups$: Observable<Group[]>;
   public categories$: Observable<Category[]>;
   public defaultGroupSelected: number;
   public defaultCategorySelected: number;
 
   ngOnInit(): void {
-    this.groups$ = this.groupsService.getGroups();
+    this.groupsWithSubgroups$ = this.groupsService.getGroups().pipe(
+      map(groups=> groups.filter(group=> group.active)),
+      map(groups=>{
+        return groups.reduce((acc,cur)=>{
+          acc.push(cur);
+          cur.subgroups.forEach(subgroup=>acc.push(subgroup));
+          return acc;
+        },[] as Group[])
+      })
+    );
+    
     this.categories$ = this.categoryService.getCategoriesNew().pipe(map(categories=> categories.filter(category=> category.id !== 0)));
 
         //TODO : Dirty workaround 

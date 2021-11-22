@@ -58,7 +58,7 @@ export class AddComponent implements OnInit, AfterViewInit {
       date: new FormControl(this.currentDate(), Validators.required),
       category: new FormControl(this.categoryService.defaultCategory, Validators.required),
       currency: new FormControl(this.defaultCurrency),
-      group: new FormControl("General", Validators.required),
+      group: new FormControl(0, Validators.required),
       description: new FormControl('', Validators.maxLength(200))
     });
 
@@ -67,7 +67,7 @@ export class AddComponent implements OnInit, AfterViewInit {
       amount_recurring: new FormControl('', Validators.required),
       month_recurring: new FormControl(this.filterService.getCurrentMonthFilter(), Validators.required),
       category_recurring: new FormControl('general', Validators.required),
-      group_recurring: new FormControl("General", Validators.required),
+      group_recurring: new FormControl(0, Validators.required),
       currency_recurring: new FormControl(this.defaultCurrency),
       description_recurring: new FormControl('', Validators.maxLength(200)),
     });

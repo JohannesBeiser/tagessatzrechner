@@ -6,6 +6,7 @@ import { filter } from 'rxjs/operators';
 import { FilterService } from './services/filter/filter.service';
 import { combineLatest } from 'rxjs';
 import { DatePipe } from '@angular/common';
+import { GroupsService } from './services/groups/groups.service';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +28,7 @@ export class AppComponent implements OnInit{
     private router: Router,
     public sliderService: SliderService,
     public filterService: FilterService,
+    public groupService: GroupsService,
     private datePipe: DatePipe,
   ) {
     router.events.pipe(
@@ -98,9 +100,9 @@ export class AppComponent implements OnInit{
 
       if (filter.groups) {
         // TODO not just first but all
-        tempString.group = `${filter.groups[0]}`;
+        tempString.group = `${this.groupService.getGroupById(filter.groups[0]).name}`;
         for(let i=1; i<filter.groups.length;i++){
-          tempString.group += `, ${filter.groups[i]}`
+          tempString.group += `, ${this.groupService.getGroupById(filter.groups[i]).name}`
         }
       }
       this.filterTitles = tempString;

@@ -25,7 +25,7 @@ export class SettingsBottomSheetComponent implements OnInit {
   }
 
   deleteGroup() {
-    if (confirm(`Are you sure you want to finish "${this.group.name}"? This won't delete the expenses you added! You simply can't assign any more expenses to it.`)) {
+    if (confirm(`Are you sure you want to delete "${this.group.name}"? If expenses are already assigned to it there will be unhandled errors, only delete if no expense has this group!`)) {
       this.groupsService.deleteGroup(this.group.key, this.group);
       this.dismiss();
     }

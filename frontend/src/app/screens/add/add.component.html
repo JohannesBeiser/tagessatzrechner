@@ -56,7 +56,7 @@
             <mat-label>Group</mat-label>
             <select matNativeControl formControlName="group" class="group-input-field">
               <option value="General">General</option>
-              <option *ngFor="let group of groups$ | async" value="{{group.name}}">{{group.name}}</option>
+              <option *ngFor="let group of groups$ | async" value="{{group.id}}">{{group.name}}</option>
             </select>
           </mat-form-field>
 
@@ -105,7 +105,7 @@
             <mat-label>Group</mat-label>
             <select matNativeControl formControlName="group_recurring" class="group-input-field">
               <option value="General">General</option>
-              <option *ngFor="let group of groups$ | async" value="{{group.name}}">{{group.name}}</option>
+              <option *ngFor="let group of groups$ | async" value="{{group.id}}">{{group.name}}</option>
             </select>
           </mat-form-field>
 

@@ -30,15 +30,15 @@
         <mat-form-field appearance="standard" class="groups-filter">
           <mat-label>Group</mat-label>
           <select matNativeControl class="group-picker" [(ngModel)]="groupsSelected[i]" #groupPickerInput>
-            <option value="General">General</option>
-            <option *ngFor="let group of groups$ | async" [value]="group.name">{{group.name}}</option>
+            <option value="0">General</option>
+            <option *ngFor="let group of groupsWithSubgroups$ | async" [value]="group.id">{{group.name}}</option>
           </select>
         </mat-form-field>
         <div class="remove-item mat-form-field-wrapper" (click)="removeGroupFilter(i)" *ngIf="groupsSelected.length > 1">
           <i class="material-icons">close</i>
         </div>
       </div>
-      <div class="align add-group-filter" (click)="groupsSelected.push(getGroupById(0))">
+      <div class="align add-group-filter" (click)="groupsSelected.push(0)">
         <i class="material-icons">add</i>
         <span class="ml-8">Add new group filter</span>
       </div>

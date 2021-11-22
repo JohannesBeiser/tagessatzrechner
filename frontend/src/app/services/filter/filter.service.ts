@@ -13,7 +13,7 @@ export interface MonthYear {
 }
 
 export interface ExpenseFilter {
-  groups?: Group[];
+  groups?: number[];
   date?: MonthYear;
   last30Active?: boolean;
   temporaryFilter?: boolean;

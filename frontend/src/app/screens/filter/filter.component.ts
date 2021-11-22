@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { GroupsService, Group } from 'src/app/services/groups/groups.service';
 import { FilterService, ExpenseFilter } from 'src/app/services/filter/filter.service';
-import {  skip, filter, } from 'rxjs/operators';
+import {  skip, filter, map, } from 'rxjs/operators';
 import { combineLatest, Observable } from 'rxjs';
 
 @Component({
@@ -14,11 +14,11 @@ export class FilterComponent implements OnInit {
   @ViewChild("monthPickerInput") public monthPickerInputElement: ElementRef;
   @ViewChild("groupPickerInput") public groupPickerInputElement: ElementRef;
 
-  public groups$: Observable<Group[]>;
+  public groupsWithSubgroups$: Observable<Group[]>;
 
   //Filters
   public dateSelected: string;
-  public groupsSelected: Group[];
+  public groupsSelected: number[];
   public allDatesSelected: boolean;
   public allGroupsSelected: boolean;
 
@@ -33,7 +33,15 @@ export class FilterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.groups$ = this.groupService.getGroups();
+    this.groupsWithSubgroups$ = this.groupService.getGroups().pipe(
+      map(groups=>{
+        return groups.reduce((acc,cur)=>{
+          acc.push(cur);
+          cur.subgroups.forEach(subgroup=>acc.push(subgroup));
+          return acc;
+        },[] as Group[])
+      })
+    );
 
     this.filterService.filterState$.subscribe((state) => {
       //FIXME : quick workaround for testing
@@ -81,7 +89,7 @@ export class FilterComponent implements OnInit {
   groupChanged(e: any) {
     this.allGroupsSelected = !e.checked;
     if(e.checked){
-        this.groupsSelected= [this.groupService.getGroupById(0)]; // if newly switched on just one with default general
+        this.groupsSelected= [0]; // if newly switched on just one with default general
     }
   }
 
