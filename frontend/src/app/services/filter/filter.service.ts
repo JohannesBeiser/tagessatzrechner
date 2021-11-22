@@ -43,6 +43,7 @@ export class FilterService {
     this.filterShown$ = new BehaviorSubject(false);
 
     let initialFilter: ExpenseFilter = JSON.parse(localStorage.getItem("filter")) || this.defaultFilter;
+    initialFilter.groups = (initialFilter as any)?.groups?.map(groupId => parseInt(groupId)); // parse id's to number from string as read from localstorage
     this.filterState$ = new BehaviorSubject(initialFilter);
     this.monthSwitched$ = new BehaviorSubject(null);
     this.sortMethod$ = new BehaviorSubject(localStorage.getItem("sortMethod") || "date")

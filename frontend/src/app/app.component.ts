@@ -22,6 +22,7 @@ export class AppComponent implements OnInit{
   public appHeadline: string = "ExpenseManager";
 
   public currentFilter$ = this.filterService.getFilter();
+  public groups$ = this.groupService.getGroups().pipe(filter(groups=> groups.length>0));
   public filterTitles: { date: string; group: string } = null;
 
   constructor(
@@ -83,29 +84,29 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit(){
-    combineLatest(this.currentFilter$, this.filterService.monthSwitched$).subscribe(([filter, monthSwitch]) => {
-      let tempString = {
-        date: null,
-        group: null
-      }
-      if (monthSwitch) {
-        tempString.date = this.datePipe.transform(`${monthSwitch.year}-${monthSwitch.month}-01`, 'MMM y');
-      } else {
-        if (filter.date) {
-          tempString.date = this.datePipe.transform(`${filter.date.year}-${filter.date.month}-01`, 'MMM y');
-        }else if(filter.last30Active){
-          tempString.date = "Last 30 days" 
+    combineLatest(this.currentFilter$, this.filterService.monthSwitched$, this.groups$).subscribe(([filter, monthSwitch,groups]) => {
+        let tempString = {
+          date: null,
+          group: null
         }
-      }
-
-      if (filter.groups) {
-        // TODO not just first but all
-        tempString.group = `${this.groupService.getGroupById(filter.groups[0]).name}`;
-        for(let i=1; i<filter.groups.length;i++){
-          tempString.group += `, ${this.groupService.getGroupById(filter.groups[i]).name}`
+        if (monthSwitch) {
+          tempString.date = this.datePipe.transform(`${monthSwitch.year}-${monthSwitch.month}-01`, 'MMM y');
+        } else {
+          if (filter.date) {
+            tempString.date = this.datePipe.transform(`${filter.date.year}-${filter.date.month}-01`, 'MMM y');
+          }else if(filter.last30Active){
+            tempString.date = "Last 30 days" 
+          }
         }
-      }
-      this.filterTitles = tempString;
+  
+        if (filter.groups) {
+          // TODO not just first but all
+          tempString.group = `${this.groupService.getGroupById(filter.groups[0]).name}`;
+          for(let i=1; i<filter.groups.length;i++){
+            tempString.group += `, ${this.groupService.getGroupById(filter.groups[i]).name}`
+          }
+        }
+        this.filterTitles = tempString;
     })
   }
 
