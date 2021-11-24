@@ -52,7 +52,11 @@ import { AddCategoryDialogComponent } from './screens/settings/category-settings
 import { CategorySettingsBottomSheetComponent } from './screens/settings/category-settings/category-settings-bottom-sheet/category-settings-bottom-sheet.component';
 import { AddGroupDialogComponent } from './screens/settings/group-settings/add-group-dialog/add-group-dialog.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-import { EditSubgroupDialogComponent } from './screens/settings/group-settings/add-group-dialog/edit-subgroup-dialog/edit-subgroup-dialog.component'
+import { EditSubgroupDialogComponent } from './screens/settings/group-settings/add-group-dialog/edit-subgroup-dialog/edit-subgroup-dialog.component';
+import { AllTimeAnalysisComponent } from './screens/analysis/all-time-analysis/all-time-analysis.component';
+import { YearAnalysisComponent } from './screens/analysis/year-analysis/year-analysis.component';
+import { MonthAnalysisComponent } from './screens/analysis/month-analysis/month-analysis.component';
+import { CustomAnalysisComponent } from './screens/analysis/custom-analysis/custom-analysis.component'
 
 registerLocaleData(localeDe, 'de');
 
@@ -88,7 +92,11 @@ registerLocaleData(localeDe, 'de');
     AddCategoryDialogComponent,
     CategorySettingsBottomSheetComponent,
     AddGroupDialogComponent,
-    EditSubgroupDialogComponent
+    EditSubgroupDialogComponent,
+    AllTimeAnalysisComponent,
+    YearAnalysisComponent,
+    MonthAnalysisComponent,
+    CustomAnalysisComponent
   ],
   imports: [
     BrowserModule,
