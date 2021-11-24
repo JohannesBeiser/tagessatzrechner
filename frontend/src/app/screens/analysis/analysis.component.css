@@ -3,5 +3,21 @@
   height: 100%;
 }
 .analysis-component-container {
-  padding: 16px;
+  width: 100%;
+}
+::ng-deep mat-tab-group mat-tab-header {
+  background-color: #76757b;
+  border-bottom: none !important;
+}
+::ng-deep mat-tab-group mat-tab-header .mat-ink-bar {
+  background-color: #efefef !important;
+}
+::ng-deep mat-tab-group mat-tab-header .mat-tab-label {
+  height: auto !important;
+  flex: 1;
+  opacity: 1;
+  padding: 4px 0;
+}
+::ng-deep mat-tab-group mat-tab-header .mat-tab-label .mat-tab-label-content {
+  color: #efefef !important;
 }
