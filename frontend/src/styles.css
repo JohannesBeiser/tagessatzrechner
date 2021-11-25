@@ -54,6 +54,10 @@ mat-dialog-container {
   background-repeat: no-repeat;
   background-position: center;
 }
+.highcharts-data-labels text {
+  fill: #444444 !important;
+  font-family: 'Roboto-Light';
+}
 .bold {
   font-weight: bold;
 }
