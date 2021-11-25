@@ -1,6 +1,68 @@
 
+<div class="all-time-analysis-container">
+    <div *ngIf="chartReady" class="chart-section">
+        <app-card>
+            <div class="all-time-header" header>
+                <div class="title">History</div>
+                <select [(ngModel)]="historyCategorySelected" (change)="historyCategoryChanged()">
+                    <option value="0">All Categories</option>
+                    <option *ngFor="let category of categories$ | async" value="{{category.id}}">{{category.name}}</option>
+                  </select>
+            </div>
+            <highcharts-chart body *ngIf="chartReady" [Highcharts]="Highcharts" [options]="chartOptions" [(update)]="updateFlag"
+            style="width: 100%; display: block;" class="highcharts-chart">
+            </highcharts-chart>
+        </app-card>
+    </div>
+    <div *ngIf="chartReady" class="chart-section">
+        <app-card>
+            <div class="title-container" header>
+                <div class="title">Average spending</div>
+                <select [(ngModel)]="averageCategorySelected" (change)="averageCategoryChanged()">
+                    <option value="0">All Categories</option>
+                    <option *ngFor="let category of categories$ | async" value="{{category.id}}">{{category.name}}</option>
+                  </select>
+            </div>
+            <div body class="stats-list-container">
+                <div class="stats-list">
+                    <div class="stats-list-item">
+                        <div class="title">Year</div>
+                        <div class="value">{{averagePerYear}} €</div>
+                    </div>
+                    <div class="stats-list-item">
+                        <div class="title">Month</div>
+                        <div class="value">{{averagePerMonth}} €</div>
+                    </div>
+                    <div class="stats-list-item">
+                        <div class="title">Day</div>
+                        <div class="value">{{averagePerDay}} €</div>
+                    </div>
+                </div>
 
-
-<highcharts-chart *ngIf="chartReady" [Highcharts]="Highcharts" [options]="chartOptions"
-style="width: 100%; height: 265px; display: block;" class="highcharts-chart">
-</highcharts-chart>
+                <div class="recurring-ratio">
+                    <div class="title">Monthly</div>
+                    <div class="content">
+                        <div class="leftLabel">
+                            <div>Regular</div>
+                            <div>718€</div>
+                        </div>
+                        <app-ratio-bar 
+                            [value1]="((stats.total- stats.totalRecurring) / stats.amountOfDays) *30.437" 
+                            [value2]="(stats.totalRecurring / stats.amountOfDays) *30.437" 
+                            [labelFirst]="true" 
+                            [showLabels]="false"
+                            [color1]="'#F79E31'" [color2]="'#ff7147'"
+                            [labelPrefix1]="'Regular expenses'" [labelPrefix2]="'Recurring'">
+                        </app-ratio-bar>
+                            <div class="rightLabel">
+                                <div>Recurring</div>
+                                <div>125€</div>
+                            </div>
+                    </div>
+         
+                </div>
+            </div>
+        </app-card>
+      
+    </div>
+</div>

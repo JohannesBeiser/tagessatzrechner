@@ -56,7 +56,9 @@ import { EditSubgroupDialogComponent } from './screens/settings/group-settings/a
 import { AllTimeAnalysisComponent } from './screens/analysis/all-time-analysis/all-time-analysis.component';
 import { YearAnalysisComponent } from './screens/analysis/year-analysis/year-analysis.component';
 import { MonthAnalysisComponent } from './screens/analysis/month-analysis/month-analysis.component';
-import { CustomAnalysisComponent } from './screens/analysis/custom-analysis/custom-analysis.component'
+import { CustomAnalysisComponent } from './screens/analysis/custom-analysis/custom-analysis.component';
+import { RationBarComponent } from './components/charts/ration-bar/ration-bar.component';
+import { CardComponent } from './components/card/card.component'
 
 registerLocaleData(localeDe, 'de');
 
@@ -96,7 +98,9 @@ registerLocaleData(localeDe, 'de');
     AllTimeAnalysisComponent,
     YearAnalysisComponent,
     MonthAnalysisComponent,
-    CustomAnalysisComponent
+    CustomAnalysisComponent,
+    RationBarComponent,
+    CardComponent
   ],
   imports: [
     BrowserModule,

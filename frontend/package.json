@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
-    "start:remote": "ng serve --host 0.0.0.0",
+    "start:remote": "ng serve --proxy-config proxy.conf.json --host 0.0.0.0",
     "nghm": "node --max_old_space_size=8096 ./node_modules/@angular/cli/bin/ng",
     "build": "ng build --prod",
     "test": "ng test",

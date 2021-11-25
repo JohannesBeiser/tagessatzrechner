@@ -1,0 +1,12 @@
+<div class="ratio-bar-component-wrapper">
+    <div class="leftBar" [style.background]="leftColor" [style.flex]="leftValue">
+        <div class="labelPrefix" *ngIf="labelFirst && showLabels">{{leftLabelPrefix}}</div>
+        <div class="label" *ngIf="showLabels">{{leftLabel}}</div>
+        <div class="labelPrefix" *ngIf="!labelFirst && showLabels">{{leftLabelPrefix}}</div>
+    </div>
+    <div class="rightBar" [style.background]="rightColor" [style.flex]="rightValue">
+        <div class="labelPrefix" *ngIf="labelFirst && showLabels">{{rightLabelPrefix}}</div>
+        <div class="label" *ngIf="showLabels">{{rightLabel}}</div>
+        <div class="labelPrefix" *ngIf="!labelFirst && showLabels">{{rightLabelPrefix}}</div>
+    </div>
+</div>

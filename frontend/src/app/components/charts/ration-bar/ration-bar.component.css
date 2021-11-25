@@ -1,0 +1,13 @@
+.ratio-bar-component-wrapper {
+  display: flex;
+  height: 32px;
+}
+.ratio-bar-component-wrapper .leftBar,
+.ratio-bar-component-wrapper .rightBar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6em;
+  text-align: center;
+}

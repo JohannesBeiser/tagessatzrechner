@@ -58,6 +58,9 @@ mat-dialog-container {
   fill: #444444 !important;
   font-family: 'Roboto-Light';
 }
+.highcharts-data-labels .highcharts-text-outline {
+  display: none;
+}
 .bold {
   font-weight: bold;
 }
