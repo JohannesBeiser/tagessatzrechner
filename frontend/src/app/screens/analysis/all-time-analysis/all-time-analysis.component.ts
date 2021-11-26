@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { differenceInDays } from 'date-fns';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { Category, CategoryService } from 'src/app/services/category/category.service';
 import { Expense, ExpenseService } from 'src/app/services/expenses/expense.service';
 import { GroupsService } from 'src/app/services/groups/groups.service';
 import * as Highcharts from 'highcharts';
+import { MatDialog } from '@angular/material/dialog';
+import { ExpenseListDialogComponent } from '../expense-list-dialog/expense-list-dialog.component';
 
 
 type Stats = {
@@ -38,12 +40,14 @@ type Stats = {
   templateUrl: './all-time-analysis.component.html',
   styleUrls: ['./all-time-analysis.component.less']
 })
-export class AllTimeAnalysisComponent implements OnInit {
+export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
 
   constructor(
     private expenseService: ExpenseService,
     private groupService: GroupsService,
     public categoryService: CategoryService,
+    public dialog: MatDialog,
+
   ) { }
 
   public expenses$: Observable<Expense[]>;
@@ -56,6 +60,8 @@ export class AllTimeAnalysisComponent implements OnInit {
   averageCategorySelected: number = 0;
   public categories$: Observable<Category[]>;
   updateFlag: boolean = false;
+  tempCategoriesSorted : {category: Category, amount: number, percentage?: number}[];
+  tempCategoriesSortedForLegend : {category: Category, amount: number, percentage?: number}[];
 
   averagePerYear: number;
   averagePerMonth: number;
@@ -64,6 +70,7 @@ export class AllTimeAnalysisComponent implements OnInit {
   // this Construct is the exact result of all of the expenses and gets build so its easier for the template and charts to display.
   //Everything thats needed is already pre-calculated in here
   public stats: Stats;
+  private subs: Subscription[] = [];
 
 
   ngOnInit(): void {
@@ -176,6 +183,10 @@ export class AllTimeAnalysisComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void{
+    this.subs.forEach(sub=>sub.unsubscribe())
+  }
+
 
   private initializeChart() {
 
@@ -252,20 +263,28 @@ export class AllTimeAnalysisComponent implements OnInit {
   }
 
   initializeCategoryPieChart() {
-    let tempCategoriesSorted = this.stats.categoryYearsData.map(el => {
-      return { category: this.categoryService.getCategoryFromId(el.category), amount: Math.round(el.data.reduce((acc, cur) => acc += cur.total, 0)) }
-    }).sort((a, b) => b.amount - a.amount)
+    this.tempCategoriesSorted = this.stats.categoryYearsData.map(el => {
+      let category = this.categoryService.getCategoryFromId(el.category);
+      let amount= Math.round(el.data.reduce((acc, cur) => acc += cur.total, 0));
+      let percentage = (Math.round(amount* 100 /this.stats.total))
+      return { category, amount, percentage }
+    }).sort((a, b) => b.amount - a.amount);
 
+    // this.tempCategoriesSortedForLegend = this.tempCategoriesSorted.reduce((acc,cur, index)=>{
+    //   let arrayLength = this.tempCategoriesSorted.length - 1;
 
-    let values = tempCategoriesSorted.map(el => [`${el.category.name} ${(Math.round(el.amount* 100 /this.stats.total))}%`, el.amount]);
-    let colors = tempCategoriesSorted.map(el => el.category.color);
+    // },[])
+
+    let values = this.tempCategoriesSorted.map(el => [`${el.category.name} ${(Math.round(el.amount* 100 /this.stats.total))}%`, el.amount]);
+    let colors = this.tempCategoriesSorted.map(el => el.category.color);
 
     this.categoryPieChartOptions = {
       chart: {
         plotBackgroundColor: null,
         plotBorderWidth: 0,
         plotShadow: false,
-        height: 280
+        height: 220,
+        backgroundColor: 'transparent'
       },
       credits: {
         enabled: false
@@ -283,8 +302,8 @@ export class AllTimeAnalysisComponent implements OnInit {
           dataLabels: {
             enabled: false,
           },
-          showInLegend: true,
-          center: ['50%', '100%'],
+          showInLegend: false,
+          center: ['50%', '83%'],
           size: '50%',
           startAngle: -90,
           endAngle: 90,
@@ -308,18 +327,6 @@ export class AllTimeAnalysisComponent implements OnInit {
         size: '185%',
         data: values
       }],
-      legend: {
-        itemStyle: {
-          fontFamily: 'Roboto-Light',
-          fontSize: '0.8em'
-        },
-        itemMarginTop: 0,
-        itemMarginBottom: 0,
-        align: 'left',
-        verticalAlign: 'bottom',
-        y: 0,
-        padding: 0,
-      }
     };
   }
 
@@ -362,5 +369,25 @@ export class AllTimeAnalysisComponent implements OnInit {
       this.averagePerMonth = Math.round(selectedCategoriesTotal / this.stats.amountOfDays * 30.437);
       this.averagePerDay = Math.round(selectedCategoriesTotal / this.stats.amountOfDays);
     }
+  }
+
+  public getTopExpensesForCategory(category: Category): Observable<Expense[]>{
+    return this.expenseService.getExpenses("expenses").pipe(
+      map(expenses=>expenses.filter(expense=>expense.category == category.id)),
+      map(expenses=>expenses.sort((a,b)=>b.amount - a.amount)),
+      map(expenses=>expenses.splice(0,20))
+    )
+  }
+
+  public categorySelectedFromLegend(category:Category){
+    let sub = this.getTopExpensesForCategory(category).subscribe(expenses=>{
+      const dialogRef = this.dialog.open(ExpenseListDialogComponent, { data: {expenses: expenses,category: category} }); // add initial data here
+  
+      dialogRef.afterClosed().subscribe(result => {
+       sub.unsubscribe()
+      }); 
+    })
+    this.subs.push(sub)
+
   }
 }

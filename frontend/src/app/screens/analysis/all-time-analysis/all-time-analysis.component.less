@@ -102,6 +102,61 @@
             }
         }
 
+        .pie-chart-wrapper{
+            position: relative;
+            padding-top: 100px;
+
+            .semi-pie-category-chart{
+                height: 160px;
+                position: absolute;
+                top: -70px;
+            }
+
+            .legend{
+                font-size: 0.7em;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                padding: 0 16px;
+
+                .category-item {
+                    padding: 4px 0;
+                    display: flex;
+                    align-items: center;
+                    transition: opacity 150ms ease-in-out;
+                    flex: 48%; // 100-4   /2
+                    max-width: 48%;
+
+                    &:nth-child(odd){
+                        padding-right: 4%;
+                    }
+            
+                    &.category-limited{
+                      opacity: 0.5;
+            
+                      &.selected{
+                        opacity: 1;
+                      }
+                    }
+            
+            
+                    .color-badge {
+                      height: 14px;
+                      width: 14px;
+                      background: lightgray;
+                      border-radius: 4px;
+                      margin-right: 8px;
+                      opacity: 0.9;
+                    }
+            
+                    .category {
+                      flex: 1;
+                      text-transform: capitalize;
+                    }
+                  }
+            }
+        }
+
 
     }
 }

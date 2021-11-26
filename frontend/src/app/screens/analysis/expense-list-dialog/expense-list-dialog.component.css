@@ -1,0 +1,16 @@
+.expense-list-dialog-container {
+  max-height: 70vh;
+}
+.expense-list-dialog-container .header {
+  display: flex;
+  align-items: center;
+}
+.expense-list-dialog-container .header .title {
+  margin-bottom: 12px;
+  opacity: 0.5;
+  font-weight: bold;
+  flex: 1;
+}
+.expense-list-dialog-container ::ng-deep .expense-list {
+  padding-bottom: 24px;
+}

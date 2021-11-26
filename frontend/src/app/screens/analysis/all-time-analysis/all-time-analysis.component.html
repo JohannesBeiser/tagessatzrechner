@@ -39,9 +39,19 @@
                     </div>
                 </div>
 
-                <highcharts-chart body *ngIf="chartReady" [Highcharts]="Highcharts" [options]="categoryPieChartOptions" 
-                style="width: 100%; display: block;" class="highcharts-chart">
-                </highcharts-chart>
+                <div class="pie-chart-wrapper">
+                    <highcharts-chart body *ngIf="chartReady" [Highcharts]="Highcharts" [options]="categoryPieChartOptions" 
+                    style="width: 100%; display: block;" class="highcharts-chart semi-pie-category-chart">
+                    </highcharts-chart>
+                    <div class="legend">
+                        <div class="category-item" *ngFor="let categoryTotal of tempCategoriesSorted; let i= index" (click)="categorySelectedFromLegend(categoryTotal.category)">
+                            <div class="color-badge" [style.background-color]="categoryTotal.category.color"></div>
+                            <span class="category">{{categoryTotal.category.name}} </span>
+                            <span class="amount"> {{categoryTotal.percentage}} %</span>
+                          </div>
+                    
+                    </div>
+                </div>
             
             </div>
         </app-card>

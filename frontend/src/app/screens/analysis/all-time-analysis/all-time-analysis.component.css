@@ -81,3 +81,48 @@
   background: deeppink;
   margin-right: 4px;
 }
+.all-time-analysis-container .stats-list-container .pie-chart-wrapper {
+  position: relative;
+  padding-top: 100px;
+}
+.all-time-analysis-container .stats-list-container .pie-chart-wrapper .semi-pie-category-chart {
+  height: 160px;
+  position: absolute;
+  top: -70px;
+}
+.all-time-analysis-container .stats-list-container .pie-chart-wrapper .legend {
+  font-size: 0.7em;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+.all-time-analysis-container .stats-list-container .pie-chart-wrapper .legend .category-item {
+  padding: 4px 0;
+  display: flex;
+  align-items: center;
+  transition: opacity 150ms ease-in-out;
+  flex: 48%;
+  max-width: 48%;
+}
+.all-time-analysis-container .stats-list-container .pie-chart-wrapper .legend .category-item:nth-child(odd) {
+  padding-right: 4%;
+}
+.all-time-analysis-container .stats-list-container .pie-chart-wrapper .legend .category-item.category-limited {
+  opacity: 0.5;
+}
+.all-time-analysis-container .stats-list-container .pie-chart-wrapper .legend .category-item.category-limited.selected {
+  opacity: 1;
+}
+.all-time-analysis-container .stats-list-container .pie-chart-wrapper .legend .category-item .color-badge {
+  height: 14px;
+  width: 14px;
+  background: lightgray;
+  border-radius: 4px;
+  margin-right: 8px;
+  opacity: 0.9;
+}
+.all-time-analysis-container .stats-list-container .pie-chart-wrapper .legend .category-item .category {
+  flex: 1;
+  text-transform: capitalize;
+}

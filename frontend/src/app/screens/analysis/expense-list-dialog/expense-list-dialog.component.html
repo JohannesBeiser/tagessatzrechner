@@ -1,0 +1,8 @@
+<div class="expense-list-dialog-container">
+    <div class="header">
+        <div class="title">Top 20 expenses: {{data.category.name}}</div>
+        <i class="material-icons"  (click)="closeDialog()">close</i>
+
+    </div>
+    <app-expense-list [expenses]="data.expenses" [collapseNotifier]="collapseNotifier" *ngIf="data.expenses?.length >0"></app-expense-list>
+</div>

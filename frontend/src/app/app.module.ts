@@ -58,7 +58,8 @@ import { YearAnalysisComponent } from './screens/analysis/year-analysis/year-ana
 import { MonthAnalysisComponent } from './screens/analysis/month-analysis/month-analysis.component';
 import { CustomAnalysisComponent } from './screens/analysis/custom-analysis/custom-analysis.component';
 import { RationBarComponent } from './components/charts/ration-bar/ration-bar.component';
-import { CardComponent } from './components/card/card.component'
+import { CardComponent } from './components/card/card.component';
+import { ExpenseListDialogComponent } from './screens/analysis/expense-list-dialog/expense-list-dialog.component'
 
 registerLocaleData(localeDe, 'de');
 
@@ -100,7 +101,8 @@ registerLocaleData(localeDe, 'de');
     MonthAnalysisComponent,
     CustomAnalysisComponent,
     RationBarComponent,
-    CardComponent
+    CardComponent,
+    ExpenseListDialogComponent
   ],
   imports: [
     BrowserModule,
