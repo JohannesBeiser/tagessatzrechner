@@ -27,42 +27,53 @@
                 <div class="stats-list">
                     <div class="stats-list-item">
                         <div class="title">Year</div>
-                        <div class="value">{{averagePerYear}} €</div>
+                        <div class="value"><span *ngIf="averageCategorySelected != 0" class="category-indicator" [style.background]="categoryService.getCategoryFromId(averageCategorySelected).color"></span>{{averagePerYear}} €</div>
                     </div>
                     <div class="stats-list-item">
                         <div class="title">Month</div>
-                        <div class="value">{{averagePerMonth}} €</div>
+                        <div class="value"><span *ngIf="averageCategorySelected != 0" class="category-indicator" [style.background]="categoryService.getCategoryFromId(averageCategorySelected).color"></span>{{averagePerMonth}} €</div>
                     </div>
                     <div class="stats-list-item">
                         <div class="title">Day</div>
-                        <div class="value">{{averagePerDay}} €</div>
+                        <div class="value"><span *ngIf="averageCategorySelected != 0" class="category-indicator" [style.background]="categoryService.getCategoryFromId(averageCategorySelected).color"></span>{{averagePerDay}} €</div>
                     </div>
                 </div>
 
-                <div class="recurring-ratio">
-                    <div class="title">Monthly</div>
-                    <div class="content">
-                        <div class="leftLabel">
-                            <div>Regular</div>
-                            <div>718€</div>
-                        </div>
-                        <app-ratio-bar 
-                            [value1]="((stats.total- stats.totalRecurring) / stats.amountOfDays) *30.437" 
-                            [value2]="(stats.totalRecurring / stats.amountOfDays) *30.437" 
-                            [labelFirst]="true" 
-                            [showLabels]="false"
-                            [color1]="'#F79E31'" [color2]="'#ff7147'"
-                            [labelPrefix1]="'Regular expenses'" [labelPrefix2]="'Recurring'">
-                        </app-ratio-bar>
-                            <div class="rightLabel">
-                                <div>Recurring</div>
-                                <div>125€</div>
-                            </div>
-                    </div>
-         
-                </div>
+                <highcharts-chart body *ngIf="chartReady" [Highcharts]="Highcharts" [options]="categoryPieChartOptions" 
+                style="width: 100%; display: block;" class="highcharts-chart">
+                </highcharts-chart>
+            
             </div>
         </app-card>
       
+    </div>
+    <div *ngIf="chartReady" class="chart-section">
+        <app-card>
+            <div class="all-time-header" header>
+                <div class="title">Comparisons</div>
+            </div>
+            <div body class="recurring-ratio">
+                <div class="title">Monthly</div>
+                <div class="content">
+                    <div class="leftLabel">
+                        <div>Regular</div>
+                        <div>718€</div>
+                    </div>
+                    <app-ratio-bar 
+                        [value1]="((stats.total- stats.totalRecurring) / stats.amountOfDays) *30.437" 
+                        [value2]="(stats.totalRecurring / stats.amountOfDays) *30.437" 
+                        [labelFirst]="true" 
+                        [showLabels]="false"
+                        [color1]="'#444444'" [color2]="'rgb(171 171 171)'"
+                        [labelPrefix1]="'Regular expenses'" [labelPrefix2]="'Recurring'">
+                    </app-ratio-bar>
+                        <div class="rightLabel">
+                            <div>Recurring</div>
+                            <div>125€</div>
+                        </div>
+                </div>
+     
+            </div>
+        </app-card>
     </div>
 </div>

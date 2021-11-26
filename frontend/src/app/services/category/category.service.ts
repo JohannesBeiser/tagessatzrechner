@@ -51,7 +51,7 @@ export class CategoryService {
   }
 
   getCategoryFromId(id: number): Category{
-    return this.categories.find(el=> el.id == id) || {name: 'unassigned', color: '#000000', id: 0};
+    return this.categories.find(el=> el.id == id) || {name: 'unassigned', color: 'deeppink', id: 0};
   }
 
   public addCategoryFromBackup(category: Category){
@@ -138,7 +138,7 @@ export class CategoryService {
         cursor.continue();
       }
       else {
-        result.push({name: 'unassigned', color: '#000000', id: 0}); // add default category 'unassigned'
+        result.push({name: 'unassigned', color: 'deeppink', id: 0}); // add default category 'unassigned'
         this.categories$.next(result)
       }
     };

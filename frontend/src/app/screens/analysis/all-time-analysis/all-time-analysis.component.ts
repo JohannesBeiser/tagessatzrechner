@@ -8,7 +8,7 @@ import { GroupsService } from 'src/app/services/groups/groups.service';
 import * as Highcharts from 'highcharts';
 
 
-type Stats =  {
+type Stats = {
   amountOfDays: number,
   averagePerMonth: number,
   averagePerYear: number,
@@ -43,17 +43,18 @@ export class AllTimeAnalysisComponent implements OnInit {
   constructor(
     private expenseService: ExpenseService,
     private groupService: GroupsService,
-    private categoryService: CategoryService,
+    public categoryService: CategoryService,
   ) { }
 
   public expenses$: Observable<Expense[]>;
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options = {};
+  categoryPieChartOptions: Highcharts.Options = {}
   chartReady: boolean = false;
 
   historyCategorySelected: number = 0;
   averageCategorySelected: number = 0;
-  public categories$ : Observable<Category[]>;
+  public categories$: Observable<Category[]>;
   updateFlag: boolean = false;
 
   averagePerYear: number;
@@ -63,12 +64,12 @@ export class AllTimeAnalysisComponent implements OnInit {
   // this Construct is the exact result of all of the expenses and gets build so its easier for the template and charts to display.
   //Everything thats needed is already pre-calculated in here
   public stats: Stats;
-  
+
 
   ngOnInit(): void {
     this.categories$ = this.categoryService.getCategoriesNew().pipe(
-      filter(categories=>categories.length>0),
-      map(categories=>categories.filter(category=>category.name !== 'unassigned'))
+      filter(categories => categories.length > 0),
+      map(categories => categories.filter(category => category.name !== 'unassigned'))
     );
 
     this.stats = {
@@ -171,15 +172,16 @@ export class AllTimeAnalysisComponent implements OnInit {
       });
 
       this.initializeChart();
+      this.initializeCategoryPieChart();
     });
   }
 
 
   private initializeChart() {
 
-    let years: string[] = this.stats.yearsData.sort((a,b)=>{return a.year - b.year}).map(el=>el.year.toString())
+    let years: string[] = this.stats.yearsData.sort((a, b) => { return a.year - b.year }).map(el => el.year.toString())
 
-    let values: number[] = this.stats.yearsData.sort((a,b)=>{return a.year - b.year}).map(el=>Math.round(el.total));
+    let values: number[] = this.stats.yearsData.sort((a, b) => { return a.year - b.year }).map(el => Math.round(el.total));
 
     this.chartOptions = {
       chart: {
@@ -226,67 +228,139 @@ export class AllTimeAnalysisComponent implements OnInit {
           },
         },
         series: {
-          
+
           states: {
-              hover: {
-                  enabled: false,
-              },
+            hover: {
+              enabled: false,
+            },
           }
-      }
+        }
       },
       series: [
-      {
-        color: '#444444',
-        name: '',
-        type: 'column',
-        data: values,
-        dataLabels: {
-          inside: false
-        }
-      }]
+        {
+          color: '#444444',
+          name: '',
+          type: 'column',
+          data: values,
+          dataLabels: {
+            inside: false
+          }
+        }]
     };
+
     this.chartReady = true; // needed so template doesnt try to initialize before its ready because it gets initialized asynchronously in subscribtion of expenses$
   }
 
-  public historyCategoryChanged(){
-    if(this.historyCategorySelected == 0){
-      this.initializeChart()      
-    }else{
+  initializeCategoryPieChart() {
+    let tempCategoriesSorted = this.stats.categoryYearsData.map(el => {
+      return { category: this.categoryService.getCategoryFromId(el.category), amount: Math.round(el.data.reduce((acc, cur) => acc += cur.total, 0)) }
+    }).sort((a, b) => b.amount - a.amount)
 
-    let selectedCategory: Category = this.categoryService.getCategoryFromId(this.historyCategorySelected);
-      
-    let years: string[] = this.stats.categoryYearsData.find(el=>el.category==selectedCategory.id).data.sort((a,b)=>{return a.year - b.year}).map(el=>el.year.toString())
 
-    let values: number[] = this.stats.categoryYearsData.find(el=>el.category==selectedCategory.id).data.sort((a,b)=>{return a.year - b.year}).map(el=>Math.round(el.total));
-    this.chartOptions.xAxis= {
+    let values = tempCategoriesSorted.map(el => [`${el.category.name} ${(Math.round(el.amount* 100 /this.stats.total))}%`, el.amount]);
+    let colors = tempCategoriesSorted.map(el => el.category.color);
+
+    this.categoryPieChartOptions = {
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: 0,
+        plotShadow: false,
+        height: 280
+      },
+      credits: {
+        enabled: false
+      },
+      title: {
+        text: ''
+      },
+      tooltip: {
+        enabled: false,
+      },
+      plotOptions: {
+        pie: {
+          colors: colors,
+          allowPointSelect: false,
+          dataLabels: {
+            enabled: false,
+          },
+          showInLegend: true,
+          center: ['50%', '100%'],
+          size: '50%',
+          startAngle: -90,
+          endAngle: 90,
+        },
+        series: {
+          enableMouseTracking: false,
+          point: {
+            events: {
+              legendItemClick: function () {
+                return false // <== returning false will cancel the default action
+              },
+            }
+          }
+        }
+      },
+      series: [{
+        type: 'pie',
+        name: 'Browser share',
+        //innerSize: '50%',
+        innerSize: '35%',
+        size: '185%',
+        data: values
+      }],
+      legend: {
+        itemStyle: {
+          fontFamily: 'Roboto-Light',
+          fontSize: '0.8em'
+        },
+        itemMarginTop: 0,
+        itemMarginBottom: 0,
+        align: 'left',
+        verticalAlign: 'bottom',
+        y: 0,
+        padding: 0,
+      }
+    };
+  }
+
+  public historyCategoryChanged() {
+    if (this.historyCategorySelected == 0) {
+      this.initializeChart()
+    } else {
+
+      let selectedCategory: Category = this.categoryService.getCategoryFromId(this.historyCategorySelected);
+
+      let years: string[] = this.stats.categoryYearsData.find(el => el.category == selectedCategory.id).data.sort((a, b) => { return a.year - b.year }).map(el => el.year.toString())
+
+      let values: number[] = this.stats.categoryYearsData.find(el => el.category == selectedCategory.id).data.sort((a, b) => { return a.year - b.year }).map(el => Math.round(el.total));
+      this.chartOptions.xAxis = {
         categories: years,
         crosshair: true
       }
-    this.chartOptions.series = [
-      {
-        color: selectedCategory.color,
-        type: 'column',
-        data: values
-      }
-    ]
+      this.chartOptions.series = [
+        {
+          color: selectedCategory.color,
+          type: 'column',
+          data: values
+        }
+      ]
     }
-    this.updateFlag= true;
+    this.updateFlag = true;
   }
 
-  public averageCategoryChanged(){
-    if(this.averageCategorySelected == 0){
+  public averageCategoryChanged() {
+    if (this.averageCategorySelected == 0) {
       this.averagePerYear = this.stats.averagePerYear;
       this.averagePerMonth = this.stats.averagePerMonth;
-      this.averagePerDay = this.stats.averagePerDay;     
-    }else{
+      this.averagePerDay = this.stats.averagePerDay;
+    } else {
       // a specific category has been chosen
-    let selectedCategory: Category = this.categoryService.getCategoryFromId(this.averageCategorySelected);
-    let selectedCategoriesTotal: number = this.stats.categoryYearsData.find(el=>el.category==selectedCategory.id).data.reduce((acc,cur)=> acc + cur.total,0)
+      let selectedCategory: Category = this.categoryService.getCategoryFromId(this.averageCategorySelected);
+      let selectedCategoriesTotal: number = this.stats.categoryYearsData.find(el => el.category == selectedCategory.id).data.reduce((acc, cur) => acc + cur.total, 0)
 
-    this.averagePerYear = Math.round(selectedCategoriesTotal / this.stats.amountOfDays *365);
-    this.averagePerMonth = Math.round(selectedCategoriesTotal / this.stats.amountOfDays *30.437);
-    this.averagePerDay = Math.round(selectedCategoriesTotal / this.stats.amountOfDays);    
+      this.averagePerYear = Math.round(selectedCategoriesTotal / this.stats.amountOfDays * 365);
+      this.averagePerMonth = Math.round(selectedCategoriesTotal / this.stats.amountOfDays * 30.437);
+      this.averagePerDay = Math.round(selectedCategoriesTotal / this.stats.amountOfDays);
     }
   }
-
 }
