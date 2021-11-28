@@ -59,7 +59,10 @@ import { MonthAnalysisComponent } from './screens/analysis/month-analysis/month-
 import { CustomAnalysisComponent } from './screens/analysis/custom-analysis/custom-analysis.component';
 import { RationBarComponent } from './components/charts/ration-bar/ration-bar.component';
 import { CardComponent } from './components/card/card.component';
-import { ExpenseListDialogComponent } from './screens/analysis/expense-list-dialog/expense-list-dialog.component'
+import { ExpenseListDialogComponent } from './screens/analysis/expense-list-dialog/expense-list-dialog.component';
+import { TagSettingsComponent } from './screens/settings/tag-settings/tag-settings.component';
+import { AddTagDialogComponent } from './screens/settings/tag-settings/add-tag-dialog/add-tag-dialog.component';
+import { TagSettingsBottomSheetComponent } from './screens/settings/tag-settings/tag-settings-bottom-sheet/tag-settings-bottom-sheet.component'
 
 registerLocaleData(localeDe, 'de');
 
@@ -102,7 +105,10 @@ registerLocaleData(localeDe, 'de');
     CustomAnalysisComponent,
     RationBarComponent,
     CardComponent,
-    ExpenseListDialogComponent
+    ExpenseListDialogComponent,
+    TagSettingsComponent,
+    AddTagDialogComponent,
+    TagSettingsBottomSheetComponent
   ],
   imports: [
     BrowserModule,

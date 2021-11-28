@@ -98,7 +98,7 @@ export const slideInAnimation =
         ]),
         query(':enter', animateChild()),
       ]),
-      transition('RecurringSettings => Settings, GroupsSettings => Settings, DefaultsSettings => Settings, GeneralSettings => Settings, CategorySettings => Settings', [
+      transition('TagSettings => Settings,RecurringSettings => Settings, GroupsSettings => Settings, DefaultsSettings => Settings, GeneralSettings => Settings, CategorySettings => Settings', [
         style({ position: 'relative' }),
         query(':enter, :leave', [
           style({
@@ -122,7 +122,7 @@ export const slideInAnimation =
         ]),
         query(':enter', animateChild()),
       ]),
-      transition('Settings => RecurringSettings, Settings => GroupsSettings, Settings => DefaultsSettings, Settings => GeneralSettings, Settings => CategorySettings', [
+      transition('Settings => RecurringSettings,Settings => TagSettings, Settings => GroupsSettings, Settings => DefaultsSettings, Settings => GeneralSettings, Settings => CategorySettings', [
         style({ position: 'relative' }),
         query(':enter, :leave', [
           style({

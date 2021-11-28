@@ -28,6 +28,10 @@ export class IndexedDBConnectionService {
       db.createObjectStore('categories', { autoIncrement: true });
       console.log("Added IndexedDB store 'categories'")
     }
+    if (!stores.contains("tags")) {
+      db.createObjectStore('tags', { autoIncrement: true });
+      console.log("Added IndexedDB store 'tags'")
+    }
   }
 
   /**
@@ -36,8 +40,9 @@ export class IndexedDBConnectionService {
    * 2: +groups
    * 3: +recurringExpenses
    * 4: + categories
+   * 5: + tags
    */
   getConnection(): IDBOpenDBRequest{
-    return indexedDB.open('ExpenseManagerDB', 4);
+    return indexedDB.open('ExpenseManagerDB', 5)
   }
 }

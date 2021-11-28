@@ -13,6 +13,7 @@ import { DefaultsComponent } from './screens/settings/defaults/defaults.componen
 import { GeneralComponent } from './screens/settings/general/general.component';
 import { GroupSettingsComponent } from './screens/settings/group-settings/group-settings.component';
 import { CategorySettingsComponent } from './screens/settings/category-settings/category-settings.component';
+import { TagSettingsComponent } from './screens/settings/tag-settings/tag-settings.component';
 
 
 const routes: Routes = [
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'settings/recurring', component: RecurringComponent, data: {animation: 'RecurringSettings'}  },
   { path: 'settings/groups', component: GroupSettingsComponent, data: {animation: 'GroupsSettings'}  },
   { path: 'settings/categories', component: CategorySettingsComponent, data: {animation: 'CategorySettings'}  },
+  { path: 'settings/tags', component: TagSettingsComponent, data: {animation: 'TagSettings'}  },
   { path: 'settings/defaults', component: DefaultsComponent, data: {animation: 'DefaultsSettings'}  },
   { path: 'settings/general', component: GeneralComponent, data: {animation: 'GeneralSettings'}  },
   { path: 'income', component: IncomeComponent, data: {animation: 'Income'}  },
