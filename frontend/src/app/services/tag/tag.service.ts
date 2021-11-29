@@ -36,6 +36,11 @@ export class TagService {
     return this.tags.find(el=> el.id == id);
   }
 
+  convertIdsToTags(ids: number[]): Tag[]{
+    let result =  ids.map(id=>this.getTagById(id))
+    return result;
+  }
+
   public addTag(tag: Tag) {
     let tx = this.db.transaction(['tags'], 'readwrite');
     let store = tx.objectStore('tags');
@@ -48,6 +53,18 @@ export class TagService {
       alert('error storing tag ' + event.target.errorCode);
     }
   };
+
+  public addTagFromBackup(tag: Tag){
+    let tx = this.db.transaction(['tags'], 'readwrite');
+    let store = tx.objectStore('tags');
+    store.add(tag);
+    tx.oncomplete = () => {
+      this.refreshTags();
+    }
+    tx.onerror = (event) => {
+      alert('error storing tag ' + event.target.errorCode);
+    }
+  }
 
   public updateTag(key: number, tag: Tag){
       let transaction = this.db.transaction('tags', "readwrite");

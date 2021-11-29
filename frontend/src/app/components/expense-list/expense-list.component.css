@@ -50,6 +50,21 @@
 .expense-list .expense-item .item-content .minimal-info .info-item.date {
   margin-right: 12px;
 }
+.expense-list .expense-item .item-content .more-info {
+  position: relative;
+}
+.expense-list .expense-item .item-content .more-info .tags {
+  margin-top: 12px;
+}
+.expense-list .expense-item .item-content .more-info .action-buttons {
+  display: flex;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+.expense-list .expense-item .item-content .more-info .action-buttons > i {
+  margin-left: auto;
+}
 .expense-list .expense-item .item-content .more-info > div:first-child {
   padding-top: 16px;
 }
@@ -88,13 +103,6 @@
 .expense-list .expense-item .item-content .more-info .group .group-name {
   margin-left: 8px;
   flex: 1;
-}
-.expense-list .expense-item .item-content .more-info .group .action-buttons {
-  display: flex;
-}
-.expense-list .expense-item .item-content .more-info .group .action-buttons > i {
-  padding: 8px;
-  padding-left: 16px;
 }
 .expense-list .expense-item .item-content .more-info .currency {
   display: flex;

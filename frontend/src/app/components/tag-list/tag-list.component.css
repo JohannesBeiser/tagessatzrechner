@@ -1,0 +1,10 @@
+.tag-list-container {
+  display: flex;
+  align-items: center;
+}
+.tag-list-container .tag-item {
+  padding: 4px 8px;
+  border: 1px solid #444;
+  margin-right: 8px;
+  font-size: 0.6em;
+}

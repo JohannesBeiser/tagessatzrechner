@@ -5,12 +5,14 @@ import { Expense, ExpenseService } from 'src/app/services/expenses/expense.servi
 import { CurrencyService } from 'src/app/services/currency/currency.service';
 
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
-import { take, map, startWith } from 'rxjs/operators';
+import { take, map, startWith, filter } from 'rxjs/operators';
 import { GroupsService, Group } from 'src/app/services/groups/groups.service';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { CategoryService, Category } from 'src/app/services/category/category.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { FilterService } from 'src/app/services/filter/filter.service';
+import { Tag, TagService } from 'src/app/services/tag/tag.service';
+import { MatAutocomplete } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-add',
@@ -23,11 +25,13 @@ export class AddComponent implements OnInit, AfterViewInit {
     public expenseService: ExpenseService,
     public groupsService: GroupsService,
     public categoryService: CategoryService,
+    public tagService: TagService,
     private filterService: FilterService,
     private _ngZone: NgZone,
     private currencyService: CurrencyService
   ) { }
 
+  @ViewChild('tagSelectInputElement') tagSelectInputElement: ElementRef;
   @ViewChild("focusInputAdd") public focusInput: ElementRef;
   @ViewChild('autosize') autosize: CdkTextareaAutosize;
   triggerResize() {
@@ -46,11 +50,19 @@ export class AddComponent implements OnInit, AfterViewInit {
   public initialData: Expense;
   public isOnline = navigator.onLine;
   public defaultCurrency = 'EUR';
+  tagFormControl: FormControl;
 
+    //Tags
+    public tags$: Observable<Tag[]>;
+    public allTags: Tag[];
+    public filteredTags$: Observable<Tag[]>; // always changing --> source of dropdown options
+    public selectedTagIds: number[] = [];
 
   ngOnInit(): void {
     this.initialData = this.sliderService.currentExpenseForEdit;
     this.selectedTabIndex = (this.initialData?.lastUpdate) ? 1 : 0;
+
+    this.tagFormControl = new FormControl('');
 
     this.expenseForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.maxLength(35)]),
@@ -81,6 +93,7 @@ export class AddComponent implements OnInit, AfterViewInit {
  
     //TODO : Dirty workaround
     if (this.initialData) {
+      this.selectedTagIds = this.initialData.tags || [];
       setTimeout(() => {
         if (this.initialData.lastUpdate) {
           this.recurringForm.reset({
@@ -119,6 +132,19 @@ export class AddComponent implements OnInit, AfterViewInit {
     }
     this.groups$ = this.groupsService.getGroupsWithoutUpdate();
     this.categories$ = this.categoryService.getCategoriesNew().pipe(map(categories=>categories.filter(category=> category.id !== 0)));
+
+    this.tags$ = this.tagService.getTags();
+    this.tags$.subscribe(tags=>this.allTags = tags);
+
+    this.filteredTags$ = combineLatest(this.tagFormControl.valueChanges.pipe(startWith('')), this.tagService.getTags()).pipe(
+      filter(([value, tags])=>value != null),
+      filter(([value,tags])=>typeof value != 'number'), // super hacky but this way i can easily build my own autocomplete chip-input and not have to update angular materials version which would mean tons of re-preogramming of inputs. This happens because the value of the option is the tags id which is a number 
+      map(([value, tags]) => this._filterTags(value))
+    );
+    
+    this.filteredTags$.subscribe(val=>{
+      console.log(val)
+    })
   }
 
   ngAfterViewInit() {
@@ -130,6 +156,27 @@ export class AddComponent implements OnInit, AfterViewInit {
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.options.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
+  }
+
+
+
+  // Tag functions
+
+  private _filterTags(value: string): Tag[] {
+    const filterValue = value.toLowerCase();
+    return this.allTags.filter(tag => tag.name.toLowerCase().indexOf(filterValue) === 0).filter(tag => this.selectedTagIds.indexOf(tag.id) == -1);
+  }
+
+  public tagSelected(id: number){
+    this.selectedTagIds.push(id);
+    this.tagFormControl.setValue('');
+     this.tagSelectInputElement.nativeElement.blur();
+    console.log(this.selectedTagIds)
+  }
+
+  public removeTag(tagId: number){
+    this.selectedTagIds = this.selectedTagIds.filter(curTagId=>curTagId != tagId);
+    this.tagFormControl.setValue('');
   }
 
 
@@ -192,6 +239,8 @@ export class AddComponent implements OnInit, AfterViewInit {
         }
 
         expense.category = parseInt(expense.category);
+        expense.tags = this.selectedTagIds;
+
         if (!this.initialData) {
           this.expenseService.addExpense(expense, "expenses");
         } else {
@@ -213,6 +262,7 @@ export class AddComponent implements OnInit, AfterViewInit {
         date: this.recurringForm.value.month_recurring + "-01",
         category: this.recurringForm.value.category_recurring,
         group: this.recurringForm.value.group_recurring,
+        tags: [],
         description: this.recurringForm.value.description_recurring,
         recurring: true,
         lastUpdate: null

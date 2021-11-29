@@ -6,6 +6,7 @@ import { Group, GroupsService } from 'src/app/services/groups/groups.service';
 import { DatePipe } from '@angular/common';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { CategoryService, Category } from 'src/app/services/category/category.service';
+import { Tag, TagService } from 'src/app/services/tag/tag.service';
 
 @Component({
   selector: 'app-general',
@@ -39,7 +40,8 @@ export class GeneralComponent implements OnInit {
     private expenseService: ExpenseService,
     private datePipe: DatePipe,
     private groupsService: GroupsService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private tagService: TagService
   ) { }
 
 
@@ -66,10 +68,10 @@ export class GeneralComponent implements OnInit {
    * Downloads all of the data (expenses, recurringExpenses, groups) as a snapshot in a .json file
    */
   public downloadBackup() {
-    combineLatest(this.expenseService.getExpenses("expenses"), this.expenseService.getExpenses("recurringExpenses"), this.groupsService.getGroups(), this.categoryService.getCategoriesNew())
+    combineLatest(this.expenseService.getExpenses("expenses"), this.expenseService.getExpenses("recurringExpenses"), this.groupsService.getGroups(), this.categoryService.getCategoriesNew(), this.tagService.getTags())
       .pipe(take(1))
-      .subscribe(([expenses, recurringExpenses, groups, categories]) => {
-        let data = { expenses, recurringExpenses, groups, categories};
+      .subscribe(([expenses, recurringExpenses, groups, categories,tags]) => {
+        let data = { expenses, recurringExpenses, groups, categories, tags};
         let fileName = `Expense_backup_${this.datePipe.transform(new Date(), 'MMM y').split(' ').join('_')}`
         this.downloadObjectAsJson(data, fileName)
       })
@@ -97,7 +99,7 @@ export class GeneralComponent implements OnInit {
    * loads all of the backup into the IndexedDB
    * @param json data containing expenses, recurringExpenses, groups
    */
-  loadDataIntoApp(json: { expenses: Expense[], recurringExpenses: Expense[], groups: Group[], categories: Category[]}) {
+  loadDataIntoApp(json: { expenses: Expense[], recurringExpenses: Expense[], groups: Group[], categories: Category[], tags: Tag[]}) {
     // add normal expenses
 
     if (confirm("Please confirm you want to load this backup into your app")) {
@@ -128,6 +130,12 @@ export class GeneralComponent implements OnInit {
         this.categoryService.addCategoryFromBackup(category);
       });
 
+      // add tags
+      json.tags.forEach(tag => {
+        delete tag['key'];
+        this.tagService.addTagFromBackup(tag);
+      });
+
       alert("Data loaded successfully")
     }
 
@@ -140,6 +148,7 @@ export class GeneralComponent implements OnInit {
         this.expenseService.clearData("recurringExpenses")
         this.groupsService.clearData();
         this.categoryService.clearData();
+        this.tagService.clearData();
       }
     }
   }

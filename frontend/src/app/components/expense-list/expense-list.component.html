@@ -31,17 +31,22 @@
                         <span>Group:</span>
                     </div>
                     <div class="group-name"> {{groupService.getGroupById(expense.group)?.name}}</div>   
-                    <div class="action-buttons">
-                        <i  class="material-icons" (click)="openBottomSheet($event, expense)">more_horiz</i>                    
-                    </div>
+  
                 </div>
-
+                
                 <div class="currency" *ngIf="expense.currency && expense.currency !== 'EUR'">
                     <div class="title">Original amount:</div>
                     <div class="value">{{expense.amount_foreign}} {{expense.currency}}</div>
                 </div>
-
-
+                
+                <div class="tags" *ngIf="expense.tags.length > 0">
+                    <div class="value">
+                        <app-tag-list [tagIds]="expense.tags"></app-tag-list>                    
+                    </div>
+                </div>  
+                <div class="action-buttons">
+                    <i  class="material-icons" (click)="openBottomSheet($event, expense)">more_horiz</i>                    
+                </div>
             </div>
         </div>
         <!-- <i class="material-icons-outlined" (click)="expenseService.deleteExpense(expense.key)">close</i> -->

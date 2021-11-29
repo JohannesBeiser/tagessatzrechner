@@ -12,6 +12,7 @@ export interface Expense {
   amount_foreign?: number;
   category: number;
   group: number; // id of the group
+  tags: number[];
   date: string;
   description?: string;
   currency?: string;

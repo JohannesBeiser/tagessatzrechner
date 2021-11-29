@@ -8,6 +8,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { Observable, merge } from 'rxjs';
 import { FilterService } from 'src/app/services/filter/filter.service';
 import { GroupsService } from 'src/app/services/groups/groups.service';
+import { TagService } from 'src/app/services/tag/tag.service';
 
 @Component({
   selector: 'app-expense-list',
@@ -37,6 +38,7 @@ export class ExpenseListComponent implements OnInit {
     public categoryService: CategoryService,
     public groupService: GroupsService,
     public filterService: FilterService,
+    public tagService: TagService,
     public sliderService: SliderService,
     private bottomSheet: MatBottomSheet
   ) { }
