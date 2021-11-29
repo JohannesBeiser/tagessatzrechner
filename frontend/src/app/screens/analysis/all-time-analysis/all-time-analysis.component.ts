@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { differenceInDays } from 'date-fns';
 import { Observable, Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, take } from 'rxjs/operators';
 import { Category, CategoryService } from 'src/app/services/category/category.service';
 import { Expense, ExpenseService } from 'src/app/services/expenses/expense.service';
 import { GroupsService } from 'src/app/services/groups/groups.service';
@@ -17,6 +17,9 @@ type Stats = {
   averagePerDay: number,
   total: number, // inirial calculation
   totalRecurring: number, // initial calc
+  totalTravel: number, // inirial calculation
+  totalNonTravel: number, // initial calc
+  totalInvest: number //initial calc
   yearsData: {
     year: number, // initial calc
     firstDate: Date,// initial calc
@@ -66,6 +69,7 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
   averagePerYear: number;
   averagePerMonth: number;
   averagePerDay: number;
+  averageTotal: number;
 
   // this Construct is the exact result of all of the expenses and gets build so its easier for the template and charts to display.
   //Everything thats needed is already pre-calculated in here
@@ -79,20 +83,27 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
       map(categories => categories.filter(category => category.name !== 'unassigned'))
     );
 
-    this.stats = {
-      amountOfDays: 0,
-      averagePerMonth: 0,
-      averagePerYear: 0,
-      averagePerDay: 0,
-      categoryYearsData: [],
-      total: 0,
-      totalRecurring: 0,
-      yearsData: [],
-    }
 
-    this.expenses$ = this.expenseService.getExpenses("expenses").pipe(filter(expenses => expenses.length > 0))
+    this.expenses$ = this.expenseService.getExpenses("expenses").pipe(
+      filter(expenses => expenses.length > 0),
+      distinctUntilChanged(),
+      take(1)
+      )
 
-    this.expenses$.subscribe(expenses => {
+    let sub =this.expenses$.subscribe(expenses => {
+      this.stats = {
+        amountOfDays: 0,
+        averagePerMonth: 0,
+        averagePerYear: 0,
+        averagePerDay: 0,
+        categoryYearsData: [],
+        total: 0,
+        totalRecurring: 0,
+        yearsData: [],
+        totalNonTravel: 0,
+        totalTravel:0,
+        totalInvest: 0
+      }
       let firstDate: Date;
       let lastDate: Date;
 
@@ -147,6 +158,17 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
             yearsDataMatch.totalRecurring += expense.amount;
           }
 
+          if(expense.tags.indexOf(1638199877164)>=0){
+            this.stats.totalTravel += expense.amount
+          }
+          if(expense.tags.indexOf(1638199880620)>=0){
+            this.stats.totalNonTravel += expense.amount
+          }
+          if(expense.category == 1638217648875){
+            // invest category
+            this.stats.totalInvest += expense.amount
+          }
+
           // years categroy totals
           let expenseCategory: number = expense.category;
           // find the category stats object whch matches the expenses category
@@ -165,6 +187,7 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
       });
 
       this.stats.amountOfDays = differenceInDays(lastDate, firstDate);
+      this.averageTotal = Math.round(this.stats.total);
 
       this.stats.averagePerDay = Math.round(this.stats.total / this.stats.amountOfDays);
       this.stats.averagePerYear = Math.round(this.stats.averagePerDay * 365);
@@ -172,6 +195,7 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
       this.averagePerYear = this.stats.averagePerYear;
       this.averagePerMonth = this.stats.averagePerMonth;
       this.averagePerDay = this.stats.averagePerDay;
+      this.stats.totalInvest = Math.round(this.stats.totalInvest);
 
       this.stats.yearsData.forEach(yearData => {
         yearData.amountInDays = differenceInDays(yearData.lastDate, yearData.firstDate);
@@ -181,6 +205,7 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
       this.initializeChart();
       this.initializeCategoryPieChart();
     });
+    this.subs.push(sub)
   }
 
   ngOnDestroy(): void{
@@ -357,6 +382,7 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
 
   public averageCategoryChanged() {
     if (this.averageCategorySelected == 0) {
+      this.averageTotal = Math.round(this.stats.total)
       this.averagePerYear = this.stats.averagePerYear;
       this.averagePerMonth = this.stats.averagePerMonth;
       this.averagePerDay = this.stats.averagePerDay;
@@ -364,7 +390,8 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
       // a specific category has been chosen
       let selectedCategory: Category = this.categoryService.getCategoryFromId(this.averageCategorySelected);
       let selectedCategoriesTotal: number = this.stats.categoryYearsData.find(el => el.category == selectedCategory.id).data.reduce((acc, cur) => acc + cur.total, 0)
-
+      
+      this.averageTotal = Math.round(selectedCategoriesTotal);
       this.averagePerYear = Math.round(selectedCategoriesTotal / this.stats.amountOfDays * 365);
       this.averagePerMonth = Math.round(selectedCategoriesTotal / this.stats.amountOfDays * 30.437);
       this.averagePerDay = Math.round(selectedCategoriesTotal / this.stats.amountOfDays);
@@ -372,7 +399,7 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
   }
 
   public getTopExpensesForCategory(category: Category): Observable<Expense[]>{
-    return this.expenseService.getExpenses("expenses").pipe(
+    return this.expenseService.getExpensesWithoutUpdate("expenses").pipe(
       map(expenses=>expenses.filter(expense=>expense.category == category.id)),
       map(expenses=>expenses.sort((a,b)=>b.amount - a.amount)),
       map(expenses=>expenses.splice(0,20))

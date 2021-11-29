@@ -26,6 +26,10 @@
             <div body class="stats-list-container">
                 <div class="stats-list">
                     <div class="stats-list-item">
+                        <div class="title">All Time</div>
+                        <div class="value"><span *ngIf="averageCategorySelected != 0" class="category-indicator" [style.background]="categoryService.getCategoryFromId(averageCategorySelected).color"></span>{{averageTotal}} €</div>
+                    </div>
+                    <div class="stats-list-item">
                         <div class="title">Year</div>
                         <div class="value"><span *ngIf="averageCategorySelected != 0" class="category-indicator" [style.background]="categoryService.getCategoryFromId(averageCategorySelected).color"></span>{{averagePerYear}} €</div>
                     </div>
@@ -62,27 +66,92 @@
             <div class="all-time-header" header>
                 <div class="title">Comparisons</div>
             </div>
-            <div body class="recurring-ratio">
-                <div class="title">Monthly</div>
-                <div class="content">
-                    <div class="leftLabel">
-                        <div>Regular</div>
-                        <div>718€</div>
-                    </div>
-                    <app-ratio-bar 
-                        [value1]="((stats.total- stats.totalRecurring) / stats.amountOfDays) *30.437" 
-                        [value2]="(stats.totalRecurring / stats.amountOfDays) *30.437" 
-                        [labelFirst]="true" 
-                        [showLabels]="false"
-                        [color1]="'#444444'" [color2]="'rgb(171 171 171)'"
-                        [labelPrefix1]="'Regular expenses'" [labelPrefix2]="'Recurring'">
-                    </app-ratio-bar>
-                        <div class="rightLabel">
-                            <div>Recurring</div>
-                            <div>125€</div>
+            <div body class="ratio-charts-wrapper">
+                <div class="recurring-ratio">
+                    <div class="title">Monthly</div>
+                    <div class="content">
+                        <div class="leftLabel">
+                            <div>Regular</div>
+                            <div>{{(((stats.total- stats.totalRecurring) / stats.amountOfDays) *30.437) | number: '1.0-0':'de-DE'}} €</div>
                         </div>
+                        <app-ratio-bar 
+                            [value1]="((stats.total- stats.totalRecurring) / stats.amountOfDays) *30.437" 
+                            [value2]="(stats.totalRecurring / stats.amountOfDays) *30.437" 
+                            [labelFirst]="true" 
+                            [showLabels]="false"
+                            [color1]="'#444444'" [color2]="'rgb(171 171 171)'"
+                            [labelPrefix1]="'Regular expenses'" [labelPrefix2]="'Recurring'">
+                        </app-ratio-bar>
+                            <div class="rightLabel">
+                                <div>Recurring</div>
+                                <div>{{((stats.totalRecurring / stats.amountOfDays) *30.437) | number: '1.0-0':'de-DE'}} €</div>
+                            </div>
+                    </div>    
                 </div>
-     
+
+                <div class="travel-ratio">
+                    <div class="title">Yearly</div>
+                    <div class="content">
+                        <div class="leftLabel" *ngIf="stats.totalTravel>stats.totalNonTravel">
+                            <div>Travel</div>
+                            <div>{{(stats.totalTravel / stats.amountOfDays)*365 | number: '1.0-0':'de-DE'}} €</div>
+                        </div>
+                        <div class="leftLabel" *ngIf="stats.totalTravel<stats.totalNonTravel">
+                            <div>Non-Travel</div>
+                            <div>{{(stats.totalNonTravel / stats.amountOfDays)*365 | number: '1.0-0':'de-DE'}} €</div>
+                        </div>
+                        <app-ratio-bar 
+                            [value1]="stats.totalNonTravel" 
+                            [value2]="stats.totalTravel" 
+                            [labelFirst]="true" 
+                            [showLabels]="false"
+                            [color1]="'#444444'" [color2]="'rgb(171 171 171)'"
+                            [labelPrefix1]="'Non-Travel'" [labelPrefix2]="'Travel'">
+                        </app-ratio-bar>
+                            <div class="rightLabel"*ngIf="stats.totalTravel <= stats.totalNonTravel">
+                                <div>Travel</div>
+                                <div>{{(stats.totalTravel / stats.amountOfDays)*365 | number: '1.0-0':'de-DE'}} €</div>
+                            </div>
+                            <div class="rightLabel" *ngIf="stats.totalTravel>stats.totalNonTravel">
+                                <div>Non-Travel</div>
+                                <div>{{(stats.totalNonTravel / stats.amountOfDays)*365 | number: '1.0-0':'de-DE'}} €</div>
+                            </div>
+                    </div>   
+                    
+                    <div class="travel-ratio">
+                        <div class="title">Yearly</div>
+                        <div class="content">
+                            <div class="leftLabel" *ngIf="stats.totalInvest>(stats.total - stats.totalInvest)">
+                                <div>Invest</div>
+                                <div>{{(stats.totalInvest / stats.amountOfDays)*365 | number: '1.0-0':'de-DE'}} €</div>
+                            </div>
+                            <div class="leftLabel" *ngIf="stats.totalInvest<(stats.total - stats.totalInvest)">
+                                <div>Non-Invest</div>
+                                <div>{{((stats.total - stats.totalInvest) / stats.amountOfDays)*365 | number: '1.0-0':'de-DE'}} €</div>
+                            </div>
+                            <app-ratio-bar 
+                                [value1]="(stats.total - stats.totalInvest)" 
+                                [value2]="stats.totalInvest" 
+                                [labelFirst]="true" 
+                                [showLabels]="false"
+                                [color1]="'#444444'" [color2]="'rgb(171 171 171)'"
+                                [labelPrefix1]="'Non-Travel'" [labelPrefix2]="'Travel'">
+                            </app-ratio-bar>
+                                <div class="rightLabel"*ngIf="stats.totalInvest <= (stats.total - stats.totalInvest)">
+                                    <div>Invest</div>
+                                    <div>{{(stats.totalInvest / stats.amountOfDays)*365 | number: '1.0-0':'de-DE'}} €</div>
+                                </div>
+                                <div class="rightLabel" *ngIf="stats.totalInvest> (stats.total - stats.totalInvest) ">
+                                    <div>Non-Invest</div>
+                                    <div>{{((stats.total - stats.totalInvest) / stats.amountOfDays)*365 | number: '1.0-0':'de-DE'}} €</div>
+                                </div>
+                                </div>
+                                
+                        </div>    
+
+                    
+                </div>
+
             </div>
         </app-card>
     </div>

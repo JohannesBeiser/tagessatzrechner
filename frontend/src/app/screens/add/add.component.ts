@@ -64,6 +64,13 @@ export class AddComponent implements OnInit, AfterViewInit {
 
     this.tagFormControl = new FormControl('');
 
+    if(this.groupsService.defaultGroup === 0){
+      // general group--> expense gets "Non-Travel tag"
+      this.selectedTagIds = [1638199880620]
+    }else{
+      this.selectedTagIds = [1638199877164]
+    }
+
     this.expenseForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.maxLength(35)]),
       amount: new FormControl('', Validators.required),
@@ -141,10 +148,6 @@ export class AddComponent implements OnInit, AfterViewInit {
       filter(([value,tags])=>typeof value != 'number'), // super hacky but this way i can easily build my own autocomplete chip-input and not have to update angular materials version which would mean tons of re-preogramming of inputs. This happens because the value of the option is the tags id which is a number 
       map(([value, tags]) => this._filterTags(value))
     );
-    
-    this.filteredTags$.subscribe(val=>{
-      console.log(val)
-    })
   }
 
   ngAfterViewInit() {

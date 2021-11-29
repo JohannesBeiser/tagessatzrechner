@@ -26,32 +26,36 @@
 .all-time-analysis-container .chart-section .title-container .amount {
   margin-left: 12px;
 }
-.all-time-analysis-container .chart-section .recurring-ratio .title {
+.all-time-analysis-container .chart-section .ratio-charts-wrapper .travel-ratio {
+  margin-top: 12px;
+}
+.all-time-analysis-container .chart-section .ratio-charts-wrapper .title {
   font-size: 0.6em;
   opacity: 0.7;
   text-align: center;
   margin-bottom: 2px;
 }
-.all-time-analysis-container .chart-section .recurring-ratio .content {
+.all-time-analysis-container .chart-section .ratio-charts-wrapper .content {
   display: flex;
 }
-.all-time-analysis-container .chart-section .recurring-ratio .leftLabel,
-.all-time-analysis-container .chart-section .recurring-ratio .rightLabel {
+.all-time-analysis-container .chart-section .ratio-charts-wrapper .leftLabel,
+.all-time-analysis-container .chart-section .ratio-charts-wrapper .rightLabel {
   flex: 0;
   font-size: 0.6em;
   opacity: 0.7;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-width: 50px;
 }
-.all-time-analysis-container .chart-section .recurring-ratio .leftLabel {
+.all-time-analysis-container .chart-section .ratio-charts-wrapper .leftLabel {
   text-align: right;
-  margin-right: 4px;
+  margin: 0 4px;
 }
-.all-time-analysis-container .chart-section .recurring-ratio .rightLabel {
-  margin-left: 4px;
+.all-time-analysis-container .chart-section .ratio-charts-wrapper .rightLabel {
+  margin: 0 4px;
 }
-.all-time-analysis-container .chart-section .recurring-ratio app-ratio-bar {
+.all-time-analysis-container .chart-section .ratio-charts-wrapper app-ratio-bar {
   flex: 1;
 }
 .all-time-analysis-container .stats-list-container .stats-list {

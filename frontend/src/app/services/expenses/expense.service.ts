@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject, Observable, ReplaySubject } from 'rxjs';
+import { Subject, Observable, ReplaySubject, BehaviorSubject } from 'rxjs';
 import { IndexedDBConnectionService } from '../indexed-dbconnection.service';
 import { expenses } from "./Expenses";
 import { addMonths, differenceInMonths, getMonth } from 'date-fns';
@@ -27,8 +27,8 @@ export interface Expense {
 export class ExpenseService {
 
   private db: any;
-  private expenses$: Subject<Expense[]>;
-  private recurringExpenses$: Subject<Expense[]>;
+  private expenses$: BehaviorSubject<Expense[]>;
+  private recurringExpenses$: BehaviorSubject<Expense[]>;
   private connection$: ReplaySubject<boolean>;
   public expenseDeletedNotifier: Subject<void>;
 
@@ -37,35 +37,35 @@ export class ExpenseService {
   ) {
     this.connection$ = new ReplaySubject(1);
     this.createExpenseDatabase();
-    this.expenses$ = new Subject<Expense[]>();
-    this.recurringExpenses$ = new Subject<Expense[]>();
+    this.expenses$ = new BehaviorSubject<Expense[]>([]);
+    this.recurringExpenses$ = new BehaviorSubject<Expense[]>([]);
     this.expenseDeletedNotifier = new Subject();
     this.checkRecurringExpenses();
   }
 
 
-  getFormatDate(date: Date): string{
-    return `${date.getFullYear()}-${this.getPrettyMonth(date.getMonth()+1)}-01`
+  getFormatDate(date: Date): string {
+    return `${date.getFullYear()}-${this.getPrettyMonth(date.getMonth() + 1)}-01`
   }
 
-  getPrettyMonth(number:number ): string{
-    if(number<10){
+  getPrettyMonth(number: number): string {
+    if (number < 10) {
       return 0 + number.toString();
-    }else{
+    } else {
       return number.toString();
     }
   }
 
-  checkRecurringExpenses(){
-    this.getExpenses("recurringExpenses").pipe(take(1)).subscribe(expenses=>{
-      expenses.forEach(expense=>{
-        if((!expense.lastUpdate || addMonths(new Date(expense.lastUpdate),1) < new Date()) && new Date()> new Date(expense.date)){
+  checkRecurringExpenses() {
+    this.getExpenses("recurringExpenses").pipe(take(1)).subscribe(expenses => {
+      expenses.forEach(expense => {
+        if ((!expense.lastUpdate || addMonths(new Date(expense.lastUpdate), 1) < new Date()) && new Date() > new Date(expense.date)) {
           // update needed for this expense
-          let key= expense.key;
+          let key = expense.key;
           delete expense.lastUpdate;
           delete expense.key;
-          this.addExpense({...expense, ...{date:this.getFormatDate(new Date(new Date().getFullYear(), new Date().getMonth()))}}, "expenses");
-          this.updateExpense(key, {...expense, ...{lastUpdate: this.getFormatDate(new Date())}}, "recurringExpenses")
+          this.addExpense({ ...expense, ...{ date: this.getFormatDate(new Date(new Date().getFullYear(), new Date().getMonth())) } }, "expenses");
+          this.updateExpense(key, { ...expense, ...{ lastUpdate: this.getFormatDate(new Date()) } }, "recurringExpenses")
         }
       });
     });
@@ -81,12 +81,12 @@ export class ExpenseService {
     let store = tx.objectStore(type);
     store.add(expense);
     tx.oncomplete = () => {
-      if(type=="recurringExpenses"){
-        if(!fromBackup){
+      if (type == "recurringExpenses") {
+        if (!fromBackup) {
           this.addInitialRecurrentEntries(expense)
         }
         this.refreshExpenses(type);
-      }else{
+      } else {
         this.refreshExpenses(type);
       }
     }
@@ -95,12 +95,12 @@ export class ExpenseService {
     }
   };
 
-  addInitialRecurrentEntries(expense: Expense){
-    let currentMonthDate = new Date( new Date().getFullYear(), new Date().getMonth());
-    let counter=0;
+  addInitialRecurrentEntries(expense: Expense) {
+    let currentMonthDate = new Date(new Date().getFullYear(), new Date().getMonth());
+    let counter = 0;
     // becomes -1 once iterading date after expense date
-    while(differenceInMonths(currentMonthDate, addMonths(new Date(expense.date), counter))>=0){
-      let pastRecurrentExpense = {...expense, ...{date: this.getFormatDate(addMonths(new Date(expense.date), counter))}}
+    while (differenceInMonths(currentMonthDate, addMonths(new Date(expense.date), counter)) >= 0) {
+      let pastRecurrentExpense = { ...expense, ...{ date: this.getFormatDate(addMonths(new Date(expense.date), counter)) } }
       delete pastRecurrentExpense.lastUpdate;
       this.addExpense(pastRecurrentExpense, "expenses")
       counter++;
@@ -111,11 +111,24 @@ export class ExpenseService {
    * Gets all of the expenses from the IndexedDB
    * @param type either "expenses" or "recurring"
    */
-  public getExpenses(type:string): Observable<Expense[]> {
-    this.connection$.subscribe(()=>this.refreshExpenses(type));
-    if(type=="expenses"){
+  public getExpenses(type: string): Observable<Expense[]> {
+    this.connection$.subscribe(() => this.refreshExpenses(type));
+    if (type == "expenses") {
       return this.expenses$.asObservable();
-    }else{
+    } else {
+      return this.recurringExpenses$.asObservable();
+    }
+  }
+
+
+  /**
+   * Gets all of the expenses from the IndexedDB
+   * @param type either "expenses" or "recurring"
+   */
+  public getExpensesWithoutUpdate(type: string): Observable<Expense[]> {
+    if (type == "expenses") {
+      return this.expenses$.asObservable();
+    } else {
       return this.recurringExpenses$.asObservable();
     }
   }
@@ -129,7 +142,7 @@ export class ExpenseService {
     }
   }
 
-  public deleteExpense(key: number, type:string) {
+  public deleteExpense(key: number, type: string) {
     let transaction = this.db.transaction(type, "readwrite");
     let objectStore = transaction.objectStore(type);
     let req = objectStore.delete(key);
@@ -139,7 +152,7 @@ export class ExpenseService {
     }
   }
 
-  clearData(type:string){
+  clearData(type: string) {
     let transaction = this.db.transaction(type, "readwrite");
     var objectStore = transaction.objectStore(type);
     objectStore.clear();
@@ -163,9 +176,9 @@ export class ExpenseService {
         cursor.continue();
       }
       else {
-        if(type=="expenses"){
+        if (type == "expenses") {
           this.expenses$.next(result);
-        }else{
+        } else {
           this.recurringExpenses$.next(result);
         }
       }

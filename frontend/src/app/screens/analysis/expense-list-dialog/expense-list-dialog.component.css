@@ -4,9 +4,9 @@
 .expense-list-dialog-container .header {
   display: flex;
   align-items: center;
+  margin-bottom: 12px;
 }
 .expense-list-dialog-container .header .title {
-  margin-bottom: 12px;
   opacity: 0.5;
   font-weight: bold;
   flex: 1;
