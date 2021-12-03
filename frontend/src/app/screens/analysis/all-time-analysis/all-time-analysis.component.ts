@@ -19,7 +19,8 @@ type Stats = {
   totalRecurring: number, // initial calc
   totalTravel: number, // inirial calculation
   totalNonTravel: number, // initial calc
-  totalInvest: number //initial calc
+  totalSinceInvest: number,
+  totalWasted: number,
   yearsData: {
     year: number, // initial calc
     firstDate: Date,// initial calc
@@ -31,6 +32,10 @@ type Stats = {
   }[],
   categoryYearsData: {
     category: number,
+    total:number,
+    firstDate: Date,
+    lastDate: Date,
+    amountOfDays: number,
     data: {
       year: number,
       total: number,// initial calc
@@ -102,10 +107,12 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
         yearsData: [],
         totalNonTravel: 0,
         totalTravel:0,
-        totalInvest: 0
+        totalSinceInvest: 0,
+        totalWasted: 0,
       }
       let firstDate: Date;
       let lastDate: Date;
+
 
       expenses.forEach(expense => {
         if (new Date(expense.date) < new Date()) {
@@ -159,14 +166,20 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
           }
 
           if(expense.tags.indexOf(1638199877164)>=0){
-            this.stats.totalTravel += expense.amount
+            this.stats.totalTravel += expense.amount;
           }
           if(expense.tags.indexOf(1638199880620)>=0){
-            this.stats.totalNonTravel += expense.amount
+            // travel tag
+            this.stats.totalNonTravel += expense.amount;
           }
-          if(expense.category == 1638217648875){
-            // invest category
-            this.stats.totalInvest += expense.amount
+
+          if(expense.tags.indexOf(1638551935130)>=0){
+            // wasting tag
+            this.stats.totalWasted += expense.amount;
+          }
+
+          if(new Date(expense.date)>new Date('2021-01-01')){
+            this.stats.totalSinceInvest += expense.amount;
           }
 
           // years categroy totals
@@ -174,7 +187,7 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
           // find the category stats object whch matches the expenses category
           let yearsCategoryMatch = this.stats.categoryYearsData.find(el => el.category === expenseCategory);
           if (!yearsCategoryMatch) {
-            this.stats.categoryYearsData.push({ category: expenseCategory, data: [] });
+            this.stats.categoryYearsData.push({ category: expenseCategory, data: [], total: 0,amountOfDays: 0, firstDate: new Date(expense.date), lastDate: new Date(expense.date)});
           }
           yearsCategoryMatch = this.stats.categoryYearsData.find(el => el.category === expenseCategory);
           let yearsCategoryDataMatch = yearsCategoryMatch.data.find(el => el.year == expenseYear);
@@ -183,11 +196,20 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
           }
           yearsCategoryDataMatch = yearsCategoryMatch.data.find(el => el.year == expenseYear);
           yearsCategoryDataMatch.total += expense.amount;
+          yearsCategoryMatch.total += expense.amount
+          let expenseDate = new Date(expense.date);
+          if(yearsCategoryMatch.firstDate>expenseDate){
+            yearsCategoryMatch.firstDate = expenseDate
+          }
+          if(yearsCategoryMatch.lastDate< expenseDate){
+            yearsCategoryMatch.lastDate = expenseDate
+          }
         }
       });
 
-      this.stats.amountOfDays = differenceInDays(lastDate, firstDate);
+      this.stats.amountOfDays = differenceInDays(new Date(), firstDate); // new Date() insead of lastDate because once a category is created its vonsidered to exist permanent, lastDate would false (if last investment is 6 months back those 6 wont show in the amount of days, but should be considered)
       this.averageTotal = Math.round(this.stats.total);
+      this.stats.totalTravel = Math.round(this.stats.totalTravel);
 
       this.stats.averagePerDay = Math.round(this.stats.total / this.stats.amountOfDays);
       this.stats.averagePerYear = Math.round(this.stats.averagePerDay * 365);
@@ -195,11 +217,15 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
       this.averagePerYear = this.stats.averagePerYear;
       this.averagePerMonth = this.stats.averagePerMonth;
       this.averagePerDay = this.stats.averagePerDay;
-      this.stats.totalInvest = Math.round(this.stats.totalInvest);
 
       this.stats.yearsData.forEach(yearData => {
         yearData.amountInDays = differenceInDays(yearData.lastDate, yearData.firstDate);
         yearData.averagePerMonth = (yearData.total / yearData.amountInDays) * 30.437;
+      });
+
+      this.stats.categoryYearsData.forEach(categoryData=>{
+        categoryData.amountOfDays = differenceInDays(new Date(), categoryData.firstDate) + 1 // 3.dec - 3.dec = 0, but should be 1
+        categoryData.total  = Math.round(categoryData.total);
       });
 
       this.initializeChart();
@@ -389,13 +415,36 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
     } else {
       // a specific category has been chosen
       let selectedCategory: Category = this.categoryService.getCategoryFromId(this.averageCategorySelected);
-      let selectedCategoriesTotal: number = this.stats.categoryYearsData.find(el => el.category == selectedCategory.id).data.reduce((acc, cur) => acc + cur.total, 0)
-      
-      this.averageTotal = Math.round(selectedCategoriesTotal);
-      this.averagePerYear = Math.round(selectedCategoriesTotal / this.stats.amountOfDays * 365);
-      this.averagePerMonth = Math.round(selectedCategoriesTotal / this.stats.amountOfDays * 30.437);
-      this.averagePerDay = Math.round(selectedCategoriesTotal / this.stats.amountOfDays);
+      let averageValues = this.getAverageValues(selectedCategory.id);
+      this.averageTotal = averageValues.total
+      this.averagePerYear = averageValues.year;
+      this.averagePerMonth = averageValues.month;
+      this.averagePerDay = averageValues.day;    
     }
+  }
+
+  getAverageValues(categoryId: number):{total: number, year: number, month: number, day: number}{
+    let categoryTotal = this.stats.categoryYearsData.find(el=>el.category == categoryId);
+    return {
+      total: Math.round(categoryTotal.total),
+      year: Math.round(categoryTotal.total / categoryTotal.amountOfDays * 365),
+      month: Math.round(categoryTotal.total / categoryTotal.amountOfDays * 30.437),
+      day: Math.round(categoryTotal.total / categoryTotal.amountOfDays)
+    }
+  }
+
+  getCategoryStats(categoryId: number):{
+    category: number,
+    total:number,
+    firstDate: Date,
+    lastDate: Date,
+    amountOfDays: number,
+    data: {
+      year: number,
+      total: number,// initial calc
+    }[]
+  }{
+    return this.stats.categoryYearsData.find(el=>el.category == categoryId);
   }
 
   public getTopExpensesForCategory(category: Category): Observable<Expense[]>{

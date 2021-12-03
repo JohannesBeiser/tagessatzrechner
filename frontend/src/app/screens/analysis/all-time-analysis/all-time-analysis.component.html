@@ -27,19 +27,19 @@
                 <div class="stats-list">
                     <div class="stats-list-item">
                         <div class="title">All Time</div>
-                        <div class="value"><span *ngIf="averageCategorySelected != 0" class="category-indicator" [style.background]="categoryService.getCategoryFromId(averageCategorySelected).color"></span>{{averageTotal}} €</div>
+                        <div class="value"><span *ngIf="averageCategorySelected != 0" class="category-indicator" [style.background]="categoryService.getCategoryFromId(averageCategorySelected).color"></span>{{averageTotal| number: '1.0-0':'de-DE'}} €</div>
                     </div>
                     <div class="stats-list-item">
                         <div class="title">Year</div>
-                        <div class="value"><span *ngIf="averageCategorySelected != 0" class="category-indicator" [style.background]="categoryService.getCategoryFromId(averageCategorySelected).color"></span>{{averagePerYear}} €</div>
+                        <div class="value"><span *ngIf="averageCategorySelected != 0" class="category-indicator" [style.background]="categoryService.getCategoryFromId(averageCategorySelected).color"></span>{{averagePerYear | number: '1.0-0':'de-DE'}} €</div>
                     </div>
                     <div class="stats-list-item">
                         <div class="title">Month</div>
-                        <div class="value"><span *ngIf="averageCategorySelected != 0" class="category-indicator" [style.background]="categoryService.getCategoryFromId(averageCategorySelected).color"></span>{{averagePerMonth}} €</div>
+                        <div class="value"><span *ngIf="averageCategorySelected != 0" class="category-indicator" [style.background]="categoryService.getCategoryFromId(averageCategorySelected).color"></span>{{averagePerMonth | number: '1.0-0':'de-DE'}} €</div>
                     </div>
                     <div class="stats-list-item">
                         <div class="title">Day</div>
-                        <div class="value"><span *ngIf="averageCategorySelected != 0" class="category-indicator" [style.background]="categoryService.getCategoryFromId(averageCategorySelected).color"></span>{{averagePerDay}} €</div>
+                        <div class="value"><span *ngIf="averageCategorySelected != 0" class="category-indicator" [style.background]="categoryService.getCategoryFromId(averageCategorySelected).color"></span>{{averagePerDay | number: '1.0-0':'de-DE'}} €</div>
                     </div>
                 </div>
 
@@ -53,10 +53,8 @@
                             <span class="category">{{categoryTotal.category.name}} </span>
                             <span class="amount"> {{categoryTotal.percentage}} %</span>
                           </div>
-                    
                     </div>
                 </div>
-            
             </div>
         </app-card>
       
@@ -121,37 +119,58 @@
                     <div class="travel-ratio">
                         <div class="title">Yearly</div>
                         <div class="content">
-                            <div class="leftLabel" *ngIf="stats.totalInvest>(stats.total - stats.totalInvest)">
+                            <div class="leftLabel" *ngIf="getCategoryStats(1638217648875).total>(stats.total - getCategoryStats(1638217648875).total)">
                                 <div>Invest</div>
-                                <div>{{(stats.totalInvest / stats.amountOfDays)*365 | number: '1.0-0':'de-DE'}} €</div>
+                                <div>{{getAverageValues(1638217648875).year | number: '1.0-0':'de-DE'}} €</div>
                             </div>
-                            <div class="leftLabel" *ngIf="stats.totalInvest<(stats.total - stats.totalInvest)">
+                            <div class="leftLabel" *ngIf="getCategoryStats(1638217648875).total<(stats.total - getCategoryStats(1638217648875).total)">
                                 <div>Non-Invest</div>
-                                <div>{{((stats.total - stats.totalInvest) / stats.amountOfDays)*365 | number: '1.0-0':'de-DE'}} €</div>
+                                <div>{{((stats.totalSinceInvest - getCategoryStats(1638217648875).total) / getCategoryStats(1638217648875).amountOfDays)*365 | number: '1.0-0':'de-DE'}} €</div>
                             </div>
                             <app-ratio-bar 
-                                [value1]="(stats.total - stats.totalInvest)" 
-                                [value2]="stats.totalInvest" 
+                                [value1]="(stats.total - getCategoryStats(1638217648875).total)" 
+                                [value2]="getCategoryStats(1638217648875).total" 
                                 [labelFirst]="true" 
                                 [showLabels]="false"
                                 [color1]="'#444444'" [color2]="'rgb(171 171 171)'"
                                 [labelPrefix1]="'Non-Travel'" [labelPrefix2]="'Travel'">
                             </app-ratio-bar>
-                                <div class="rightLabel"*ngIf="stats.totalInvest <= (stats.total - stats.totalInvest)">
+                                <div class="rightLabel"*ngIf="getCategoryStats(1638217648875).total <= (stats.total - getCategoryStats(1638217648875).total)">
                                     <div>Invest</div>
-                                    <div>{{(stats.totalInvest / stats.amountOfDays)*365 | number: '1.0-0':'de-DE'}} €</div>
+                                    <div>{{getAverageValues(1638217648875).year| number: '1.0-0':'de-DE'}} €</div>
                                 </div>
-                                <div class="rightLabel" *ngIf="stats.totalInvest> (stats.total - stats.totalInvest) ">
+                                <div class="rightLabel" *ngIf="getCategoryStats(1638217648875).total> (stats.total - getCategoryStats(1638217648875).total) ">
                                     <div>Non-Invest</div>
-                                    <div>{{((stats.total - stats.totalInvest) / stats.amountOfDays)*365 | number: '1.0-0':'de-DE'}} €</div>
+                                    <div>{{((stats.totalSinceInvest - getCategoryStats(1638217648875).total) / getCategoryStats(1638217648875).amountOfDays) | number: '1.0-0':'de-DE'}} €</div>
                                 </div>
-                                </div>
-                                
-                        </div>    
+                                </div>                            
+                        </div>                        
+                </div>  
+            </div>
+        </app-card>
+    </div>
 
-                    
+    
+    <div *ngIf="chartReady" class="chart-section">
+        <app-card>
+            <div class="title-container" header>
+                <div class="title">Totals</div>
+            </div>
+            <div body class="totals-container">
+                <div class="totals-list">
+                    <div class="totals-list-item">
+                        <div class="title">Travel</div>
+                        <div class="value">{{stats.totalTravel | number: '1.0-0':'de-DE'}} €</div>
+                    </div>
+                    <div class="totals-list-item">
+                        <div class="title">Invest</div>
+                        <div class="value">{{getAverageValues(1638217648875).total | number: '1.0-0':'de-DE'}} €</div>
+                    </div>
+                    <div class="totals-list-item">
+                        <div class="title">Wasted money</div>
+                        <div class="value">{{stats.totalWasted | number: '1.0-0':'de-DE'}} €</div>
+                    </div>
                 </div>
-
             </div>
         </app-card>
     </div>

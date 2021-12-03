@@ -93,6 +93,16 @@ export class AddComponent implements OnInit, AfterViewInit {
 
     this.options = this.currencyService.getCurrencies();
 
+    this.expenseForm.controls['group'].valueChanges.subscribe(value => {
+      value = parseInt(value);
+      if(value === 0){
+        // general group--> expense gets "Non-Travel tag"
+        this.selectedTagIds = [1638199880620]
+      }else{
+        this.selectedTagIds = [1638199877164]
+      }
+    });
+
     this.filteredOptions$ = this.expenseForm.get('currency').valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value))

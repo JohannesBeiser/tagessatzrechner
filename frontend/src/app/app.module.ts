@@ -63,7 +63,8 @@ import { ExpenseListDialogComponent } from './screens/analysis/expense-list-dial
 import { TagSettingsComponent } from './screens/settings/tag-settings/tag-settings.component';
 import { AddTagDialogComponent } from './screens/settings/tag-settings/add-tag-dialog/add-tag-dialog.component';
 import { TagSettingsBottomSheetComponent } from './screens/settings/tag-settings/tag-settings-bottom-sheet/tag-settings-bottom-sheet.component';
-import { TagListComponent } from './components/tag-list/tag-list.component'
+import { TagListComponent } from './components/tag-list/tag-list.component';
+import { AboutComponent } from './screens/settings/about/about.component'
 
 registerLocaleData(localeDe, 'de');
 
@@ -110,7 +111,8 @@ registerLocaleData(localeDe, 'de');
     TagSettingsComponent,
     AddTagDialogComponent,
     TagSettingsBottomSheetComponent,
-    TagListComponent
+    TagListComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

@@ -14,6 +14,7 @@ import { GeneralComponent } from './screens/settings/general/general.component';
 import { GroupSettingsComponent } from './screens/settings/group-settings/group-settings.component';
 import { CategorySettingsComponent } from './screens/settings/category-settings/category-settings.component';
 import { TagSettingsComponent } from './screens/settings/tag-settings/tag-settings.component';
+import { AboutComponent } from './screens/settings/about/about.component';
 
 
 const routes: Routes = [
@@ -26,6 +27,7 @@ const routes: Routes = [
   { path: 'settings/tags', component: TagSettingsComponent, data: {animation: 'TagSettings'}  },
   { path: 'settings/defaults', component: DefaultsComponent, data: {animation: 'DefaultsSettings'}  },
   { path: 'settings/general', component: GeneralComponent, data: {animation: 'GeneralSettings'}  },
+  { path: 'settings/about', component: AboutComponent, data: {animation: 'AboutSettings'}  },
   { path: 'income', component: IncomeComponent, data: {animation: 'Income'}  },
   { path: 'analysis', component: AnalysisComponent, data: {animation: 'Analysis'}  },
   { path: 'groups', component: GroupsComponent ,data: {animation: 'Groups'}},

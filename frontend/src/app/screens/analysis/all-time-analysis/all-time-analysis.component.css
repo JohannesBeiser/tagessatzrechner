@@ -2,6 +2,26 @@
   padding: 8px;
   margin-top: 16px;
 }
+.all-time-analysis-container .chart-section .totals-container .totals-list {
+  margin-bottom: 16px;
+}
+.all-time-analysis-container .chart-section .totals-container .totals-list .totals-list-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.all-time-analysis-container .chart-section .totals-container .totals-list .totals-list-item .title {
+  flex: 1;
+  text-align: left;
+  opacity: 0.7;
+}
+.all-time-analysis-container .chart-section .totals-container .totals-list .totals-list-item .value {
+  display: flex;
+  align-items: center;
+  text-align: right;
+  font-weight: bold;
+  font-size: 0.8em;
+}
 .all-time-analysis-container .chart-section .all-time-header {
   display: flex;
   align-items: center;
