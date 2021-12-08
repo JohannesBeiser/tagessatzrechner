@@ -1,1 +1,22 @@
-<p>year-analysis works!</p>
+<div class="year-analysis-container">
+
+    <div *ngIf="chartReady" class="chart-section">
+        <app-card>
+            <div class="year-history-header" header>
+                <div class="title">
+                    <div class="name">Year</div>
+                    <select [(ngModel)]="yearSelection" (change)="yearSelectionChanged()">
+                        <option *ngFor="let year of availableYears" value="{{year}}">{{year}}</option>
+                    </select>
+                </div>
+                <select [(ngModel)]="historyCategorySelected" (change)="historyCategoryChanged()">
+                    <option value="0">All Categories</option>
+                    <option *ngFor="let category of categories$ | async" value="{{category.id}}">{{category.name}}</option>
+                  </select>
+            </div>
+            <highcharts-chart body *ngIf="chartReady" [Highcharts]="Highcharts" [options]="chartOptions" [(update)]="updateFlag"
+            style="width: 100%; display: block;" class="highcharts-chart">
+            </highcharts-chart>
+        </app-card>
+    </div>
+</div>

@@ -1,6 +1,6 @@
 
 <div class="analysis-component-container">
-    <mat-tab-group class="tab-group-wrapper">
+    <mat-tab-group [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="tabSelected($event)" class="tab-group-wrapper">
         <mat-tab label="All Time"><app-all-time-analysis></app-all-time-analysis></mat-tab>
         <mat-tab label="Year"><app-year-analysis></app-year-analysis></mat-tab>
         <mat-tab label="Month"><app-month-analysis></app-month-analysis></mat-tab>
