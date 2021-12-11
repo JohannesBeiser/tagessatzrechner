@@ -1,12 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { combineLatest } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Category, CategoryService } from 'src/app/services/category/category.service';
 import { Expense, ExpenseService } from 'src/app/services/expenses/expense.service';
 import * as Highcharts from 'highcharts';
 import { filter, map, take } from 'rxjs/operators';
+import { differenceInDays } from 'date-fns';
+import { MatDialog } from '@angular/material/dialog';
+import { ExpenseListDialogComponent } from '../expense-list-dialog/expense-list-dialog.component';
 
 type Stats= {
+  averagePerMonth: number,
+  averagePerDay: number,
   total: number;
   totalTravel: number;
   totalInvest: number;
@@ -19,6 +24,8 @@ type Stats= {
   categoryMonthsData: {
     category: number,
     total: number,
+    amountOfDays: number,
+    firstDate: Date,
     monthsData: {
       month: number;
       total: number;
@@ -35,7 +42,9 @@ export class YearAnalysisComponent implements OnInit {
 
   constructor(
     public categoryService: CategoryService,
-    private expenseService: ExpenseService
+    private expenseService: ExpenseService,
+    public dialog: MatDialog,
+
   ) { }
   
   Highcharts: typeof Highcharts = Highcharts;
@@ -46,10 +55,19 @@ export class YearAnalysisComponent implements OnInit {
   public availableYears: number[];
   public yearSelection: number = new Date().getFullYear();
   chartOptions: Highcharts.Options = {};
-  historyCategorySelected: number = 0;
+  categorySelected: number = 0;
   updateFlag: boolean = false;
+  categoryPieChartOptions: Highcharts.Options = {}
+  tempCategoriesSorted : {category: Category, amount: number, percentage?: number}[];
+  tempCategoriesSortedForLegend : {category: Category, amount: number, percentage?: number}[];
+  private subs: Subscription[] = [];
+
+  averagePerMonth: number;
+  averagePerDay: number;
 
   public stats: Stats = {
+    averagePerMonth: 0,
+    averagePerDay: 0,
     total: 0,
     totalTravel: 0,
     totalInvest: 0,
@@ -71,7 +89,7 @@ export class YearAnalysisComponent implements OnInit {
       filter(expenses => expenses.length>0),
       take(1)
       )
-    combineLatest([this.expenses$, this.selectedYear$]).subscribe(([expenses, selectedYear])=>{
+    combineLatest([this.expenses$, this.selectedYear$, this.categories$]).subscribe(([expenses, selectedYear])=>{
       this.availableYears = expenses.reduce((acc,cur)=>{
         let currentYear = new Date(cur.date).getFullYear()
         if(!acc.includes(currentYear)){
@@ -81,6 +99,8 @@ export class YearAnalysisComponent implements OnInit {
       },[])
 
       this.stats = {
+        averagePerMonth: 0,
+        averagePerDay: 0,
         total: 0,
         totalTravel: 0,
         totalInvest: 0,
@@ -89,6 +109,7 @@ export class YearAnalysisComponent implements OnInit {
         monthsData: [],
         categoryMonthsData: []
       };
+
 
       expenses = expenses.filter(expense=>new Date(expense.date).getFullYear() === parseInt(selectedYear as any));
       let firstDate: Date;
@@ -115,7 +136,7 @@ export class YearAnalysisComponent implements OnInit {
           // all totals
           this.stats.total += expense.amount;
 
-          // years total
+          // months total
           let expenseMonth: number = new Date(expense.date).getMonth();
           let monthsDataMatch = this.stats.monthsData.find(el => el.month === expenseMonth);
           if (!monthsDataMatch) {
@@ -133,7 +154,7 @@ export class YearAnalysisComponent implements OnInit {
           // find the category stats object whch matches the expenses category
           let monthsCategoryMatch = this.stats.categoryMonthsData.find(el => el.category === expenseCategory);
           if (!monthsCategoryMatch) {
-            this.stats.categoryMonthsData.push({ category: expenseCategory, total: 0, monthsData: []});
+            this.stats.categoryMonthsData.push({ category: expenseCategory, total: 0, monthsData: [], amountOfDays: 0, firstDate: null});
           }
           monthsCategoryMatch = this.stats.categoryMonthsData.find(el => el.category === expenseCategory);
           let monthsCategoryDataMatch = monthsCategoryMatch.monthsData.find(el => el.month == expenseMonth);
@@ -143,13 +164,38 @@ export class YearAnalysisComponent implements OnInit {
           monthsCategoryDataMatch = monthsCategoryMatch.monthsData.find(el => el.month == expenseMonth);
           monthsCategoryDataMatch.total += expense.amount;
           monthsCategoryMatch.total += expense.amount
+          let expenseDate = new Date(expense.date);
+          if(monthsCategoryMatch.firstDate>expenseDate || !monthsCategoryMatch.firstDate){
+            monthsCategoryMatch.firstDate = expenseDate
+          }
         }
+      });
+
+      
+      let lastDayOfYear: Date = new Date();
+      if(this.yearSelection !== new Date().getFullYear()){
+        lastDayOfYear = new Date(`${this.yearSelection}-12-31`)
+      }
+
+      let firstDayOfYear: Date = new Date(`${this.yearSelection}-01-01`);
+      this.stats.amountOfDays = differenceInDays(lastDayOfYear,firstDayOfYear);
+      this.stats.averagePerDay = this.stats.total / this.stats.amountOfDays;
+      this.stats.averagePerMonth = this.stats.averagePerDay * 30.437;
+
+      this.averagePerDay = this.stats.averagePerDay;
+      this.averagePerMonth = this.stats.averagePerMonth;
+
+
+      this.stats.categoryMonthsData.forEach(categoryData=>{
+        categoryData.amountOfDays = differenceInDays(lastDayOfYear,firstDayOfYear)// categoryData.firstDate) + 1 // 3.dec - 3.dec = 0, but should be 1 // Note: changed to firstDayOfYear instead of categoryData.firstDate because of logical reasons (i wanna know even if a categporie has recently be added the average over that whole year)
+        categoryData.total  = Math.round(categoryData.total);
       });
 
 
       // 
       this.initializeChart();
-      this.historyCategoryChanged();
+      this.initializeCategoryPieChart();
+      this.categoryChanged();
     })
   }
 
@@ -157,13 +203,19 @@ export class YearAnalysisComponent implements OnInit {
     this.selectedYear$.next(this.yearSelection);
   }
 
-  
-  public historyCategoryChanged() {
-    if (this.historyCategorySelected == 0) {
-      this.initializeChart()
-    } else {
 
-      let selectedCategory: Category = this.categoryService.getCategoryFromId(this.historyCategorySelected);
+  public categoryChanged(){
+    if (this.categorySelected == 0) {
+      this.initializeChart()
+      this.averagePerMonth = this.stats.averagePerMonth;
+      this.averagePerDay = this.stats.averagePerDay;
+    } else {
+ // a specific category has been chosen
+      let selectedCategory: Category = this.categoryService.getCategoryFromId(this.categorySelected);
+      let averageValues = this.getAverageValues(selectedCategory.id);
+      this.averagePerMonth = averageValues.month;
+      this.averagePerDay =  averageValues.day; 
+
       let monthsFilled = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].map(el=>el.substr(0,3));
       let valuesFilled = [0,0,0,0,0,0,0,0,0,0,0,0]
   
@@ -187,11 +239,10 @@ export class YearAnalysisComponent implements OnInit {
       ]
     }
     this.updateFlag = true;
+    // this.averageCategoryChanged()
   }
 
-  private initializeChart() {
-    
-
+  private initializeChart() {  
     let monthsFilled = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].map(el=>el.substr(0,3));
     let valuesFilled = [0,0,0,0,0,0,0,0,0,0,0,0]
 
@@ -266,6 +317,106 @@ export class YearAnalysisComponent implements OnInit {
     };
 
     this.chartReady = true; // needed so template doesnt try to initialize before its ready because it gets initialized asynchronously in subscribtion of expenses$
+  }
+
+  getAverageValues(categoryId: number):{month: number, day: number}{
+    let categoryTotal = this.stats.categoryMonthsData.find(el=>el.category == categoryId);
+    return {
+      month: Math.round(categoryTotal.total / categoryTotal.amountOfDays * 30.437),
+      day: Math.round(categoryTotal.total / categoryTotal.amountOfDays)
+    }
+  }
+
+  public categorySelectedFromLegend(category:Category){
+    let sub = this.getTopExpensesForCategory(category).subscribe(expenses=>{
+      const dialogRef = this.dialog.open(ExpenseListDialogComponent, { data: {expenses: expenses,category: category} }); // add initial data here
+  
+      dialogRef.afterClosed().subscribe(result => {
+       sub.unsubscribe()
+      }); 
+    })
+    this.subs.push(sub)
+
+  }
+
+  
+  public getTopExpensesForCategory(category: Category): Observable<Expense[]>{
+    return this.expenseService.getExpensesWithoutUpdate("expenses").pipe(
+      map(expenses=>expenses.filter(expense=>new Date(expense.date).getFullYear() == this.yearSelection)),
+      map(expenses=>expenses.filter(expense=>expense.category == category.id)),
+      map(expenses=>expenses.sort((a,b)=>b.amount - a.amount)),
+      map(expenses=>expenses.splice(0,20))
+    )
+  }
+
+
+
+  initializeCategoryPieChart() {
+    this.tempCategoriesSorted = this.stats.categoryMonthsData.map(el => {
+      let category = this.categoryService.getCategoryFromId(el.category);
+      let amount= Math.round(el.monthsData.reduce((acc, cur) => acc += cur.total, 0));
+      let percentage = (Math.round(amount* 100 /this.stats.total))
+      return { category, amount, percentage }
+    }).sort((a, b) => b.amount - a.amount);
+
+    // this.tempCategoriesSortedForLegend = this.tempCategoriesSorted.reduce((acc,cur, index)=>{
+    //   let arrayLength = this.tempCategoriesSorted.length - 1;
+
+    // },[])
+
+    let values = this.tempCategoriesSorted.map(el => [`${el.category.name} ${(Math.round(el.amount* 100 /this.stats.total))}%`, el.amount]);
+    let colors = this.tempCategoriesSorted.map(el => el.category.color);
+
+    this.categoryPieChartOptions = {
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: 0,
+        plotShadow: false,
+        height: 220,
+        backgroundColor: 'transparent'
+      },
+      credits: {
+        enabled: false
+      },
+      title: {
+        text: ''
+      },
+      tooltip: {
+        enabled: false,
+      },
+      plotOptions: {
+        pie: {
+          colors: colors,
+          allowPointSelect: false,
+          dataLabels: {
+            enabled: false,
+          },
+          showInLegend: false,
+          center: ['50%', '83%'],
+          size: '50%',
+          startAngle: -90,
+          endAngle: 90,
+        },
+        series: {
+          enableMouseTracking: false,
+          point: {
+            events: {
+              legendItemClick: function () {
+                return false // <== returning false will cancel the default action
+              },
+            }
+          }
+        }
+      },
+      series: [{
+        type: 'pie',
+        name: 'Browser share',
+        //innerSize: '50%',
+        innerSize: '35%',
+        size: '185%',
+        data: values
+      }],
+    };
   }
 
 

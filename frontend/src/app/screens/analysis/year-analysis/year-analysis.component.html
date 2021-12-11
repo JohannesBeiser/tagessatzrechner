@@ -1,22 +1,82 @@
 <div class="year-analysis-container">
 
+    <div class="filter-container">
+        <div class="year">    
+            <div class="title">Year</div>               
+             <select [(ngModel)]="yearSelection" (change)="yearSelectionChanged()">
+            <option *ngFor="let year of availableYears" value="{{year}}">{{year}}</option>
+            </select></div>
+        <div class="category">
+            <div class="title">Category</div>
+            <select [(ngModel)]="categorySelected" (change)="categoryChanged()">
+                <option value="0">All Categories</option>
+                <option *ngFor="let category of categories$ | async" value="{{category.id}}">{{category.name}}</option>
+              </select>
+        </div>
+
+    </div>
+
+    <div *ngIf="chartReady" class="chart-section">
+        <app-card class="total-card">
+            <div header>
+                <div class="title">
+                    <div class="name">Total</div>
+                    <div class="amount">{{stats.total | number: '1.0-0':'de-DE'}} €</div>
+                </div>
+            </div>
+        </app-card>
+    </div>
+
     <div *ngIf="chartReady" class="chart-section">
         <app-card>
             <div class="year-history-header" header>
                 <div class="title">
-                    <div class="name">Year</div>
-                    <select [(ngModel)]="yearSelection" (change)="yearSelectionChanged()">
-                        <option *ngFor="let year of availableYears" value="{{year}}">{{year}}</option>
-                    </select>
+                    <div class="name">History {{categorySelected ==0 ? '' : '(' + categoryService.getCategoryFromId(categorySelected).name + ')'}}</div>
                 </div>
-                <select [(ngModel)]="historyCategorySelected" (change)="historyCategoryChanged()">
-                    <option value="0">All Categories</option>
-                    <option *ngFor="let category of categories$ | async" value="{{category.id}}">{{category.name}}</option>
-                  </select>
             </div>
             <highcharts-chart body *ngIf="chartReady" [Highcharts]="Highcharts" [options]="chartOptions" [(update)]="updateFlag"
             style="width: 100%; display: block;" class="highcharts-chart">
             </highcharts-chart>
         </app-card>
     </div>
+
+
+
+    <div *ngIf="chartReady" class="chart-section">
+        <app-card>
+            <div class="title-container" header>
+                <div class="title">Average spending</div>
+
+            </div>
+            <div body class="stats-list-container">
+                <div class="stats-list">
+                    <div class="stats-list-item">
+                        <div class="title">Month</div>
+                        <div class="value"><span *ngIf="categorySelected != 0" class="category-indicator" [style.background]="categoryService.getCategoryFromId(categorySelected).color"></span>{{averagePerMonth | number: '1.0-0':'de-DE'}} €</div>
+                    </div>
+                    <div class="stats-list-item">
+                        <div class="title">Day</div>
+                        <div class="value"><span *ngIf="categorySelected != 0" class="category-indicator" [style.background]="categoryService.getCategoryFromId(categorySelected).color"></span>{{averagePerDay | number: '1.0-0':'de-DE'}} €</div>
+                    </div>
+                </div>
+
+                <div class="pie-chart-wrapper">
+                    <highcharts-chart body *ngIf="chartReady" [Highcharts]="Highcharts" [options]="categoryPieChartOptions" 
+                    style="width: 100%; display: block;" class="highcharts-chart semi-pie-category-chart">
+                    </highcharts-chart>
+                    <div class="legend">
+                        <div class="category-item" *ngFor="let categoryTotal of tempCategoriesSorted; let i= index" (click)="categorySelectedFromLegend(categoryTotal.category)">
+                            <div class="color-badge" [style.background-color]="categoryTotal.category.color"></div>
+                            <span class="category">{{categoryTotal.category.name}} </span>
+                            <span class="amount"> {{categoryTotal.percentage}} %</span>
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </app-card>
+      
+    </div>
+
+
+    
 </div>

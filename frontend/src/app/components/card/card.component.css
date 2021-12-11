@@ -9,4 +9,5 @@
 }
 .card-container .card-title {
   opacity: 0.5;
+  font-weight: bold;
 }

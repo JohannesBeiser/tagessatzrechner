@@ -8,6 +8,7 @@ import { GroupsService } from 'src/app/services/groups/groups.service';
 import * as Highcharts from 'highcharts';
 import { MatDialog } from '@angular/material/dialog';
 import { ExpenseListDialogComponent } from '../expense-list-dialog/expense-list-dialog.component';
+import { combineLatest } from 'rxjs';
 
 
 type Stats = {
@@ -92,10 +93,9 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
     this.expenses$ = this.expenseService.getExpenses("expenses").pipe(
       filter(expenses => expenses.length > 0),
       distinctUntilChanged(),
-      take(1)
-      )
+      take(1));
 
-    let sub =this.expenses$.subscribe(expenses => {
+    let sub = combineLatest([this.expenses$, this.categories$]).subscribe(([expenses]) => {
       this.stats = {
         amountOfDays: 0,
         averagePerMonth: 0,
