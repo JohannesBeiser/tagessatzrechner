@@ -2,6 +2,76 @@
     padding: 8px;
     margin-top: 16px;
 
+    .totals-container{
+        .totals-list{
+            margin-bottom: 16px;
+
+            .totals-list-item{
+                display: flex;
+                align-items: center;
+                margin-bottom: 8px;
+
+                .title{
+                    flex: 1;
+                    text-align: left;
+                    opacity: 0.7;
+                }
+                
+                .value{
+                    display: flex;
+                    align-items: center;
+                    text-align: right;
+                    font-weight: bold;
+                    font-size: 0.8em;
+                }   
+            }
+        }
+    }
+
+    .title-container{
+        padding-bottom: 8px;
+    }
+
+    .ratio-charts-wrapper{
+                
+        .travel-ratio{
+            margin-top: 12px;
+        }
+            .title{
+                font-size: 0.6em;
+                opacity: 0.7;
+                text-align: center;
+                margin-bottom: 2px;
+            }
+            
+            .content{
+                display: flex;
+           }
+
+            .leftLabel, .rightLabel{
+                flex: 0;
+                font-size: 0.6em;
+                opacity: 0.7;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                min-width: 50px;
+            }
+
+            .leftLabel{
+                text-align: right;
+                margin: 0 4px;
+            }
+            .rightLabel{
+                margin: 0 4px;
+            }
+
+            app-ratio-bar {
+                flex: 1;
+            }
+
+    }
+
     .filter-container{
         display: flex;
         padding-bottom: 12px;

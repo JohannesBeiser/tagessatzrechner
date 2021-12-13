@@ -15,6 +15,7 @@ type Stats = {
   total: number;
   totalTravel: number;
   totalInvest: number;
+  totalRecurring: number;
   expectedTotalEndOfYear: number;
   amountOfDays: number;
   monthsData: {
@@ -75,6 +76,7 @@ export class YearAnalysisComponent implements OnInit {
     total: 0,
     totalTravel: 0,
     totalInvest: 0,
+    totalRecurring: 0,
     expectedTotalEndOfYear: 0,
     amountOfDays: 0,
     monthsData: [],
@@ -108,6 +110,7 @@ export class YearAnalysisComponent implements OnInit {
         total: 0,
         totalTravel: 0,
         totalInvest: 0,
+        totalRecurring: 0,
         expectedTotalEndOfYear: 0,
         amountOfDays: 0,
         monthsData: [],
@@ -137,9 +140,10 @@ export class YearAnalysisComponent implements OnInit {
             lastDate = new Date(expense.date);
           }
 
+          
           // all totals
           this.stats.total += expense.amount;
-
+          
           // months total
           let expenseMonth: number = new Date(expense.date).getMonth();
           let monthsDataMatch = this.stats.monthsData.find(el => el.month === expenseMonth);
@@ -149,6 +153,9 @@ export class YearAnalysisComponent implements OnInit {
           monthsDataMatch = this.stats.monthsData.find(el => el.month === expenseMonth);
           monthsDataMatch.total += expense.amount;
           monthsDataMatch.expenses.push(expense);
+          if (expense.recurring) {
+            this.stats.totalRecurring += expense.amount;
+          }
 
           if (expense.tags.indexOf(1638199877164) >= 0) {
             this.stats.totalTravel += expense.amount;
@@ -182,7 +189,7 @@ export class YearAnalysisComponent implements OnInit {
 
 
       let lastDayOfYear: Date = new Date();
-      if (this.yearSelection !== new Date().getFullYear()) {
+      if (this.yearSelection != new Date().getFullYear()) {
         lastDayOfYear = new Date(`${this.yearSelection}-12-31`)
       }
 
@@ -356,11 +363,12 @@ export class YearAnalysisComponent implements OnInit {
     });
   }
 
-  getAverageValues(categoryId: number): { month: number, day: number } {
+  getAverageValues(categoryId: number): {total: number, month: number, day: number } {
     let categoryTotal = this.stats.categoryMonthsData.find(el => el.category == categoryId);
     return {
-      month: Math.round(categoryTotal.total / categoryTotal.amountOfDays * 30.437),
-      day: Math.round(categoryTotal.total / categoryTotal.amountOfDays)
+      total: Math.round(categoryTotal?.total) || 0,
+      month: Math.round(categoryTotal?.total / categoryTotal?.amountOfDays * 30.437),
+      day: Math.round(categoryTotal?.total / categoryTotal?.amountOfDays)
     }
   }
 
@@ -386,7 +394,20 @@ export class YearAnalysisComponent implements OnInit {
     )
   }
 
-
+  getCategoryStats(categoryId: number):{
+    category: number,
+    expenses: Expense[],
+    total:number,
+    firstDate: Date,
+    amountOfDays: number,
+    monthsData: {
+      expenses: Expense[],
+      month: number,
+      total: number,// initial calc
+    }[]
+  }{
+    return this.stats.categoryMonthsData.find(el=>el.category == categoryId);
+  }
 
   initializeCategoryPieChart() {
     this.tempCategoriesSorted = this.stats.categoryMonthsData.map(el => {
