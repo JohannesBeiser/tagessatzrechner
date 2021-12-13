@@ -21,7 +21,7 @@
             <div header>
                 <div class="title">
                     <div class="name">Total</div>
-                    <div class="amount">{{stats.total | number: '1.0-0':'de-DE'}} €</div>
+                    <div class="amount">{{total | number: '1.0-0':'de-DE'}} €</div>
                 </div>
             </div>
         </app-card>
@@ -34,7 +34,7 @@
                     <div class="name">History {{categorySelected ==0 ? '' : '(' + categoryService.getCategoryFromId(categorySelected).name + ')'}}</div>
                 </div>
             </div>
-            <highcharts-chart body *ngIf="chartReady" [Highcharts]="Highcharts" [options]="chartOptions" [(update)]="updateFlag"
+            <highcharts-chart body *ngIf="chartReady" [Highcharts]="Highcharts" [options]="monthChartOptions" [(update)]="updateFlag"
             style="width: 100%; display: block;" class="highcharts-chart">
             </highcharts-chart>
         </app-card>
@@ -42,7 +42,7 @@
 
 
 
-    <div *ngIf="chartReady" class="chart-section">
+    <div *ngIf="chartReady" class="chart-section" [class.all-categories-selected]="categorySelected == 0">
         <app-card>
             <div class="title-container" header>
                 <div class="title">Average spending</div>
@@ -60,7 +60,7 @@
                     </div>
                 </div>
 
-                <div class="pie-chart-wrapper">
+                <div class="pie-chart-wrapper" >
                     <highcharts-chart body *ngIf="chartReady" [Highcharts]="Highcharts" [options]="categoryPieChartOptions" 
                     style="width: 100%; display: block;" class="highcharts-chart semi-pie-category-chart">
                     </highcharts-chart>

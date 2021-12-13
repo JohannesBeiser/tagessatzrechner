@@ -1,6 +1,6 @@
 <div class="expense-list-dialog-container">
     <div class="header">
-        <div class="title">Top 20 expenses: {{data.category.name}}</div>
+        <div class="title">Top 20 expenses <span *ngIf="data.category.name !== 'unassigned'">: {{data.category.name}}</span></div>
         <i class="material-icons"  (click)="closeDialog()">close</i>
 
     </div>

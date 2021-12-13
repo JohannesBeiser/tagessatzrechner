@@ -11,6 +11,3 @@
   font-weight: bold;
   flex: 1;
 }
-.expense-list-dialog-container ::ng-deep .expense-list {
-  padding-bottom: 24px;
-}
