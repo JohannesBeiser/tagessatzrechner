@@ -2,6 +2,25 @@
   padding: 8px;
   margin-top: 16px;
 }
+.all-time-analysis-container .filter-container {
+  display: flex;
+  padding-bottom: 12px;
+}
+.all-time-analysis-container .filter-container .year,
+.all-time-analysis-container .filter-container .category {
+  display: flex;
+  margin-right: 16px;
+}
+.all-time-analysis-container .filter-container .year .title,
+.all-time-analysis-container .filter-container .category .title {
+  font-weight: bold;
+  opacity: 0.5;
+  padding-right: 6px;
+}
+.all-time-analysis-container .filter-container .year select,
+.all-time-analysis-container .filter-container .category select {
+  border-color: #E1E1E1;
+}
 .all-time-analysis-container .chart-section .totals-container .totals-list {
   margin-bottom: 16px;
 }

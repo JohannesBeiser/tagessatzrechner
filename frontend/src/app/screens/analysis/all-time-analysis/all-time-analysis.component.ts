@@ -67,8 +67,7 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
   categoryPieChartOptions: Highcharts.Options = {}
   chartReady: boolean = false;
 
-  historyCategorySelected: number = 0;
-  averageCategorySelected: number = 0;
+  categorySelected: number = 0;
   public categories$: Observable<Category[]>;
   updateFlag: boolean = false;
   tempCategoriesSorted : {category: Category, amount: number, percentage?: number}[];
@@ -393,13 +392,22 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
     };
   }
 
-  public historyCategoryChanged() {
-    if (this.historyCategorySelected == 0) {
-      this.initializeChart()
+  public categoryChanged(){
+    if (this.categorySelected == 0) {
+      this.initializeChart();
+      this.averageTotal = Math.round(this.stats.total)
+      this.averagePerYear = this.stats.averagePerYear;
+      this.averagePerMonth = this.stats.averagePerMonth;
+      this.averagePerDay = this.stats.averagePerDay;
     } else {
-
-      let selectedCategory: Category = this.categoryService.getCategoryFromId(this.historyCategorySelected);
-
+      // a specific category has been chosen
+      let selectedCategory: Category = this.categoryService.getCategoryFromId(this.categorySelected);
+      let averageValues = this.getAverageValues(selectedCategory.id);
+      this.averageTotal = averageValues.total
+      this.averagePerYear = averageValues.year;
+      this.averagePerMonth = averageValues.month;
+      this.averagePerDay = averageValues.day;    
+      
       let years: string[] = this.stats.categoryYearsData.find(el => el.category == selectedCategory.id).data.sort((a, b) => { return a.year - b.year }).map(el => el.year.toString())
 
       let values: number[] = this.stats.categoryYearsData.find(el => el.category == selectedCategory.id).data.sort((a, b) => { return a.year - b.year }).map(el => Math.round(el.total));
@@ -416,23 +424,6 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
       ]
     }
     this.updateFlag = true;
-  }
-
-  public averageCategoryChanged() {
-    if (this.averageCategorySelected == 0) {
-      this.averageTotal = Math.round(this.stats.total)
-      this.averagePerYear = this.stats.averagePerYear;
-      this.averagePerMonth = this.stats.averagePerMonth;
-      this.averagePerDay = this.stats.averagePerDay;
-    } else {
-      // a specific category has been chosen
-      let selectedCategory: Category = this.categoryService.getCategoryFromId(this.averageCategorySelected);
-      let averageValues = this.getAverageValues(selectedCategory.id);
-      this.averageTotal = averageValues.total
-      this.averagePerYear = averageValues.year;
-      this.averagePerMonth = averageValues.month;
-      this.averagePerDay = averageValues.day;    
-    }
   }
 
   getAverageValues(categoryId: number):{total: number, year: number, month: number, day: number}{
