@@ -13,7 +13,6 @@
                 <option *ngFor="let category of categories$ | async" value="{{category.id}}">{{category.name}}</option>
               </select>
         </div>
-
     </div>
 
     <div *ngIf="chartReady" class="chart-section">

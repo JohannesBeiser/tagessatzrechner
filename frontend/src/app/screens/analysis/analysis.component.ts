@@ -15,6 +15,7 @@ export class AnalysisComponent implements OnInit {
   ) { }
 
   public selectedTabIndex: number;
+  public selectedYear: number;
 
   ngOnInit(): void {
 
@@ -28,6 +29,16 @@ export class AnalysisComponent implements OnInit {
   tabSelected(event: MatTabChangeEvent){
     let tab = ["all_time", "year", "month", "custom"][event.index] as AnalysisTabTypes
     this.analysisService.setTab(tab);
+  }
+
+  openTab(tab: AnalysisTabTypes){
+    this.analysisService.setTab(tab);
+  }
+
+  yearClicked(year: number){
+    this.analysisService.setTab("year");
+    this.selectedTabIndex = 1;
+    this.selectedYear = year;
   }
 
 }

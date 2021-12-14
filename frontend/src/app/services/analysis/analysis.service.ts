@@ -10,6 +10,7 @@ export type AnalysisTabTypes = "all_time" | "year" | "month" | "custom";
 export class AnalysisService {
 
   private currentTab: AnalysisTabTypes;
+  private initialYear: number;
 
   constructor() { 
     this.currentTab =  (localStorage.getItem("analysisTab") || "all_time") as AnalysisTabTypes;
@@ -23,5 +24,15 @@ export class AnalysisService {
     localStorage.setItem("analysisTab", tab);
     this.currentTab = tab;
   }
+
+  public setYear(year: number){
+    this.initialYear= year
+  }
+
+  public getInitialYear():number{
+    return this.initialYear;
+  }
+
+  
 
 }

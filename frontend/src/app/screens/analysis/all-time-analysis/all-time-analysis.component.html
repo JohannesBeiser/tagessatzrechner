@@ -1,5 +1,16 @@
 
 <div class="all-time-analysis-container">
+
+    <!-- <div class="filter-container">
+        <div class="category">
+            <div class="title">Category</div>
+            <select [(ngModel)]="categorySelected" (change)="categoryChanged()">
+                <option value="0">All Categories</option>
+                <option *ngFor="let category of categories$ | async" value="{{category.id}}">{{category.name}}</option>
+              </select>
+        </div>
+    </div> -->
+
     <div *ngIf="chartReady" class="chart-section">
         <app-card>
             <div class="all-time-header" header>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { combineLatest, Subscription } from 'rxjs';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Category, CategoryService } from 'src/app/services/category/category.service';
@@ -44,11 +44,16 @@ type Stats = {
 })
 export class YearAnalysisComponent implements OnInit {
 
+  @Input() set initialYear(year: number) {
+    if(year){    
+      this.selectedYear$.next(year);
+      this.yearSelection = year;
+    }
+  }
   constructor(
     public categoryService: CategoryService,
     private expenseService: ExpenseService,
     public dialog: MatDialog,
-
   ) { }
 
   Highcharts: typeof Highcharts = Highcharts;
@@ -84,6 +89,10 @@ export class YearAnalysisComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    if(this.initialYear){
+      this.yearSelection = this.initialYear;
+    }
+
     this.categories$ = this.categoryService.getCategoriesNew().pipe(
       filter(categories => categories.length > 0),
       map(categories => categories.filter(category => category.name !== 'unassigned'))
@@ -456,7 +465,14 @@ export class YearAnalysisComponent implements OnInit {
           endAngle: 90,
         },
         series: {
-          enableMouseTracking: false,
+          cursor: 'pointer',
+          events: {
+            click: (event) => {
+              let index = event.point.colorIndex;
+              this.categorySelectedFromLegend(this.tempCategoriesSorted[index].category);
+            }
+          },
+          enableMouseTracking: true,
           point: {
             events: {
               legendItemClick: function () {

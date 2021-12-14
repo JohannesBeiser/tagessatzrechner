@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { differenceInDays } from 'date-fns';
 import { Observable, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, take } from 'rxjs/operators';
@@ -51,6 +51,8 @@ type Stats = {
 })
 export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
 
+  @Output() tabChanged = new EventEmitter<number>();
+
   constructor(
     private expenseService: ExpenseService,
     private groupService: GroupsService,
@@ -96,6 +98,7 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
       take(1));
 
     let sub = combineLatest([this.expenses$, this.categories$]).subscribe(([expenses]) => {
+
       this.stats = {
         amountOfDays: 0,
         averagePerMonth: 0,
@@ -290,7 +293,12 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
           },
         },
         series: {
-
+          cursor: 'pointer',
+          events: {
+            click: (event) => {
+              this.yearClicked(parseInt(event.point.category))
+            }
+          },
           states: {
             hover: {
               enabled: false,
@@ -312,6 +320,10 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
 
     this.chartReady = true; // needed so template doesnt try to initialize before its ready because it gets initialized asynchronously in subscribtion of expenses$
   }
+
+  yearClicked(year: number){
+    this.tabChanged.emit(year)
+  } 
 
   initializeCategoryPieChart() {
     this.tempCategoriesSorted = this.stats.categoryYearsData.map(el => {
