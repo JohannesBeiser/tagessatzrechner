@@ -17,7 +17,7 @@ export class ExpenseListDialogComponent implements OnInit {
 
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data:{expenses: Expense[], category: Category} ,
+    @Inject(MAT_DIALOG_DATA) public data:{expenses: Expense[], category: Category, total: number} ,
     private dialogRef: MatDialogRef<AddCategoryDialogComponent>
   ) { }
 

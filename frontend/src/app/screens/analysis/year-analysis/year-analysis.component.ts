@@ -363,7 +363,8 @@ export class YearAnalysisComponent implements OnInit {
     const dialogRef = this.dialog.open(ExpenseListDialogComponent, {
       data: {
         expenses: topExpenses,
-        category: this.categoryService.getCategoryFromId(this.categorySelected)
+        category: this.categoryService.getCategoryFromId(this.categorySelected),
+        total: this.stats.monthsData.find(el=>el.month==monthIndex).total
       }
     }); // add initial data here
 
@@ -383,7 +384,8 @@ export class YearAnalysisComponent implements OnInit {
 
   public categorySelectedFromLegend(category: Category) {
     let sub = this.getTopExpensesForCategory(category).subscribe(expenses => {
-      const dialogRef = this.dialog.open(ExpenseListDialogComponent, { data: { expenses: expenses, category: category } }); // add initial data here
+      let total = this.stats.categoryMonthsData.find(el=>el.category==category.id).total;
+      const dialogRef = this.dialog.open(ExpenseListDialogComponent, { data: { expenses: expenses, category: category, total } }); // add initial data here
 
       dialogRef.afterClosed().subscribe(result => {
         sub.unsubscribe()

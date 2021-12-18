@@ -371,7 +371,14 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
           endAngle: 90,
         },
         series: {
-          enableMouseTracking: false,
+          cursor: 'pointer',
+          events: {
+            click: (event) => {
+              let index = event.point.colorIndex;
+              this.categorySelectedFromLegend(this.tempCategoriesSorted[index].category);
+            }
+          },
+          enableMouseTracking: true,
           point: {
             events: {
               legendItemClick: function () {
@@ -450,7 +457,7 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
     return this.stats.categoryYearsData.find(el=>el.category == categoryId);
   }
 
-  public getTopExpensesForCategory(category: Category): Observable<Expense[]>{
+  public getExpensesForCategory(category: Category): Observable<Expense[]>{
     return this.expenseService.getExpensesWithoutUpdate("expenses").pipe(
       map(expenses=>expenses.filter(expense=>expense.category == category.id)),
       map(expenses=>expenses.sort((a,b)=>b.amount - a.amount)),
@@ -459,8 +466,9 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
   }
 
   public categorySelectedFromLegend(category:Category){
-    let sub = this.getTopExpensesForCategory(category).subscribe(expenses=>{
-      const dialogRef = this.dialog.open(ExpenseListDialogComponent, { data: {expenses: expenses,category: category} }); // add initial data here
+    let sub = this.getExpensesForCategory(category).subscribe(expenses=>{
+      let total = this.stats.categoryYearsData.find(el=>el.category == category.id).total
+      const dialogRef = this.dialog.open(ExpenseListDialogComponent, { data: {expenses: expenses, category: category, total } }); // add initial data here
   
       dialogRef.afterClosed().subscribe(result => {
        sub.unsubscribe()

@@ -1,5 +1,6 @@
 <div class="expense-list" (click)="stopPropagation($event)" *ngIf="refresh">
-    <div *ngFor="let expense of expenses; let i = index" class="expense-item" (click)="toggleHelpMenu(i)" >
+        <div *ngFor="let expense of expenses; let i = index" class="expense-item" (click)="toggleHelpMenu(i)" >
+
         <span class="recurring" *ngIf="expense.recurring">Monthly</span> 
         <div class="category-indicator" [style.background-color]="categoryService.getCategoryFromId(expense.category).color"></div>
         <div class="item-content">

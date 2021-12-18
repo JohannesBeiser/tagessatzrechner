@@ -11,3 +11,11 @@
   font-weight: bold;
   flex: 1;
 }
+.expense-list-dialog-container .total {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+.expense-list-dialog-container .total .title {
+  margin-right: 8px;
+}

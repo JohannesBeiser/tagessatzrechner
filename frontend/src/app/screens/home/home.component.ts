@@ -6,6 +6,7 @@ import { isWithinInterval, subDays, addMonths, subMonths } from "date-fns";
 import { CategoryService, Category } from 'src/app/services/category/category.service';
 import * as Highcharts from 'highcharts';
 import { map, switchMap, switchMapTo, shareReplay } from 'rxjs/operators';
+import { SliderService } from 'src/app/services/slider/slider.service';
 
 interface CategoryTotal {
   category: Category;
@@ -29,7 +30,8 @@ export class HomeComponent implements OnInit {
   constructor(
     public expenseService: ExpenseService,
     public filterService: FilterService,
-    public categoryService: CategoryService
+    public categoryService: CategoryService,
+    private sliderService: SliderService
   ) { }
 
 
@@ -61,6 +63,8 @@ export class HomeComponent implements OnInit {
         let filtered = expenses.filter((expense) => {
           return this.matchesFilter(expense, filter, monthSwitch)
         });
+
+        // start edit loop
 
         if (sortMethod == "amount") {
           this.expenses = filtered.reverse().sort(this.filterService.amountSorter);
