@@ -51,6 +51,8 @@ export class AddComponent implements OnInit, AfterViewInit {
   public isOnline = navigator.onLine;
   public defaultCurrency = 'EUR';
   tagFormControl: FormControl;
+  public currentCategory: number;
+  public categoryTagToggleValue: number;
 
     //Tags
     public tags$: Observable<Tag[]>;
@@ -60,6 +62,15 @@ export class AddComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.initialData = this.sliderService.currentExpenseForEdit;
+
+    //Code for food-tag toggle for tags groceries & eat-out
+    this.currentCategory = this.initialData?.category || this.categoryService.defaultCategory;
+    if(this.initialData?.tags.includes(1639339147966)){
+      this.categoryTagToggleValue = 1639339147966
+    }else if(this.initialData?.tags.includes(1639339152378)){
+      this.categoryTagToggleValue = 1639339152378
+    }
+
     this.selectedTabIndex = (this.initialData?.lastUpdate) ? 1 : 0;
 
     this.tagFormControl = new FormControl('');
@@ -93,14 +104,40 @@ export class AddComponent implements OnInit, AfterViewInit {
 
     this.options = this.currencyService.getCurrencies();
 
+    if (this.initialData) {
+      this.initialData.tags.forEach(tag=>this.selectedTagIds.push(tag))
+    }
+
     this.expenseForm.controls['group'].valueChanges.subscribe(value => {
       value = parseInt(value);
-      if(value === 0){
-        // general group--> expense gets "Non-Travel tag"
-        this.selectedTagIds = [1638199880620]
+      if(value == 0){
+        if(!this.selectedTagIds?.includes(1638199880620)){
+          this.selectedTagIds.push(1638199880620);
+          //if group changes to general --> add non-travel tag if not exists already and remove travel tag
+          if(this.selectedTagIds?.includes(1638199877164)){
+            let index = this.selectedTagIds.indexOf(1638199877164);
+            if(index>-1){
+              this.selectedTagIds.splice(index,1);
+            }
+          }
+        }
       }else{
-        this.selectedTagIds = [1638199877164]
+        if(!this.selectedTagIds?.includes(1638199877164)){
+          this.selectedTagIds.push(1638199877164);
+          //if group changes to general --> add non-travel tag if not exists already and remove travel tag (reverse-logic here)
+          if(this.selectedTagIds?.includes(1638199880620)){
+            let index = this.selectedTagIds.indexOf(1638199880620);
+            if(index>-1){
+              this.selectedTagIds.splice(index,1);
+            }
+          }
+        }
       }
+    });
+
+
+    this.expenseForm.controls['category'].valueChanges.subscribe(value => {
+      this.currentCategory = parseInt(value)
     });
 
     this.filteredOptions$ = this.expenseForm.get('currency').valueChanges.pipe(
@@ -166,6 +203,33 @@ export class AddComponent implements OnInit, AfterViewInit {
     }
   }
 
+  setCategoryTagToggleValue(tagId: number){
+    this.categoryTagToggleValue = tagId;
+    if(tagId == 1639339147966 && !this.selectedTagIds?.includes(1639339147966)){
+      this.selectedTagIds.push(1639339147966);
+      //if groceries is selected, eat-out has to be removed if that exists in array
+      if(this.selectedTagIds?.includes(1639339152378)){
+        let index = this.selectedTagIds.indexOf(1639339152378);
+        if(index>-1){
+          this.selectedTagIds.splice(index,1);
+        }
+      }
+    }
+    if(tagId == 1639339152378 && !this.selectedTagIds?.includes(1639339152378)){
+      this.selectedTagIds.push(1639339152378);
+
+      //if eat-out is selected, grocveries has to be removed if that exists in array
+      if(this.selectedTagIds?.includes(1639339147966)){
+        let index = this.selectedTagIds.indexOf(1639339147966);
+        if(index>-1){
+          this.selectedTagIds.splice(index,1);
+        }
+      }
+    }
+   }
+
+   
+
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.options.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
@@ -183,8 +247,7 @@ export class AddComponent implements OnInit, AfterViewInit {
   public tagSelected(id: number){
     this.selectedTagIds.push(id);
     this.tagFormControl.setValue('');
-     this.tagSelectInputElement.nativeElement.blur();
-    console.log(this.selectedTagIds)
+    this.tagSelectInputElement.nativeElement.blur();
   }
 
   public removeTag(tagId: number){

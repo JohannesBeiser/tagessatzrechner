@@ -19,6 +19,22 @@
   display: flex;
   justify-content: flex-end;
 }
+.add-component-container .food-specific-tags {
+  width: 100%;
+  display: flex;
+}
+.add-component-container .food-specific-tags > div {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border: 1px solid #444;
+}
+.add-component-container .food-specific-tags > div.active {
+  background: steelblue;
+  color: white;
+}
 .add-component-container ::ng-deep .mat-tab-label-container {
   background: #76757b;
 }
@@ -62,12 +78,14 @@
 }
 ::ng-deep .tag-selection .selected-tags {
   display: flex;
+  flex-wrap: wrap;
 }
 ::ng-deep .tag-selection .selected-tags .selected-tag-item {
   font-size: 0.6em;
   padding: 4px 8px;
   border: 1px solid #444;
   margin-right: 12px;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
 }
@@ -82,6 +100,9 @@
 }
 ::ng-deep .tag-selection .mat-form-field-flex {
   padding-top: 0 !important;
+}
+::ng-deep .food-specific-tags {
+  margin-bottom: 12px;
 }
 ::ng-deep .mat-form-field-infix {
   border-top: 0px !important;
