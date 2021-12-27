@@ -3,10 +3,16 @@
 
     <div class="filter-container">
         <div class="category">
-            <div class="title">Category</div>
+            <div class="title">Filter</div>
             <select [(ngModel)]="categorySelected" (change)="categoryChanged()">
                 <option value="0">All Categories</option>
                 <option *ngFor="let category of categories$ | async" value="{{category.id}}">{{category.name}}</option>
+              </select>
+              <select [(ngModel)]="restrictionSelected" (change)="restrictionChanged()" class="restriction-selection"> 
+                <option value="none">No restriction</option>
+                <option value="no-special">Exclude Special</option>
+                <option value="no-special-no-invest">Exclude special & invest</option>
+
               </select>
         </div>
     </div>

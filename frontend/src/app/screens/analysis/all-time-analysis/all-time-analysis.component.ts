@@ -22,27 +22,37 @@ type Stats = {
   totalNonTravel: number, // initial calc
   totalSinceInvest: number,
   totalWasted: number,
+  totalSpecial: number,
+  totalInvest: number,
   yearsData: {
     year: number, // initial calc
     firstDate: Date,// initial calc
     lastDate: Date,// initial calc
     amountInDays: number,
     total: number,// initial calc
+    totalSpecial: number,
+    totalInvest: number,
     totalRecurring: number,// initial calc
     averagePerMonth: number,
   }[],
   categoryYearsData: {
     category: number,
     total:number,
+    totalSpecial: number,
+    totalInvest: number,
     firstDate: Date,
     lastDate: Date,
     amountOfDays: number,
     data: {
       year: number,
       total: number,// initial calc
+      totalSpecial: number,
+      totalInvest: number,
     }[]
   }[]
 }
+
+export type Restriction = "no-special" | "no-special-no-invest" | "none";
 
 @Component({
   selector: 'app-all-time-analysis',
@@ -58,7 +68,6 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
     private groupService: GroupsService,
     public categoryService: CategoryService,
     public dialog: MatDialog,
-
   ) { }
 
   public expenses$: Observable<Expense[]>;
@@ -69,6 +78,8 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
 
   categorySelected: number = 0;
   public categories$: Observable<Category[]>;
+  restrictionSelected: Restriction = "none";
+  restrictions: string[] = ["none", "no-special", "no-special-no-invest"]
   updateFlag: boolean = false;
   tempCategoriesSorted : {category: Category, amount: number, percentage?: number}[];
   tempCategoriesSortedForLegend : {category: Category, amount: number, percentage?: number}[];
@@ -85,6 +96,7 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
+    this.restrictionSelected = "none";
     this.categories$ = this.categoryService.getCategoriesNew().pipe(
       filter(categories => categories.length > 0),
       map(categories => categories.filter(category => category.name !== 'unassigned'))
@@ -111,6 +123,8 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
         totalTravel:0,
         totalSinceInvest: 0,
         totalWasted: 0,
+        totalSpecial: 0,
+        totalInvest: 0,
       }
       let firstDate: Date;
       let lastDate: Date;
@@ -144,10 +158,22 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
           let expenseYear: number = new Date(expense.date).getFullYear();
           let yearsDataMatch = this.stats.yearsData.find(el => el.year === expenseYear);
           if (!yearsDataMatch) {
-            this.stats.yearsData.push({ year: expenseYear, total: 0, totalRecurring: 0, averagePerMonth: 0, amountInDays: null, firstDate: null, lastDate: null });
+            this.stats.yearsData.push({ year: expenseYear, total: 0, totalRecurring: 0, averagePerMonth: 0, amountInDays: null, firstDate: null, lastDate: null, totalSpecial: 0, totalInvest: 0});
           }
           yearsDataMatch = this.stats.yearsData.find(el => el.year === expenseYear);
           yearsDataMatch.total += expense.amount;
+          if(expense.tags.indexOf(1640542478507)>=0){
+            // special-expense tag
+            yearsDataMatch.totalSpecial += expense.amount;
+
+          }
+          if(expense.category == 1638217648875){
+            // invest category 
+            yearsDataMatch.totalInvest += expense.amount;
+            this.stats.totalInvest +=  expense.amount;
+          }
+
+
           if (!yearsDataMatch.firstDate) {
             yearsDataMatch.firstDate = new Date(expense.date);
           }
@@ -179,6 +205,10 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
             // wasting tag
             this.stats.totalWasted += expense.amount;
           }
+          if(expense.tags.indexOf(1640542478507)>=0){
+            // special-expense tag
+            this.stats.totalSpecial += expense.amount;
+          }
 
           if(new Date(expense.date)>new Date('2021-01-01')){
             this.stats.totalSinceInvest += expense.amount;
@@ -189,15 +219,25 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
           // find the category stats object whch matches the expenses category
           let yearsCategoryMatch = this.stats.categoryYearsData.find(el => el.category === expenseCategory);
           if (!yearsCategoryMatch) {
-            this.stats.categoryYearsData.push({ category: expenseCategory, data: [], total: 0,amountOfDays: 0, firstDate: new Date(expense.date), lastDate: new Date(expense.date)});
+            this.stats.categoryYearsData.push({ category: expenseCategory, data: [], total: 0,amountOfDays: 0, firstDate: new Date(expense.date), lastDate: new Date(expense.date), totalSpecial: 0, totalInvest: 0});
           }
           yearsCategoryMatch = this.stats.categoryYearsData.find(el => el.category === expenseCategory);
           let yearsCategoryDataMatch = yearsCategoryMatch.data.find(el => el.year == expenseYear);
           if (!yearsCategoryDataMatch) {
-            yearsCategoryMatch.data.push({ total: 0, year: expenseYear });
+            yearsCategoryMatch.data.push({ total: 0, year: expenseYear, totalSpecial: 0, totalInvest: 0});
           }
           yearsCategoryDataMatch = yearsCategoryMatch.data.find(el => el.year == expenseYear);
           yearsCategoryDataMatch.total += expense.amount;
+          if(expense.tags.indexOf(1640542478507)>=0){
+            // special-expense tag
+            yearsCategoryDataMatch.totalSpecial += expense.amount;
+            yearsCategoryMatch.totalSpecial += expense.amount;
+          }
+          if(expense.category == 1638217648875){
+            // investcategory 
+            yearsCategoryDataMatch.totalInvest += expense.amount;
+            yearsCategoryMatch.totalInvest += expense.amount;
+          }
           yearsCategoryMatch.total += expense.amount
           let expenseDate = new Date(expense.date);
           if(yearsCategoryMatch.firstDate>expenseDate){
@@ -320,6 +360,153 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
     this.chartReady = true; // needed so template doesnt try to initialize before its ready because it gets initialized asynchronously in subscribtion of expenses$
   }
 
+  filtersChanged(){
+    if (this.categorySelected == 0) {
+      // TODO: differentiate between restrictions
+      switch (this.restrictionSelected) {
+        case "none":{
+          this.initializeChart();
+          this.averageTotal = Math.round(this.stats.total)
+          this.averagePerYear = this.stats.averagePerYear;
+          this.averagePerMonth = this.stats.averagePerMonth;
+          this.averagePerDay = this.stats.averagePerDay;
+        }
+          break;
+        case "no-special":{
+          let years: string[] = this.stats.yearsData.sort((a, b) => { return a.year - b.year }).map(el => el.year.toString())
+
+          let values: number[] = this.stats.yearsData.sort((a, b) => { return a.year - b.year }).map(el => Math.round(el.total - el.totalSpecial));
+          this.chartOptions.xAxis = {
+            categories: years,
+            crosshair: true
+          }
+          this.chartOptions.series = [
+            {
+              color: '#444444',
+              type: 'column',
+              data: values
+            }
+          ]
+
+          this.averageTotal = Math.round(this.stats.total - this.stats.totalSpecial)
+          this.averagePerDay = this.averageTotal / this.stats.amountOfDays;
+          this.averagePerMonth =  this.averagePerDay * 30.437;
+          this.averagePerYear =  this.averagePerDay * 365;
+        }
+
+          break;
+        case "no-special-no-invest":{
+          let years: string[] = this.stats.yearsData.sort((a, b) => { return a.year - b.year }).map(el => el.year.toString())
+
+          let values: number[] = this.stats.yearsData.sort((a, b) => { return a.year - b.year }).map(el => Math.round(el.total - el.totalSpecial - el.totalInvest));
+          this.chartOptions.xAxis = {
+            categories: years,
+            crosshair: true
+          }
+          this.chartOptions.series = [
+            {
+              color: '#444444',
+              type: 'column',
+              data: values
+            }
+          ]
+
+          this.averageTotal = Math.round(this.stats.total - this.stats.totalSpecial - this.stats.totalInvest)
+          this.averagePerDay = this.averageTotal / this.stats.amountOfDays;
+          this.averagePerMonth =  this.averagePerDay * 30.437;
+          this.averagePerYear =  this.averagePerDay * 365;
+        }
+          break;
+        default:
+          alert("unhandled restricion case")
+          break;
+      } 
+    } else {
+      // a specific category has been chosen
+      switch (this.restrictionSelected) {
+        case "none": {
+          let selectedCategory: Category = this.categoryService.getCategoryFromId(this.categorySelected);
+          let averageValues = this.getAverageValues(selectedCategory.id);
+          this.averageTotal = averageValues.total
+          this.averagePerYear = averageValues.year;
+          this.averagePerMonth = averageValues.month;
+          this.averagePerDay = averageValues.day;    
+          
+          let years: string[] = this.stats.categoryYearsData.find(el => el.category == selectedCategory.id).data.sort((a, b) => { return a.year - b.year }).map(el => el.year.toString())
+    
+          let values: number[] = this.stats.categoryYearsData.find(el => el.category == selectedCategory.id).data.sort((a, b) => { return a.year - b.year }).map(el => Math.round(el.total));
+          this.chartOptions.xAxis = {
+            categories: years,
+            crosshair: true
+          }
+          this.chartOptions.series = [
+            {
+              color: selectedCategory.color,
+              type: 'column',
+              data: values
+            }
+          ]
+        }
+          break;
+        case "no-special":{
+          let selectedCategory: Category = this.categoryService.getCategoryFromId(this.categorySelected);
+          let averageValues = this.getAverageValues(selectedCategory.id);
+          this.averageTotal = averageValues.total - averageValues.totalSpecial
+          this.averagePerYear = this.averageTotal / averageValues.amountOfDays * 365;
+          this.averagePerMonth = this.averageTotal / averageValues.amountOfDays * 30.437;;
+          this.averagePerDay = this.averageTotal / averageValues.amountOfDays;    
+
+          
+          let years: string[] = this.stats.categoryYearsData.find(el => el.category == selectedCategory.id).data.sort((a, b) => { return a.year - b.year }).map(el => el.year.toString())
+    
+          let values: number[] = this.stats.categoryYearsData.find(el => el.category == selectedCategory.id).data.sort((a, b) => { return a.year - b.year }).map(el => Math.round(el.total-el.totalSpecial));
+          this.chartOptions.xAxis = {
+            categories: years,
+            crosshair: true
+          }
+          this.chartOptions.series = [
+            {
+              color: selectedCategory.color,
+              type: 'column',
+              data: values
+            }
+          ]
+        }        
+          break;
+        case "no-special-no-invest":{
+          let selectedCategory: Category = this.categoryService.getCategoryFromId(this.categorySelected);
+          let averageValues = this.getAverageValues(selectedCategory.id);
+          this.averageTotal = averageValues.total - averageValues.totalSpecial - averageValues.totalInvest
+          this.averagePerYear = this.averageTotal / averageValues.amountOfDays * 365;
+          this.averagePerMonth = this.averageTotal / averageValues.amountOfDays * 30.437;;
+          this.averagePerDay = this.averageTotal / averageValues.amountOfDays;    
+
+          let years: string[] = this.stats.categoryYearsData.find(el => el.category == selectedCategory.id).data.sort((a, b) => { return a.year - b.year }).map(el => el.year.toString())
+    
+          let values: number[] = this.stats.categoryYearsData.find(el => el.category == selectedCategory.id).data.sort((a, b) => { return a.year - b.year }).map(el => Math.round(el.total-el.totalSpecial-el.totalInvest));
+          this.chartOptions.xAxis = {
+            categories: years,
+            crosshair: true
+          }
+          this.chartOptions.series = [
+            {
+              color: selectedCategory.color,
+              type: 'column',
+              data: values
+            }
+          ]
+        }
+      
+          break;
+        default:
+          alert("unhandled restricion case")
+          break;
+      } 
+
+    }
+    this.updateFlag = true;
+  }
+
   yearClicked(year: number){
     this.tabChanged.emit(year)
   } 
@@ -400,46 +587,24 @@ export class AllTimeAnalysisComponent implements OnInit, OnDestroy {
   }
 
   public categoryChanged(){
-    if (this.categorySelected == 0) {
-      this.initializeChart();
-      this.averageTotal = Math.round(this.stats.total)
-      this.averagePerYear = this.stats.averagePerYear;
-      this.averagePerMonth = this.stats.averagePerMonth;
-      this.averagePerDay = this.stats.averagePerDay;
-    } else {
-      // a specific category has been chosen
-      let selectedCategory: Category = this.categoryService.getCategoryFromId(this.categorySelected);
-      let averageValues = this.getAverageValues(selectedCategory.id);
-      this.averageTotal = averageValues.total
-      this.averagePerYear = averageValues.year;
-      this.averagePerMonth = averageValues.month;
-      this.averagePerDay = averageValues.day;    
-      
-      let years: string[] = this.stats.categoryYearsData.find(el => el.category == selectedCategory.id).data.sort((a, b) => { return a.year - b.year }).map(el => el.year.toString())
-
-      let values: number[] = this.stats.categoryYearsData.find(el => el.category == selectedCategory.id).data.sort((a, b) => { return a.year - b.year }).map(el => Math.round(el.total));
-      this.chartOptions.xAxis = {
-        categories: years,
-        crosshair: true
-      }
-      this.chartOptions.series = [
-        {
-          color: selectedCategory.color,
-          type: 'column',
-          data: values
-        }
-      ]
-    }
-    this.updateFlag = true;
+    this.filtersChanged()
   }
 
-  getAverageValues(categoryId: number):{total: number, year: number, month: number, day: number}{
+  public restrictionChanged(){
+    this.filtersChanged()
+  }
+
+
+  getAverageValues(categoryId: number):{total: number,totalSpecial: number, year: number, month: number, day: number, amountOfDays: number, totalInvest: number}{
     let categoryTotal = this.stats.categoryYearsData.find(el=>el.category == categoryId);
     return {
       total: Math.round(categoryTotal.total),
       year: Math.round(categoryTotal.total / categoryTotal.amountOfDays * 365),
       month: Math.round(categoryTotal.total / categoryTotal.amountOfDays * 30.437),
-      day: Math.round(categoryTotal.total / categoryTotal.amountOfDays)
+      day: Math.round(categoryTotal.total / categoryTotal.amountOfDays),
+      totalSpecial: Math.round(categoryTotal.totalSpecial),
+      totalInvest: categoryTotal.totalInvest,
+      amountOfDays: categoryTotal.amountOfDays,
     }
   }
 
