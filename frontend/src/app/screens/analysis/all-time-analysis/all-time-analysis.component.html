@@ -79,7 +79,7 @@
                     <div class="content">
                         <div class="leftLabel">
                             <div>Regular</div>
-                            <div>{{(((stats.total- stats.totalRecurring) / stats.amountOfDays) *30.437) | number: '1.0-0':'de-DE'}} €</div>
+                            <div>{{getComparisonValues().regular | number: '1.0-0':'de-DE'}} €</div>
                         </div>
                         <app-ratio-bar 
                             [value1]="((stats.total- stats.totalRecurring) / stats.amountOfDays) *30.437" 
@@ -91,7 +91,7 @@
                         </app-ratio-bar>
                             <div class="rightLabel">
                                 <div>Recurring</div>
-                                <div>{{((stats.totalRecurring / stats.amountOfDays) *30.437) | number: '1.0-0':'de-DE'}} €</div>
+                                <div>{{getComparisonValues().recurring | number: '1.0-0':'de-DE'}} €</div>
                             </div>
                     </div>    
                 </div>
@@ -101,11 +101,11 @@
                     <div class="content">
                         <div class="leftLabel" *ngIf="stats.totalTravel>stats.totalNonTravel">
                             <div>Travel</div>
-                            <div>{{(stats.totalTravel / stats.amountOfDays)*365 | number: '1.0-0':'de-DE'}} €</div>
+                            <div>{{getComparisonValues().travel | number: '1.0-0':'de-DE'}} €</div>
                         </div>
                         <div class="leftLabel" *ngIf="stats.totalTravel<stats.totalNonTravel">
                             <div>Non-Travel</div>
-                            <div>{{(stats.totalNonTravel / stats.amountOfDays)*365 | number: '1.0-0':'de-DE'}} €</div>
+                            <div>{{getComparisonValues().nonTravel | number: '1.0-0':'de-DE'}} €</div>
                         </div>
                         <app-ratio-bar 
                             [value1]="stats.totalNonTravel" 
@@ -117,11 +117,11 @@
                         </app-ratio-bar>
                             <div class="rightLabel"*ngIf="stats.totalTravel <= stats.totalNonTravel">
                                 <div>Travel</div>
-                                <div>{{(stats.totalTravel / stats.amountOfDays)*365 | number: '1.0-0':'de-DE'}} €</div>
+                                <div>{{getComparisonValues().travel | number: '1.0-0':'de-DE'}} €</div>
                             </div>
                             <div class="rightLabel" *ngIf="stats.totalTravel>stats.totalNonTravel">
                                 <div>Non-Travel</div>
-                                <div>{{(stats.totalNonTravel / stats.amountOfDays)*365 | number: '1.0-0':'de-DE'}} €</div>
+                                <div>{{getComparisonValues().nonTravel | number: '1.0-0':'de-DE'}} €</div>
                             </div>
                     </div>   
                     
@@ -130,11 +130,11 @@
                         <div class="content">
                             <div class="leftLabel" *ngIf="getCategoryStats(1638217648875).total>(stats.total - getCategoryStats(1638217648875).total)">
                                 <div>Invest</div>
-                                <div>{{getAverageValues(1638217648875).year | number: '1.0-0':'de-DE'}} €</div>
+                                <div>{{getComparisonValues().invest | number: '1.0-0':'de-DE'}} €</div>
                             </div>
                             <div class="leftLabel" *ngIf="getCategoryStats(1638217648875).total<(stats.total - getCategoryStats(1638217648875).total)">
                                 <div>Non-Invest</div>
-                                <div>{{((stats.totalSinceInvest - getCategoryStats(1638217648875).total) / getCategoryStats(1638217648875).amountOfDays)*365 | number: '1.0-0':'de-DE'}} €</div>
+                                <div>{{getComparisonValues().nonInvest | number: '1.0-0':'de-DE'}} €</div>
                             </div>
                             <app-ratio-bar 
                                 [value1]="(stats.total - getCategoryStats(1638217648875).total)" 
@@ -146,11 +146,11 @@
                             </app-ratio-bar>
                                 <div class="rightLabel"*ngIf="getCategoryStats(1638217648875).total <= (stats.total - getCategoryStats(1638217648875).total)">
                                     <div>Invest</div>
-                                    <div>{{getAverageValues(1638217648875).year| number: '1.0-0':'de-DE'}} €</div>
+                                    <div>{{getComparisonValues().invest | number: '1.0-0':'de-DE'}} €</div>
                                 </div>
                                 <div class="rightLabel" *ngIf="getCategoryStats(1638217648875).total> (stats.total - getCategoryStats(1638217648875).total) ">
                                     <div>Non-Invest</div>
-                                    <div>{{((stats.totalSinceInvest - getCategoryStats(1638217648875).total) / getCategoryStats(1638217648875).amountOfDays) | number: '1.0-0':'de-DE'}} €</div>
+                                    <div>{{getComparisonValues().nonInvest | number: '1.0-0':'de-DE'}} €</div>
                                 </div>
                                 </div>                            
                         </div>                        
