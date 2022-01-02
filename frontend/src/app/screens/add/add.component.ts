@@ -303,6 +303,7 @@ export class AddComponent implements OnInit, AfterViewInit {
     if (this.selectedTabIndex === 0 && !this.currentlyAdding) {
       this.currentlyAdding = true;
       let expense = this.expenseForm.value;
+      expense.group = parseInt(expense.group);
       this.setFormGroupTouched(this.expenseForm);
       if (this.expenseForm.valid) {
         if (expense.currency && expense.currency !== 'EUR') {
@@ -337,7 +338,7 @@ export class AddComponent implements OnInit, AfterViewInit {
         amount: this.recurringForm.value.amount_recurring,
         date: this.recurringForm.value.month_recurring + "-01",
         category: this.recurringForm.value.category_recurring,
-        group: this.recurringForm.value.group_recurring,
+        group: parseInt(this.recurringForm.value.group_recurring),
         tags: [],
         description: this.recurringForm.value.description_recurring,
         recurring: true,
