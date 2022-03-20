@@ -58,7 +58,7 @@ export class AddComponent implements OnInit, AfterViewInit {
     public tags$: Observable<Tag[]>;
     public allTags: Tag[];
     public filteredTags$: Observable<Tag[]>; // always changing --> source of dropdown options
-    public selectedTagIds: number[] = [];
+    public selectedTagIds: number[] = JSON.parse(localStorage.getItem("defaultTags")) || [];
 
   ngOnInit(): void {
     this.initialData = this.sliderService.currentExpenseForEdit;
@@ -75,12 +75,12 @@ export class AddComponent implements OnInit, AfterViewInit {
 
     this.tagFormControl = new FormControl('');
 
-    if(this.groupsService.defaultGroup === 0){
-      // general group--> expense gets "Non-Travel tag"
-      this.selectedTagIds = [1638199880620]
-    }else{
-      this.selectedTagIds = [1638199877164]
-    }
+    // if(this.groupsService.defaultGroup === 0){
+    //   // general group--> expense gets "Non-Travel tag"
+    //   this.selectedTagIds.push(1638199880620)
+    // }else{
+    //   this.selectedTagIds.push(1638199877164)
+    // }
 
     this.expenseForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.maxLength(35)]),
@@ -116,17 +116,6 @@ export class AddComponent implements OnInit, AfterViewInit {
           //if group changes to general --> add non-travel tag if not exists already and remove travel tag
           if(this.selectedTagIds?.includes(1638199877164)){
             let index = this.selectedTagIds.indexOf(1638199877164);
-            if(index>-1){
-              this.selectedTagIds.splice(index,1);
-            }
-          }
-        }
-      }else{
-        if(!this.selectedTagIds?.includes(1638199877164)){
-          this.selectedTagIds.push(1638199877164);
-          //if group changes to general --> add non-travel tag if not exists already and remove travel tag (reverse-logic here)
-          if(this.selectedTagIds?.includes(1638199880620)){
-            let index = this.selectedTagIds.indexOf(1638199880620);
             if(index>-1){
               this.selectedTagIds.splice(index,1);
             }
