@@ -39,7 +39,7 @@ export class DefaultsComponent implements OnInit {
 
   ngOnInit(): void {
     this.tagFormControl = new FormControl('');
-    this.selectedTagIds = JSON.parse(localStorage.getItem("defaultTags"));
+    this.selectedTagIds = JSON.parse(localStorage.getItem("defaultTags")) || [];
 
     this.groupsWithSubgroups$ = this.groupsService.getGroups().pipe(
       map(groups=> groups.filter(group=> group.active)),
@@ -62,7 +62,6 @@ export class DefaultsComponent implements OnInit {
 
     this.tags$ = this.tagService.getTags();
     this.tags$.subscribe(tags=>this.allTags = tags);
-
 
     this.filteredTags$ = combineLatest(this.tagFormControl.valueChanges.pipe(startWith('')), this.tagService.getTags()).pipe(
       filter(([value, tags])=>value != null),
