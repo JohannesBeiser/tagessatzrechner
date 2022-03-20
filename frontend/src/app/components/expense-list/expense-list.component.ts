@@ -52,7 +52,7 @@ export class ExpenseListComponent implements OnInit {
     merge(this.expenseService.expenseDeletedNotifier,this.collapseNotifier).subscribe(()=>{
       this.helper= {}
     });
-    //TODO : Quick fix for testing --> Debug! 
+    //TODO : Quick fix for testing --> Debug!
     this.filterService.sortMethod$.subscribe(()=>{
       this.refresh = false;
       setTimeout(() => {

@@ -31,7 +31,6 @@ export class HomeComponent implements OnInit {
     public expenseService: ExpenseService,
     public filterService: FilterService,
     public categoryService: CategoryService,
-    private sliderService: SliderService
   ) { }
 
 
@@ -82,7 +81,7 @@ export class HomeComponent implements OnInit {
         this.totalAmount = filtered.reduce((acc, cur) => {
           return acc + cur.amount
         }, 0);
-    
+
         this.categoryService.getCategoriesNew().subscribe((categrories) => {
             let temp: CategoryTotal[] = filtered.reduce((acc, cur) => {
               let categoryMatch = acc.find(element => element.category.id === cur.category);
@@ -123,7 +122,7 @@ export class HomeComponent implements OnInit {
 
 
   /**
-   * Since the chart starts with 5 entries and scroll position equals left border, we want 
+   * Since the chart starts with 5 entries and scroll position equals left border, we want
    * the scroll position to be in the middle of the chart
    * @param number: index of item in array
    */
@@ -236,7 +235,7 @@ export class HomeComponent implements OnInit {
         scrollablePlotArea: {
           minWidth: chartData.data.length * 50, //amountOfEntries *50px
           opacity: 0.9,
-          scrollPositionX: (1 / (chartData.data.length - 5)) * this.getNormalizedStartMonth(chartData.currentMonthIndex) // 1/ amountOfEntries * startMonth from begin ignoring 5 first entries 
+          scrollPositionX: (1 / (chartData.data.length - 5)) * this.getNormalizedStartMonth(chartData.currentMonthIndex) // 1/ amountOfEntries * startMonth from begin ignoring 5 first entries
         }
       },
       plotOptions: {
@@ -308,9 +307,9 @@ export class HomeComponent implements OnInit {
       if (filter.date) {
         matches = expenseYear == filter.date.year && expenseMonth == filter.date.month;
       } else {
-        //take all data change nothing...BUT if last30Days then 
+        //take all data change nothing...BUT if last30Days then
         if (filter.last30Active) {
-          //leading zeros lead to wrong time for the Date. FIXME: Dirty solution 
+          //leading zeros lead to wrong time for the Date. FIXME: Dirty solution
           let expenseDate = new Date(new Date(expense.date).getFullYear(), new Date(expense.date).getMonth(), new Date(expense.date).getDate());
           matches = isWithinInterval(expenseDate, { start: subDays(new Date(), 30), end: new Date() })
         }

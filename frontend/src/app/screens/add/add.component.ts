@@ -144,7 +144,7 @@ export class AddComponent implements OnInit, AfterViewInit {
       startWith(''),
       map(value => this._filter(value))
     );
- 
+
     //TODO : Dirty workaround
     if (this.initialData) {
       this.selectedTagIds = this.initialData.tags || [];
@@ -192,7 +192,7 @@ export class AddComponent implements OnInit, AfterViewInit {
 
     this.filteredTags$ = combineLatest(this.tagFormControl.valueChanges.pipe(startWith('')), this.tagService.getTags()).pipe(
       filter(([value, tags])=>value != null),
-      filter(([value,tags])=>typeof value != 'number'), // super hacky but this way i can easily build my own autocomplete chip-input and not have to update angular materials version which would mean tons of re-preogramming of inputs. This happens because the value of the option is the tags id which is a number 
+      filter(([value,tags])=>typeof value != 'number'), // super hacky but this way i can easily build my own autocomplete chip-input and not have to update angular materials version which would mean tons of re-preogramming of inputs. This happens because the value of the option is the tags id which is a number
       map(([value, tags]) => this._filterTags(value))
     );
   }
@@ -228,7 +228,7 @@ export class AddComponent implements OnInit, AfterViewInit {
     }
    }
 
-   
+
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
@@ -330,14 +330,14 @@ export class AddComponent implements OnInit, AfterViewInit {
         this.sliderService.hide();
       }
       this.currentlyAdding= false;
-      
+
     } else {
       this.setFormGroupTouched(this.recurringForm);
       let expense = {
         name: this.recurringForm.value.name_recurring,
         amount: this.recurringForm.value.amount_recurring,
         date: this.recurringForm.value.month_recurring + "-01",
-        category: this.recurringForm.value.category_recurring,
+        category: parseInt(this.recurringForm.value.category_recurring),
         group: parseInt(this.recurringForm.value.group_recurring),
         tags: [],
         description: this.recurringForm.value.description_recurring,
@@ -355,8 +355,8 @@ export class AddComponent implements OnInit, AfterViewInit {
         }
         this.sliderService.hide();
       }
-      
+
     }
-    
+
   }
 }

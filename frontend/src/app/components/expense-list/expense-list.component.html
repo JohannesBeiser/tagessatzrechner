@@ -1,52 +1,52 @@
 <div class="expense-list" (click)="stopPropagation($event)" *ngIf="refresh">
         <div *ngFor="let expense of expenses; let i = index" class="expense-item" (click)="toggleHelpMenu(i)" >
 
-        <span class="recurring" *ngIf="expense.recurring">Monthly</span> 
+        <span class="recurring" *ngIf="expense.recurring">Monthly</span>
         <div class="category-indicator" [style.background-color]="categoryService.getCategoryFromId(expense.category).color"></div>
         <div class="item-content">
             <div class="minimal-info" >
-                <div class="date info-item">{{expense.date | dateLongShort}}</div> 
+                <div class="date info-item">{{expense.date | dateLongShort}}</div>
                 <div class="name info-item">{{expense.name}}</div>
                 <div class="amount info-item">{{expense.amount | prettyCurrency}}</div>
             </div>
             <div class="more-info" [@slideInOut]="helpMenuOpenForIndex(i)" >
                 <div class="description flexbox" *ngIf="expense.description">
                     <!-- <i class="material-icons-outlined mr-8">description</i>-->
-                    <span>{{expense.description}}</span>                    
+                    <span>{{expense.description}}</span>
                 </div>
 
                 <div class="expense-name" *ngIf="expense.name.length>=30">
                     <div class="title">Name:</div>
                     <div class="value">{{expense.name}}</div>
-                </div>  
+                </div>
 
 
                 <div class="category">
                     <div class="title"> Category:</div>
                     <div class="value">{{categoryService.getCategoryFromId(expense.category).name | titlecase}}</div>
-                </div>  
+                </div>
 
                 <div class="group">
                     <div class="group-title flexbox align">
                         <!-- <div class="image-icon groups mr-8"></div> -->
                         <span>Group:</span>
                     </div>
-                    <div class="group-name"> {{groupService.getGroupById(expense.group)?.name}}</div>   
-  
+                    <div class="group-name"> {{groupService.getGroupById(expense.group)?.name}}</div>
+
                 </div>
-                
+
                 <div class="currency" *ngIf="expense.currency && expense.currency !== 'EUR'">
                     <div class="title">Original amount:</div>
                     <div class="value">{{expense.amount_foreign}} {{expense.currency}}</div>
                 </div>
-                
-                <div class="tags" *ngIf="expense.tags.length > 0">
+
+                <div class="tags" *ngIf="expense.tags?.length > 0">
                     <div class="value">
-                        <app-tag-list [tagIds]="expense.tags"></app-tag-list>                    
+                        <app-tag-list [tagIds]="expense.tags"></app-tag-list>
                     </div>
-                </div>  
+                </div>
                 <div class="action-buttons">
-                    <i  class="material-icons" (click)="openBottomSheet($event, expense)">more_horiz</i>                    
+                    <i  class="material-icons" (click)="openBottomSheet($event, expense)">more_horiz</i>
                 </div>
             </div>
         </div>
