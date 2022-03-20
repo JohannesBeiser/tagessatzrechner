@@ -140,6 +140,24 @@
             <input type="month" matInput formControlName="month_recurring">
           </mat-form-field>
 
+          <div class="tag-selection">
+            <div class="selected-tags">
+              <div class="selected-tag-item" *ngFor="let tagId of selectedTagIds">
+                <div class="label">{{tagService.getTagById(tagId).name}}</div>
+                <i class="material-icons-outlined back-icon" (click)="removeTag(tagId)">close</i>
+              </div>
+            </div>
+            <mat-form-field appearance="standard">
+              <input type="text" #tagSelectInputElement placeholder="Select Tags" aria-label="Number" matInput
+                [formControl]="tagFormControl" [matAutocomplete]="auto">
+              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="tagSelected($event.option.value)">
+                <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag.id">
+                  {{tag.name}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+
           <mat-form-field appearance="standard">
             <mat-label>Description</mat-label>
             <textarea matInput formControlName="description_recurring" cdkTextareaAutosize

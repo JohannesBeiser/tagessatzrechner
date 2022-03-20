@@ -339,7 +339,7 @@ export class AddComponent implements OnInit, AfterViewInit {
         date: this.recurringForm.value.month_recurring + "-01",
         category: parseInt(this.recurringForm.value.category_recurring),
         group: parseInt(this.recurringForm.value.group_recurring),
-        tags: [],
+        tags: this.selectedTagIds,
         description: this.recurringForm.value.description_recurring,
         recurring: true,
         lastUpdate: null
