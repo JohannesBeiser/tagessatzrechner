@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ExpenseService, Expense } from 'src/app/services/expenses/expense.service';
 import { Observable, combineLatest, Subject, BehaviorSubject } from 'rxjs';
 import { FilterService, ExpenseFilter, MonthYear } from 'src/app/services/filter/filter.service';
 import { isWithinInterval, subDays, addMonths, subMonths } from "date-fns";
 import { CategoryService, Category } from 'src/app/services/category/category.service';
 import * as Highcharts from 'highcharts';
-import { map, switchMap, switchMapTo, shareReplay } from 'rxjs/operators';
-import { SliderService } from 'src/app/services/slider/slider.service';
+import { map, switchMap, switchMapTo, shareReplay, filter } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 interface CategoryTotal {
   category: Category;
@@ -25,7 +25,7 @@ interface ChartData {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.less']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     public expenseService: ExpenseService,
@@ -33,6 +33,7 @@ export class HomeComponent implements OnInit {
     public categoryService: CategoryService,
   ) { }
 
+  private subs: Subscription[] = [];
 
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options = {};
@@ -51,18 +52,20 @@ export class HomeComponent implements OnInit {
   public initialFocus: string;
 
   ngOnInit(): void {
-    this.expenses$ = this.expenseService.getExpenses("expenses");
+    this.expenses$ = this.expenseService.getExpenses("expenses").pipe(filter(expenses=>expenses.length>0));
     this.currentFilter$ = this.filterService.getFilter();
     this.monthSwitched$ = this.filterService.monthSwitched$;
     this.sortMethod$ = this.filterService.sortMethod$;
     this.limitedCategory$ = new BehaviorSubject(null);
+    let allCategories$ = this.categoryService.getCategoriesNew().pipe(
+      filter(categroies=>categroies.length>0)
+    );
 
-    combineLatest(this.currentFilter$, this.expenses$, this.monthSwitched$, this.sortMethod$, this.limitedCategory$)
-      .subscribe(([filter, expenses, monthSwitch, sortMethod, limitedCategory]) => {
+    let sub1 = combineLatest(this.currentFilter$, this.expenses$, this.monthSwitched$, this.sortMethod$, this.limitedCategory$,allCategories$)
+      .subscribe(([currentFilter, expenses, monthSwitch, sortMethod, limitedCategory, allCategories]) => {
         let filtered = expenses.filter((expense) => {
-          return this.matchesFilter(expense, filter, monthSwitch)
+          return this.matchesFilter(expense, currentFilter, monthSwitch)
         });
-
         // start edit loop
 
         if (sortMethod == "amount") {
@@ -82,30 +85,27 @@ export class HomeComponent implements OnInit {
           return acc + cur.amount
         }, 0);
 
-        this.categoryService.getCategoriesNew().subscribe((categrories) => {
-            let temp: CategoryTotal[] = filtered.reduce((acc, cur) => {
-              let categoryMatch = acc.find(element => element.category.id === cur.category);
-              if(categoryMatch === undefined){
-                // if expense doesnt belong to any known category, accumulate its cost onto the "unassigned" category
-                acc.find(element => element.category.name === 'unassigned').amount += cur.amount;
-              }else{
-                categoryMatch.amount += cur.amount;
-              }
-              return acc;
-            }, categrories.map(category => {
-              return { category: category, amount: 0 }
-            }));
-
-             this.totalCategories = temp.filter((item) => {
-                return item.amount > 0;
-              }).sort((a, b) => {
-                return b.amount - a.amount;
-              });
+        let temp: CategoryTotal[] = filtered.reduce((acc, cur) => {
+          let categoryMatch = acc.find(element => element.category.id === cur.category);
+          if(categoryMatch === undefined){
+            // if expense doesnt belong to any known category, accumulate its cost onto the "unassigned" category
+            acc.find(element => element.category.name === 'unassigned').amount += cur.amount;
+          }else{
+            categoryMatch.amount += cur.amount;
           }
-        )
-      })
+          return acc;
+        }, allCategories.map(category => {
+          return { category: category, amount: 0 }
+        }));
 
-    this.calculateChartData().subscribe((options) => {
+          this.totalCategories = temp.filter((item) => {
+            return item.amount > 0;
+          }).sort((a, b) => {
+            return b.amount - a.amount;
+          });
+    });
+
+    let sub2 = this.calculateChartData().subscribe((options) => {
       if (options) {
         this.chartData = [...options.data].reverse().splice(1).filter((element) => {
           return element.y > 0
@@ -113,6 +113,15 @@ export class HomeComponent implements OnInit {
         this.drawChart(options);
       }
     });
+
+    this.subs.push(sub1)
+    this.subs.push(sub2)
+  }
+
+  ngOnDestroy(): void {
+    this.subs.forEach(sub=>{
+      sub.unsubscribe()
+    })
   }
 
   chartOpened = false;
