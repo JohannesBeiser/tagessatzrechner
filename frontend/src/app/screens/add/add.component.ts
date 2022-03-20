@@ -184,7 +184,18 @@ export class AddComponent implements OnInit, AfterViewInit {
         })
       }, 100);
     }
-    this.groups$ = this.groupsService.getGroupsWithoutUpdate();
+    this.groups$ = this.groupsService.getGroupsWithoutUpdate().pipe(
+      map(groups=>{
+        return groups.reduce((acc,cur)=>{
+          acc.push(cur);
+          if(cur.subgroups && cur.subgroups.length>0){
+            acc.push(...cur.subgroups)
+          }
+          return acc
+        },[])
+      })
+    );
+
     this.categories$ = this.categoryService.getCategoriesNew().pipe(map(categories=>categories.filter(category=> category.id !== 0)));
 
     this.tags$ = this.tagService.getTags();
